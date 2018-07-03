@@ -12,15 +12,32 @@
 
 int main(void)
 {
-    if (HCU_present){
+	//waitMS(4000);                   // For debugging purposes only REMOVE!
+	if (HCU_present){
 		pre_Initial();       // This will have the waiting until the HCU tells the ECU to wake up
 	}
 	Initial();
 	while (1) 
     {
-		batVoltage();       // This is the battery voltage measurement function
+		if (!connected){
+			ESB_Connect();
+		}
+
+		//batVoltage();       // This is the battery voltage measurement function
 		measureFlow();      // This is the flow calculation function
-		ESBTransmit();      // This is the normal message transmission between the ESU and ESB
+		//readTempSensor();
+		massFlow.f += 0.05;
+		if (massFlow.f > 4.8) {
+			massFlow.f = 0;
+		}
+		
+		if (connected){
+			packageMessage();
+			sendToESB(flowData);           // Send the flow data to the ESB
+		}
+		
+		sendToLaptop();
+		
     }
 }
 

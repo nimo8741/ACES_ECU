@@ -13,88 +13,6 @@
 #include <string.h>
 #include "ECU_funcs.h"
 
-/** @brief Waits until the timer is done for the ESB command cycle and then swaps data with it
- *
- *  This performs the following functions:
- *  
- *  1) Prepares the message string to be sent
- *  2) Sends the message to the ESB in a prescribed order
- *  3) Continues to resend the message to the ESB until it receives the confirmation code in reply
- *  4) Sends the necessary data onto the Windows GUI
- *  5) Resets the timer for use the next time (0.25 sec later)
- *
- *  @param void
- *  @return void
- */
-void ESBTransmit(void)
-{
-	if (bit_is_clear(TIFR1,TOV1))
-		return;                     // if the overflow is not set then just return
-		
-	// Now I need to package all of the data going to the ESB
-	// The format will go like this
-	// 1) Operation Mode - N for normal
-	// 3) Current Mass flow 0 - first byte of the float
-	// 4) Current Mass flow 1 - second byte of the float
-	// 5) Current Mass flow 2 - third byte of the float
-	// 6) Current Mass flow 3 - fourth byte of the float
-	
-	char message[4];              // this will be the array for the message string
-	message[0] = 'N';              // this is N for normal mode
-	memcpy(message+1,&massFlow,sizeof(float));     
-	
-	// Now comes the transmission part of the function
-	char receive;
-	hasInterrupted = 0;
-	for (unsigned char i = 0; i < 6 + ECU_temp_sensors; i++){
-		if (i > 3){
-			receive = SPI_Transmit(0);               // transmit nothing but need to fill something in the buffer 
-		}
-		else{
-			receive = SPI_Transmit(message[i]);
-		}
-		
-		// Now process the information
-		switch (i){
-			case 0:
-				opMode = receive;
-				break;
-			case 1:
-				Hall_effect = (receive << 8);
-				break;
-			case 2:
-				Hall_effect |= receive;
-				break;
-			case 3:
-				EGT = (receive << 8);
-				break;
-			case 4:
-				EGT |= receive;
-				break;
-			case 5:
-				glow_plug = receive;
-				break;
-			default:                // This section should never run unless there are temp sensors on the ESB
-				if (i % 2){
-					ESB_temp[i - 5] = (receive << 8);
-				}
-				else{
-					ESB_temp[i - 5] |= receive;
-				}
-		}
-		if (hasInterrupted){
-			i = 0;   // restart the loop from the beginning because the message got interrupted
-			continue;
-		}
-	}
-	sendToLaptop();     // now send all of the data to the laptop
-	
-	// Since the overflow flag is not clear, we need to clear it by writing a 1 to it
-	TIFR1 |= (1 << TOV1);
-	TCNT1 = 3036;                 // reset the timer register
-		
-}
-
 /** @brief Transmits data between the ECU and ESB
  *
  *  This performs the following functions:
@@ -107,27 +25,17 @@ void ESBTransmit(void)
  *  @param char The byte that is going to be sent to the ESB
  *  @return char The received byte from the ESB
  */
-char SPI_Transmit(char info)
+void sendToESB(uint8_t len)
 {
-	// First wait for an empty transmit buffer
-	while (! (UCSR1A & (1 << UDRE1)) );
-	
-	// Then drive the SS low
-	assign_bit(&PORTC, ESB_SS, 0);           // Pull low to start the communication
-	
-	// Now begin timer 5
-	TCCR5B = (1 << CS51) | (1 << CS50);      // start timer 5 with prescalar of 64
-
-	// Now put the data into the buffer, this should send the data too
-	UDR1 = info;
-	
-	// Now wait for the data to be received
-	while ( !(UCSR1A & (1 << RXC1)) );
-	assign_bit(&PORTC, ESB_SS, 1);           // Pull high to stop communication
-	assign_bit(&TCCR5B, CS51, 0);
-	assign_bit(&TCCR5B, CS50, 0);            // turn off the timer
-	TCNT5 = 40536;
-	return UDR1;
+	// this will send the number of character in ESBmessage up to len
+	cli();
+	for(uint8_t i = 0; i < len; i++)
+	{
+		while ( !( UCSR1A & (1<<UDRE1)) );
+		/* Put data into buffer, sends the data */
+		UDR1 = ESBtransmit[i];
+	}
+	sei();
 }
 
 /** @brief Establishes the connection between the ECU and ESB
@@ -144,19 +52,12 @@ char SPI_Transmit(char info)
  */
 void ESB_Connect(void)
 {
-	char message[] = "ACES";
-	char receive[5];              // this is the receive buffer
-	char done = 0;
-	while (!done){
-		for (unsigned char i = 0; i <= strlen(message); i++){   // the equals sign will ensure that the terminator is sent
-			receive[i] = SPI_Transmit(message[i]);
-		}
-		// now compare to the pass phrase
-		if (!strcmp(receive, "DALE")){
-			done = 1;
-		}
-	}
-	
+
+	ESBtransmit[0] = 'A';
+	ESBtransmit[1] = 'C';
+	ESBtransmit[2] = 'E';
+	ESBtransmit[3] = 'S';
+	sendToESB(4);	
 }
 
 /** @brief Establishes the connection between the ECU and Windows GUI
@@ -172,7 +73,7 @@ void ESB_Connect(void)
 void GUI_Connect(void)
 {
 	char message[] = "DALE";
-	for (uint8_t i = 0; i < 5; i++){                // This will also send the terminator
+	for (uint8_t i = 0; i < 4; i++){                // This will also send the terminator
 		/* Wait for empty transmit buffer */
 		while ( !( UCSR0A & (1<<UDRE0)) );
 		/* Put data into buffer, sends the data */
@@ -193,43 +94,71 @@ void GUI_Connect(void)
  */
 void sendToLaptop(void)
 {
+	dummyData();    // remove this later
 	// This function will be responsible for packaging and sending the desired data to the Windows GUI
-	char message[14];              // this is the base length of the message
+	char message[21];              // this is the base length of the message with room for the parity bytes
 	// now fill the message
-	
-	if (opMode == 0){
-		message[0] = 'H';          // This means that the engine is just sitting there not doing anything
+	if (overrideMode == 1){
+		message[0] = 'b';          // This means that the ESB is not connected or it has lost connection
+		overrideMode = 0;
+	}
+	else if (overrideMode == 3){
+		message[0] = 'R';          // This means that RPM limit has been reached and the engine is shutting down
+		overrideMode = 0;
+	}
+	else if (overrideMode == 4){
+		message[0] = 'T';          // This means the Temperature limit has been reached and the engine is shutting down
+		overrideMode = 0;
+	}
+	else if (opMode == 0){
+		message[0] = 'S';          // This means that an engine shutdown is being carried out
 	}
 	else if(opMode == 1){
-		message[0] = 'S';          // This means that the engine is trying to stop
+		message[0] = 'r';          // This means that an engine startup is in progress
 	}
 	else if(opMode == 2){
-		message[0] = 'r';          // This means that the engine is trying to start
-	}
-	else if(opMode == 3){
-		message[0] = 'N';          // This means that the engine is running nominally
+		message[0] = 't';          // This means that a throttle adjustment has been requested and is being carried out
 	}
 	else if(opMode == 4){
-		message[0] = 't';          // This means that the engine is changing to desired throttle
+		message[0] = 'C';          // This means that the engine is in the cooling mode
 	}
 	else if(opMode == 5){
-		message[0] = 'E';          // This means that the ESB has been disconnected
+		message[0] = 'n';          // The engine is not doing anything
 	}
+	else if (opMode == 6){
+		message[0] = 'g';          // Special shutdown, the EGT is not working properly and there cannot be a normal cooling mode
+	}
+	else if (opMode == 7){
+		message[0] = 'N';          // This means that the engine has reached the desired throttle, within the error tolerance
+	}
+	else if (opMode == 9){         // This means that fuel is not flowing when it should be flowing
+		message[0] = 'P';	
+	}
+	else if (opMode == 10){
+		message[0] = 'I';          // This means that the engine has reached idle
+	}
+		
+	memcpy(message+1,&massFlow,sizeof(float));          // This should fill 1->4 with the float value
+	memcpy(message+5,&Hall_effect,sizeof(uint16_t));    // This should fill 5->6 with the Hall effect sensor value
+	memcpy(message+7,&EGT,sizeof(uint16_t));            // This should fill 7->8 with the EGT value 
+	memcpy(message+9,&voltageFinal,sizeof(float));      // this should fill 9->12 with the value of the battery voltage
+	memcpy(message+13,&glow_plug,sizeof(char));         // This should fill 13 with the glow plug on/off
+	memcpy(message+14,&ECU_temp,sizeof(float));         // This should fill 14->17 with the temperature of the ECU
 	
-	memcpy(message+1,&massFlow,sizeof(float));         // This should fill 1->4 with the float value
-	memcpy(message+5,&Hall_effect,sizeof(float));   // This should fill 5->6 with the Hall effect sensor value
-	memcpy(message+7,&EGT,sizeof(float));           // This should fill 7->8 with the EGT value 
-	memcpy(message+9,&voltageFinal,sizeof(float));
-	memcpy(message+13,&glow_plug,sizeof(char));         // This should fill 9 with the glow plug on/off
+	// now that the message is made, I need to calculate and populate the parity bytes
+	calculateParity(&message[0]);
 	
-	for (uint8_t i = 0; i < 14; i++){
+	// At this point it is advantageous to turn off global interrupts so that this process is not interrupted
+	cli();
+	for (uint8_t i = 0; i < 21; i++){
 		/* Wait for empty transmit buffer */
 		while ( !( UCSR0A & (1<<UDRE0)) );
 		/* Put data into buffer, sends the data */
 		UDR0 = message[i];
 	}
+	sei();   // Now need to turn global interrupts back on
 	// Now start the timer
-	TCCR4B = (1 << CS41) | (1 << CS40);      // start timer 5 with prescalar of 64
+	//TCCR4B = (1 << CS41) | (1 << CS40);      // start timer 5 with prescalar of 64
 
 }
 
@@ -255,9 +184,22 @@ ISR(USART0_RX_vect)
 	hasInterrupted = 1;                    // Set this flag so that the ESBCommand function knows if it has been interrupted or not
 	if (newCommand){
 		newCommand = 0;                    // reset this so that the commandMode cannot change until the command string is done
-		if (data == 'C'){
+		if (data == 'A'){
+			connect_count = 1;
 			newCommand = 1;
+		}
+		else if (data == 'C' && connect_count == 1){
+			connect_count++;
+			newCommand = 1;
+		}
+		else if (data == 'E' && connect_count == 2){
+			connect_count++;
+			newCommand = 1;
+		}
+		else if (data == 'S' && connect_count == 3){
+			connect_count++;
 			GUI_Connect();
+			newCommand = 1;
 		}
 		else if (data == 'O'){
 			commandMode = 1;               // This means the GUI is ordering the ECU to do something
@@ -272,11 +214,18 @@ ISR(USART0_RX_vect)
 			assign_bit(&TCCR4B, CS40, 0);            // turn off the timer
 			TCNT4 = 40536;                           // reset the timer register
 		}
+		else if (data == 'R'){    // This means that the data needs to be sent to the GUI one more time
+			newCommand = 1;
+			sendToLaptop();   // this will just use what ever the values of the data currently are
+		}
 		else{
 			commandMode = 0;               // This will handle all undefined behavior
+			if (!connected)
+				newCommand = 1;     // This was found to work during debugging as there is a 0 waiting in the buffer
 		}
 	}
 	else if (connected) {
+		newCommand = 1;
 		switch (commandMode){
 			case 0:
 				repeatCommand();           // repeat the command because something got screwed up  This isn't right because I don't do it over spi, do it over USART
@@ -302,6 +251,74 @@ ISR(USART0_RX_vect)
 	}
 }
 
+// This interrupt will be triggered whenever data is received from the ESB
+ISR(USART1_RX_vect)
+{
+	uint8_t data = UDR1;
+	hasInterrupted = 1;      // set this flag so other functions will know if they have been interrupted
+	if (newCommand_ESB == 1)
+	{
+		ESBreceive[0] = data;
+		if (data == 'K'){
+			newCommand_ESB = 1;
+			ESBreceiveCount = 0;
+		}
+		else if (data == 'D'){
+			newCommand_ESB = 2;       // this means that the ESB is sending the connection string back
+			ESBreceiveCount = 0;
+		}
+		else if (data == 'N'){
+			newCommand_ESB = 3;
+			ESBreceiveCount = 0;
+			TCNT5 = ESB_timer_val;
+		}
+	}
+	else if (newCommand_ESB == 2){
+		ESBreceiveCount++;
+		switch(ESBreceiveCount){
+			case 1:
+				if (data != 'A'){
+					ESBreceiveCount = 0;
+					newCommand_ESB = 1;
+				}
+				break;
+			case 2:
+				if (data != 'L'){
+					ESBreceiveCount = 0;
+					newCommand_ESB = 1;	
+				}
+				break;
+			case 3:
+				if (data == 'E'){
+					connected = 1;
+					TCCR5B |= (1 << CS52);      // start the ESB connection timer with a prescalar of 256
+				}
+				ESBreceiveCount = 0;
+				newCommand_ESB = 1;
+				break;
+
+		}
+	}
+	else if (newCommand_ESB == 3){                     // This will handle the normal data transmission
+		ESBreceiveCount++;
+		ESBreceive[ESBreceiveCount] = data;
+		if (ESBreceiveCount >= 8){
+			ESBreceiveCount = 0;
+			newCommand_ESB = 1;                       // This indicates the end of the data string
+		}
+	}
+	
+}
+
+void packageMessage(void)
+{
+	ESBtransmit[0] = 'N';
+	ESBtransmit[1] = massFlow.c[0];
+	ESBtransmit[2] = massFlow.c[1];
+	ESBtransmit[3] = massFlow.c[2];
+	ESBtransmit[4] = massFlow.c[3];
+}
+
 /** @brief Requests the Windows GUI to repeat the last sent command
  *
  *  This performs the following functions:
@@ -317,7 +334,66 @@ void repeatCommand(void)
 	while ( !( UCSR0A & (1<<UDRE0)) );
 	
 	/* Put data into buffer, sends the data */
-	UDR0 = 'R';
+	UDR0 = 'V';
+	repeatCount++;
 	
 	// Will have to see in unit testing how long this takes to get the response from the GUI
+}
+
+void i2c_Start(unsigned char address)
+{
+	TWCR = (1<<TWSTA) | (1<<TWINT) | (1 << TWEN);   // this will issue the start command
+	while (!(TWCR & (1<<TWINT)));    // wait for the start condition to be transmitted 
+	if ((TWSR & 0xF8) != 0x08)
+		i2c_Start(address);            // it will call this recursively until the start is transmitted
+		
+	// Now send the addressing byte 
+	TWDR = address;
+	TWCR = (1<<TWINT) | (1 << TWEN);    // this will start the data transfer
+	
+	while (!(TWCR & (1<<TWINT)));    // wait for the address byte to be sent
+	
+	if ((TWSR & 0xF8) != 18 && (TWSR & 0xF8) != 0x40){    // the first is if it is in write mode and the second is if it is in read mode
+		i2c_Stop();   // stop the current i2c message string
+		i2c_Start(address);  // retry.  This will make an infinite loop if something is wrong
+			
+	}
+		
+}
+
+void i2c_Stop(void)
+{
+	TWCR = (1<<TWINT) | (1<<TWSTO) | (1 << TWEN);  // this will issue the stop command
+	
+}
+
+void i2c_write(unsigned char data)
+{
+	TWDR = data;
+	TWCR = (1<<TWINT) | (1 << TWEN);    // this will start the data transmission
+	
+	while (!(TWCR & (1<<TWINT)));    // wait for the data to be transmitted
+	
+	if ((TWSR & 0xF8) != 0x28) {   // this is the hex number that should be received if the acknowledge has been received
+	     // fill in this later for error checking	
+	}
+		
+}
+
+unsigned char i2c_read(unsigned char ack)
+{
+	// write the interrupt bit low and set the appropriate acknowledge bit
+	TWCR = (1<<TWINT) | (ack << TWEA) | (1 << TWEN);  
+	
+	// and now we wait for data
+	while (!(TWCR & (1<<TWINT)));
+	
+	if ((TWSR & 0xF8) != 0x50 && ack) {   // this is the hex number that should be received if the acknowledge has been received
+		// fill in this later for error checking for in the acknowledge bit was meant to be sent
+	}
+	else if ((TWSR & 0xF8) != 0x58 && !ack) {
+		// fill in this later for error checking when the NOT acknowledge bit was meant to be sent
+	}
+	
+	return TWDR;
 }

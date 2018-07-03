@@ -45,7 +45,7 @@
 #define pump_b 0.195783
 
 //! defines if the HCU is present in the current configuration or not, 1 for yes, 0 for no
-#define HCU_present 1
+#define HCU_present 0
 
 //! Defines the minimum RPM we say is engine is off
 #define offRPM 213    // This translates to 99.7 RPM
@@ -56,6 +56,13 @@
 //! Defines the idle RPM of the engine
 #define idleRPM 16384     // This translates to 35000 RPM
 
+#define SLA_W 0x3E
+#define SLA_R 0x3F
+#define SPI_PORT PORTB
+#define flowData 5
+#define ESB_timer_val 3036
+#define FlowTime 3700              // This was found via logic analyzer to have a flow period of exactly 0.25 seconds
+
 ///////////////////////////////////////////////////////////////////////////
 ///////////////////////// Pin Assignments /////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////
@@ -63,6 +70,8 @@
 #define UCPHA1 1   // bit assignment for clock phase bit for the SPI communication
 #define ESB_SS 0   // Pin assignment for the SS line which extends to the ESB
 #define HCU_link 1 // Pin assignment for the Command line for the HCU to turn on the ECU
+#define MOSI 2     // Pin within PORTB for MOSI
+#define SCK 1      // Pin within PORTB for SCK
 
 
 
@@ -71,18 +80,28 @@
 //////////////////////////////////////////////////////////////////////////
 void pre_Initial(void);
 void Initial(void);
-void ESBTransmit(void);
 void shutdown(void);
 void startup(void);
 void throttle(void);
 void batVoltage(void);
 void assign_bit(volatile uint8_t *sfr,uint8_t bit, uint8_t val);
-char SPI_Transmit(char info);
+void sendToESB(uint8_t len);
 void ESB_Connect(void);
 void measureFlow(void);
 void sendToLaptop(void);
 void repeatCommand(void);
 void GUI_Connect(void);
+void i2c_Start(unsigned char address);
+void i2c_Stop(void);
+void i2c_write(unsigned char data);
+unsigned char i2c_read(unsigned char ack);
+void readTempSensor(void);
+void calculateParity(char message[]);
+unsigned char countOnes(unsigned char byte);
+void packageMessage(void);
+void waitMS(uint16_t msec);
+
+void dummyData(void);
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////// Global Variables  ///////////////////////////////
@@ -97,14 +116,17 @@ float voltageFinal;
 //! Char which keeps track of which ADC channel we are on
 char batChannel;
 
-//! Holds whether or not we should kill the engine or not
+//! Holds the current operational mode of the engine
 char opMode;
 
 //! Char which keeps track of the throttle percentage 0-100
 uint8_t throttle_per;
 
 //! Float holding the current mass flow rate
-float massFlow;
+union {
+	float f;
+	unsigned char c[4];
+}massFlow;
 
 //! uint_16 holding the current measurement of the hall effect sensor
 uint16_t Hall_effect;
@@ -116,13 +138,10 @@ uint16_t EGT;
 unsigned char glow_plug;
 
 //! Array of uint_16 holding the temperature of the various temperature sensors
-uint16_t ESB_temp[ESB_temp_sensors];
+int16_t ESB_temp;
 
 //! This will keep track of how many pulses have been seen in the sampling window
 uint8_t pulse_count;
-
-//! This will keep track of what mode of the flow meter operation it is in
-uint8_t flowMode;
 
 //! Variable to convert the pulses into a voltage
 float V_per_pulse;
@@ -138,6 +157,19 @@ uint8_t hasInterrupted;
 
 //! will keep track of whether or not the ECU is connected to the windows GUI
 uint8_t connected;
+
+char voltage_s[3];    // this will keep track of the three digits for the battery voltage
+
+uint8_t ESBtransmit[5];
+uint8_t ESBreceive[8];   // might need to change this number later
+
+float ECU_temp;
+
+uint8_t overrideMode;
+uint8_t connect_count;
+uint8_t repeatCount;
+uint8_t newCommand_ESB;
+uint8_t ESBreceiveCount;
 
 
 #endif /* ECU_FUNCS_H_ */

@@ -23,15 +23,12 @@
  */
 void shutdown(void)
 {
-	char receive = 'P';                        // This is a letter that isn't K and so it will enter the loop
-	hasInterrupted = 0;
-	while (receive != 'K'){                    // Loop until the ESB says K
-		receive = SPI_Transmit('S');
-		receive = SPI_Transmit(0);          // This last message should have the K
+	ESBtransmit[0] = 'S';
+	while (ESBreceive[0] != 'K'){                    // Loop until the ESB says K
+		sendToESB(1);
+		waitMS(5);
 	}
-	if (hasInterrupted){
-		shutdown();                            // just keep calling this function until it doesn't get interrupted
-	}
+	ESBreceive[0] = 0;                              // clear out the first char so that it actually transmits
 }
 
 /** @brief Commands the ESB to startup and awaits the confirmation code
@@ -47,17 +44,12 @@ void shutdown(void)
  */
 void startup(void)
 {
-	char receive = 'P';                           // This is a char that isn't K and so it will enter the loop
-	hasInterrupted = 0;
-	while (receive != 'K'){
-		receive = SPI_Transmit('r');   
-		receive = SPI_Transmit(0);            // This last message should have the K
+	ESBtransmit[0] = 'r';
+	while (ESBreceive[0] != 'K'){
+		sendToESB(1);
+		waitMS(5);   
 	}
-	// The reason this is a lower case r is so that a single bit error
-	// won't make this look like an "S"
-	if (hasInterrupted){
-		startup();                               // just keep calling this function until it doesn't get interrupted
-	}
+	ESBreceive[0] = 0;              // Change this character so I actually have to receive it in the future	
 	
 }
 
@@ -75,17 +67,11 @@ void startup(void)
  */
 void throttle(void)
 {
-	char message[1];
-	memcpy(message,&throttle_per,sizeof(uint8_t));      // copy over the memory into an array
-	
-	char recieve = '0';                                 // This is a char that isn't K and so will enter the loop
-	hasInterrupted = 0;
-	while (recieve != 'K'){
-		recieve = SPI_Transmit('t');
-		recieve = SPI_Transmit(message[0]);
-		recieve = SPI_Transmit(0);                   // This last message should have the K
+	ESBtransmit[0] = 't';
+	ESBtransmit[1] = throttle_per;
+	while (ESBreceive[0] != 'K'){
+		sendToESB(2);
+		waitMS(5);
 	}
-	if (hasInterrupted){
-		throttle();                                     // Just keep calling this function until it isn't interrupted
-	}
+	ESBreceive[0] = 0;                   // clear out the first char so that it actually transmits
 }
