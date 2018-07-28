@@ -16,27 +16,26 @@ ISR(TIMER5_OVF_vect)   // This means that it has been too long since data has be
 {
 	// If it makes it in here then it is assumed that the ECU and ESB have gotten disconnected
 	assign_bit(&TCCR5B, CS52, 0);    // turn off the timer for now
-	//connected = 0;
-	//shutdown();     // shutdown the engine    don't want to do this for now until the timers are flushed out
+	connected = 0;
+	shutdown();     // shutdown the engine    don't want to do this for now until the timers are flushed out
 
 }
 
 void package_message(void)
 {
-	hallEffect.l = 34567;
-	EGT.l = 12345;
+	hallEffect = 34567;
+	EGT = 12345;
 	glowPlug = 1;
-	ref_temp.l = 23456;
+	ref_temp = 23456;
 	
-	ECUtransmit[0] = 'N';                  // This means normal data transfer
-	ECUtransmit[1] = opMode;
-	ECUtransmit[2] = hallEffect.s[1];      // big endian order
-	ECUtransmit[3] = hallEffect.s[0];
-	ECUtransmit[4] = EGT.s[1];
-	ECUtransmit[5] = EGT.s[0];
-	ECUtransmit[6] = glowPlug;
-	ECUtransmit[7] = ref_temp.s[1];
-	ECUtransmit[8] = ref_temp.s[0];
+	ECUtransmit[0] = opMode;
+	memcpy(ECUtransmit + 1, &hallEffect, sizeof(uint16_t));
+	memcpy(ECUtransmit + 3, &EGT, sizeof(float));
+	memcpy(ECUtransmit + 7, &glowPlug, sizeof(uint8_t));
+	memcpy(ECUtransmit + 8, &ref_temp, sizeof(float));
+	ECUtransmit[12] = calculateParity(ECUtransmit, 0);
+	ECUtransmit[13] = calculateParity(ECUtransmit, 6);
+	
 	hallDone = 0;                          // reset this we have already used the new data
 }
 
@@ -104,7 +103,7 @@ ISR(USART0_RX_vect)
 			case 1:
 				if (data != 'C'){
 					commandCode = 0;
-					//connected = 0;
+					connected = 0;
 					ECUreceiveCount = 0;
 				}
 				break;
@@ -112,7 +111,7 @@ ISR(USART0_RX_vect)
 			case 2:
 				if (data != 'E'){
 					commandCode = 0;
-					//connected = 0;
+					connected = 0;
 					ECUreceiveCount = 0;
 				}
 				break;
@@ -131,7 +130,7 @@ ISR(USART0_RX_vect)
 					
 				}
 				else{
-					//connected = 0;
+					connected = 0;
 				}
 				commandCode = 0;
 				ECUreceiveCount = 0;
@@ -151,4 +150,36 @@ void sendToECU(uint8_t len)
 		UDR0 = ECUtransmit[i];
 	}
 	sei();
+}
+
+uint8_t calculateParity(uint8_t message[], uint8_t start_index)
+{
+	// This will return the parity byte for a message made up of 6 sequential bytes, starting with start_index
+	uint8_t parity = 0;
+	
+	// first need to get the number of high bits in the first three bytes in the set
+	for (unsigned set = 0; set < 2; set++){
+		unsigned char count = 0;
+		for (unsigned char i = 0; i < 3; i++){
+			count += countOnes(message[start_index + set*3 + i]);
+		}
+		// now that I have the count for this set, I need to take the modulo
+		count = count % 16;   // Modulo with 16 because I have 4 bits to play with
+		
+		// now add this into the parity byte
+		parity |= count << (4 * set);   // this will make it so that bytes 0-2 will take up the LSB of the parity byte
+	}
+	// now copy this byte into memory
+	return parity;
+}
+
+unsigned char countOnes(unsigned char byte)
+{
+	unsigned char count = 0;
+	while (byte)
+	{
+		count += byte & 1;    // this was essentially lifted from geeksforgeeks.com
+		byte >>= 1;
+	}
+	return count;
 }

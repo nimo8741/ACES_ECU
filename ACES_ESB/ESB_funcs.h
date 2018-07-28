@@ -24,6 +24,9 @@
  *  OpMode 8: Engine is operating at the desired throttle, within the designated error tolerance
  *  OpMode 9: Fuel is not flowing when it should be flowing
  *  OpMode 10: Engine has reached idle
+ *  OpMode 11: Messages sent from the ECU have failed the parity check
+ *  OpMode 12: Engine Temperature limit has been reached, shutting down
+ *  OpMode 13: RPM limit has been reached, shutting down
 **/
 
 
@@ -35,6 +38,9 @@
 //! Simple function define for testing if the bit is clear
 #define bit_is_clear(sfr,bit) \
 (!(_SFR_BYTE(sfr) & _BV(bit)))
+
+#define SSACTIVE assign_bit(&SPI_PORT, CJC_SS, 0)
+#define SSPASSIVE assign_bit(&SPI_PORT, CJC_SS, 1)  // These two defines will control the operation of the Slave Select line
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -56,6 +62,7 @@
 #define allData 9
 #define ECU_timer_val 3036    // This is the reload value for the ECU connection timer
 #define HallTime 2760         // This was found experimentally to cause the space between the message to be exactly 0.25 sec (by logic analyzer)
+#define CJC_MSK 0x7           // This is the mask will will separate the MSB's of the temperature from the dummy sign bit, probably not needed
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -64,9 +71,7 @@
 #define MISO 3     // Pin assignment in PORT B for MISO
 #define MOSI 2
 #define SCK 1
-#define Ethernet_SS 0
-#define CJC_CLK 2  // Pin assignment in PORT E for the CLK to CJC module
-#define CJC_SS 3   // Pin assignment in PORT E for the SS line to the CJC module
+#define CJC_SS 0
 #define glowPin 4
 #define solePin 5
 #define lubePin 6
@@ -84,8 +89,8 @@ void shutdown(void);
 void startup(void);
 void throttle(void);
 void EGT_collect(void);
-unsigned char USART_Receive(void);
-void getTemp(char *tempString);
+uint8_t SPI_Receive(void);
+void getTemp(uint8_t *tempString);
 void package_message(void);
 void compressor(void);
 void fuel_puffs(void);
@@ -95,6 +100,8 @@ void coolingMode(void);
 void sendToECU(uint8_t len);
 void waitMS(uint16_t msec);
 void ECUconnect(void);
+uint8_t calculateParity(uint8_t message[], uint8_t start_index);
+uint8_t countOnes(uint8_t byte);
 
 
 
@@ -122,28 +129,16 @@ float bat_voltage;
 char string_volt[3];
 uint8_t fail_counter;
 uint8_t bytesToSend;
-uint8_t ECUtransmit[8];
-uint8_t ECUreceive[5];
+uint8_t ECUtransmit[14];
+uint8_t ECUreceive[7];
+uint16_t hallEffect;
+float EGT;
+float ref_temp;
 
-
-union {
-	float f;
-	unsigned char c[4];
+union{
+	uint8_t c[4];
+	float f;	
 } massFlow;
 
-union {
-	uint16_t l;
-	uint8_t s[2];
-} hallEffect;
-
-union {
-	int16_t l;
-	int8_t s[2];
-} EGT;
-
-union {
-	int16_t l;
-	int8_t s[2];
-} ref_temp;
 
 #endif /* ESB_FUNCS_H_ */

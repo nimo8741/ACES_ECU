@@ -40,14 +40,15 @@ void assign_bit(volatile uint8_t *sfr,uint8_t bit, uint8_t val)
 void EGT_collect(void)
 {
 	// Now loop through 4 bytes for the receive message
-	char tempString[4];
-	assign_bit(&PORTA, PA7, 0);       // drop the SS line for the CJC
-	for (int i = 0; i < 4; i++){
-		tempString[i] = USART_Receive();
+	uint8_t tempString[2];
+	SSACTIVE;       // drop the SS line for the CJC
+	for (int i = 0; i < 2; i++){
+		tempString[i] = SPI_Receive();
 	}
-	assign_bit(&PORTA, PA7, 1);       // raise the SS line again since we are done
+	SSPASSIVE;       // raise the SS line again since we are done
 	
 	// Now interpret this data string into an actual temperature
+
 	getTemp(tempString);
 			
 	// Now package the message
@@ -57,18 +58,22 @@ void EGT_collect(void)
 /** @brief Performs the operations needed to communicate with the CJC via SPI
  *
  *  @param[in] void
- *  @return void
+ *  @return uint8_t
  */
-unsigned char USART_Receive( void )   // This is copied from the datasheet page 232
+uint8_t SPI_Receive( void )   // This is copied from the datasheet page 193
 {
-	/* Wait for empty transmit buffer */
-	while ( !( UCSR1A & (1<<UDRE1)) );
-	/* Put data into buffer, sends the data */
-	UDR1 = 0;   // Since the CJC doesn't receive, we can put anything we want into the buffer
+	cli();
+	/* Put data into buffer and start the transmission */
+	SPDR = 0;   // Since the CJC doesn't receive, we can put anything we want into the buffer
+	
 	/* Wait for data to be received */
-	while ( !(UCSR1A & (1<<RXC1)) );
+	while ( !(SPSR & (1<<SPIF)) );
+	
+	/* Enable interrupts again */
+	sei();
+	
 	/* Get and return received data from buffer */
-	return UDR1;
+	return SPDR;
 }
 
 /** @brief Converts the bytes received from the CJC into a usable temperature
@@ -76,24 +81,19 @@ unsigned char USART_Receive( void )   // This is copied from the datasheet page 
  *  @param[in] tempString Array of chars which contains all the data received by the CJC
  *  @return void
  */
-void getTemp(char *tempString)
+void getTemp(uint8_t *tempString)     // This is definitely Wrong but will fix it later
 {
 	// First check to see if there is a fault
-	if (tempString[3] & 0x04)
-		EGT.l = 0;
-	else if (tempString[3] & 0x02)
-		EGT.l = 1;
-	else if (tempString[3] & 0x01)
-		EGT.l = 2;
+	if (tempString[1] & 0x04)
+		EGT = 0;               // This means that the Thermocouple is open, check connection
 	else {                     // If it makes it to here then there are no faults
-		int val = (tempString[0] << 8) | (tempString[1] >> 8);
+		int val = ((tempString[0] &) << 5) | (tempString[1] >> 3);
 		
-		if (val < 3)
-			val = 3;   // set the value to this for anything that is less than 3
-		EGT.l = (uint16_t) val;
+		if (!val)
+			val = 1;   // set the value to this for anything that is less than 3
+		EGT = ((float) val / 4095.0) * 1023.75;        // Since the temperature is on the scale of 0->1023.75 and it has 12 bit resolution
+		ref_temp = 0;                                  // This is unimplemented at this time as the MAX6675 does not transmit the reference temperature
 		
-		// Now get the reference temperature for future use
-		ref_temp.l = (tempString[2] << 8) | (tempString[3] >> 8);
 	}
 }
 
@@ -114,10 +114,10 @@ ISR(INT2_vect)
  */
 ISR(TIMER4_OVF_vect)
 {
-	hallEffect.l = hallCount * 120;  // this gets the number of pulses per 30 seconds
-	//EGT_collect();
+	hallEffect = hallCount * 120;  // this gets the number of pulses per 30 seconds
+	EGT_collect();
 	
-	if (hallEffect.l > 65000 || EGT.l > 700) { // if either the engine is too hot or spinning too fast, shut it down
+	if (hallEffect > 65000 || EGT > 700) { // if either the engine is too hot or spinning too fast, shut it down
 		//shutdown();
 	}
 	hallDone = 1;
@@ -159,7 +159,6 @@ void setPWM(void)
 	OCR2A = (uint8_t) (255 - gVolts * 255.0 / pump_tot_V);
 	
 }
-
 
 void waitMS(uint16_t msec)
 {

@@ -13,6 +13,9 @@
 int main(void)
 {
     Initial();
+	while (1){
+		EGT_collect();
+	}
 	while (1) 
     {	
 		connected++;

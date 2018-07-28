@@ -33,35 +33,11 @@ void batVoltage(void)
 	uint16_t result = (high_bits << 8) | low_bits;
 	
 	// Now I need to convert this 16 bit number into an actual temperature
-	voltage += (float) result;   // Convert to float value of the voltage
+	voltage = 3.0 * (float) result;            // Convert to float value of the voltage
+	voltage = voltage * (4.96 / 1024.0);      // This will return Vin
 	
-	// Now prepare the ADC for the next channel
-	if (batChannel == 2){
-		voltageFinal = voltage;
-		assign_bit(&ADMUX,MUX1,0);
-		batChannel = 0;
+	ADCSRA |= (1 << ADSC);                     // Start the next conversion
 		
-		// Now create the string which will hold the values for the voltage to be passed to the ESB
-		char digit = (char) voltageFinal;
-		if (digit >= 10)
-			voltage_s[0] = '0';
-		else
-			voltage_s[0] = digit + 48;   // this will convert it to the correct ascii notation
-		
-		digit = (char) voltageFinal * 10;  // this will get it so that the tenths place will come out
-		digit = digit % 10;   // this will extract the ones place
-		voltage_s[1] = digit + 48;
-		
-		digit = (char) voltageFinal * 100;  // this will get the hundredths place to come out
-		digit = digit % 10;  
-		voltage_s[2] = digit + 48;
-	}
-	else{  // if there are still at least one more channel to sample before starting over
-		ADMUX++;
-		batChannel++;
-	}
-	return;
-	
 }
 
 /** @brief Measures the fuel flow passing through the Flow meter
@@ -100,7 +76,11 @@ void measureFlow(void)
 	// Now need to convert the pulses detected into an actual flow rate
 	//massFlow.f = V_per_pulse * (float) pulse_count;
 	//massFlow.f = (massFlow.f - pump_b) / pump_m;
-	return;
+
+	// now set the doTransmit flag
+	if (doTransmit < 1){
+		doTransmit++;
+	}
 }
 
 /** @brief Interrupt Service Routine which reads in the pulse train and increments a count.
@@ -138,11 +118,10 @@ void assign_bit(volatile uint8_t *sfr,uint8_t bit, uint8_t val)
 ISR(TIMER4_OVF_vect)
 {
 	// If it makes it in here then the Computer is presumed to have gotten disconnected from the ECU
-	assign_bit(&TCCR4B, CS41, 0);
-	assign_bit(&TCCR4B, CS40, 0);            // turn off the timer
-	TCNT4 = 40536;                           // reload the timer register
+	assign_bit(&TCCR4B, CS42, 0);
+	TCNT4 = 34286;                           // reload the timer register
 	shutdown();
-	connected = 0;
+	connected_GUI = 0;
 	newCommand = 1;     // this will come in handy when trying to reconnect
 }
 
@@ -152,7 +131,7 @@ ISR(TIMER5_OVF_vect)
 	opMode = 5;
 	assign_bit(&TCCR5B, CS52, 0);            // turn off the timer
 	TCNT5 = ESB_timer_val;                           // reload the timer register
-	connected = 0;
+	connected_GUI = 0;
 }
 
 void readTempSensor(void)
@@ -180,37 +159,38 @@ void readTempSensor(void)
 	}
 	
 	upper = upper & 0x1F; //Clear flag bits
+	uint8_t decimal = (lower & dec_MSK) >> 2;
 	if ((upper & 0x10) == 0x10){ //TA < 0°C
 		upper = upper & 0x0F; //Clear SIGN
-		ECU_temp = (float)(256 - (upper * 16 + lower / 16));
+		ECU_temp = (float)(256 - ((upper << 4) + (lower >> 4)));
+		ECU_temp -= (0.25 * decimal);
 	}
-	else //TA >= 0°C
-	ECU_temp = (float)(upper * 16 + lower / 16);     //Temperature = Ambient Temperature (°C)
+	else { //TA >= 0°C
+		ECU_temp = (float)((upper << 4) + (lower >> 4));     //Temperature = Ambient Temperature (°C)
+		ECU_temp += (0.25 * decimal);
+	}
+
 }
 
-void calculateParity(char message[])
+char calculateParity(char message[], uint8_t start_index)
 {
-	
-	for (unsigned char byte = 0; byte < 3; byte++)
-	{
-		unsigned char parity = 0;
+	// This will return the parity byte for a message made up of 6 sequential bytes, starting with start_index
+		char parity = 0;
 		
 		// first need to get the number of high bits in the first three bytes in the set
 		for (unsigned set = 0; set < 2; set++){
 			unsigned char count = 0;
 			for (unsigned char i = 0; i < 3; i++){
-				count += countOnes(message[byte*6 + set*3 + i]);
+				count += countOnes(message[start_index + set*3 + i]);
 			}
 			// now that I have the count for this set, I need to take the modulo
-			count = count % 8;   // Modulo with 8 because I have 4 bits to play with
+			count = count % 16;   // Modulo with 16 because I have 4 bits to play with
 			
 			// now add this into the parity byte
 			parity |= count << (4 * set);   // this will make it so that bytes 0-2 will take up the LSB of the parity byte
 		}
-		
 		// now copy this byte into memory
-		message[18 + byte] = parity;
-	}
+		return parity;
 }
 
 unsigned char countOnes(unsigned char byte)
@@ -226,17 +206,14 @@ unsigned char countOnes(unsigned char byte)
 
 void dummyData(void)
 {
-	// this function will produce dummy data
-	// first dummy data for the battery
-	voltageFinal += 0.2;
-	if (voltageFinal > 10.8)
-		voltageFinal = 7.5;
 		
 	// second dummy data for the hall effect sensor
 	Hall_effect += 5000;   // this will overflow all on its own
 	
 	// third dummy data for the EGT;
-	EGT += 3000;
+	EGT += 30.24;
+	if (EGT > 1000)
+		EGT = 0;
 	
 	// fourth dummy data for the mass flow rate
 	massFlow.f += 0.05;
@@ -249,11 +226,8 @@ void dummyData(void)
 	else
 		glow_plug = 0;
 		
-	// Sixth, the ECU temperature
-	ECU_temp += 5.43;
-	if (ECU_temp > 169)
-		ECU_temp = 0.69;
-	
+	ESB_temp = 69.69;
+			
 	// sixth need the operational mode
 	opMode = 5;  // this means that the engine is not doing anything
 }

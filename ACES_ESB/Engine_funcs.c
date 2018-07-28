@@ -35,7 +35,7 @@ void shutdown(void)
 void startup(void)
 {
 	if (startUpLockOut){
-		if (hallEffect.l < 10 && EGT.l < 50){
+		if (hallEffect < 10 && EGT < 50){
 			startUpLockOut = 0;
 			startup();              // restart the function so that it has the opportunity to restart
 		}
@@ -51,7 +51,7 @@ void startup(void)
 		if (opMode == 1)
 			return;
 			
-		if (hallEffect.l < 35000){  // This means that start up was not achieved
+		if (hallEffect < 35000){  // This means that start up was not achieved
 			//shutdown();     // 35,000 RPM is the minimum required for startup
 		}
 		else{
@@ -67,7 +67,7 @@ void throttle(void)   // I only want this function to be called after a new
 	uint8_t desPulses = (uint8_t) desMFlow*pulse_flow;
 	
 	// Now I need to increase the duty cycle depending in the difference from the expected flow rate
-	uint8_t pulse_error = desPulses - (uint8_t) pulse_flow*massFlow.f;
+	uint8_t pulse_error = desPulses - (uint8_t) pulse_flow * massFlow.f;
 	
 	float difference = massFlow.f - desMFlow;
 	if (difference < 0)
@@ -99,10 +99,10 @@ void compressor(void)
 	OCR0A = 255 - ((uint8_t) (sMotor / pump_tot_V * 255.0));
 	TCCR0B |= (1 << CS02) | (1 << CS00);	
 	
-	while (!(hallEffect.l < 10500 && hallEffect.l > 9500 && slope < 10 && slope > -10))
+	while (!(hallEffect < 10500 && hallEffect > 9500 && slope < 10 && slope > -10))
 	{
 		// now need to find new voltage
-		float voltage = Kp*(hallEffect.l - 10000) + Kd*slope;
+		float voltage = Kp*(hallEffect - 10000) + Kd*slope;
 		if (voltage > 6.0)
 			voltage = 6.0;
 		else if (voltage < 0.0)
@@ -113,7 +113,7 @@ void compressor(void)
 		// now change the duty cycle on the starter motor
 		OCR0A = 255 - ((uint8_t) (duty * 255.5));
 		hallDone = 0;
-		uint16_t hallPrev = hallEffect.l;
+		uint16_t hallPrev = hallEffect;
 		// now wait for the next hall effect sensor measurement
 		while (!hallDone);
 		
@@ -122,7 +122,7 @@ void compressor(void)
 		}
 		
 		// now calculate the new slope
-		slope = (hallPrev - hallEffect.l) / 0.25;
+		slope = (hallPrev - hallEffect) / 0.25;
 		
 	}
 	
@@ -154,7 +154,7 @@ void fuel_puffs(void)
 		if (opMode == 1)    // This means that a shutdown has been invoked
 			return;
 			
-		if (EGT.l > 100) {  // if true, turn off the starter motor and glow plug
+		if (EGT > 100) {  // if true, turn off the starter motor and glow plug
 			TCCR2B &= 0xF8;  // this will turn off the glow plug
 			TCCR0B &= 0xF8;  // this will turn off the starter motor
 		}
@@ -197,7 +197,7 @@ void coolingMode(void)
 	// for this I will make sure that the starter motor receives 4V 
 	// This will force cool air through the engine
 	
-	if (EGT.l > 100){
+	if (EGT > 100){
 		// first need to make sure that the PWM is working 
 		TCCR0A |= (1 << WGM01) | (1 << WGM00) | (1 << COM0A0) | (1 << COM0A1);
 		TCCR0B |= (1 << WGM02);

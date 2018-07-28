@@ -107,13 +107,13 @@ void Initial(void)
 	/////////////////// Initialize ADC for Battery Voltage ///////////////////////////////
 	
 	// The next things that need to be set are as follows
-	// 1) The reference for the ADC needs to be set to the AVCC with external cap
+	// 1) The reference for the ADC needs to be set to the external AREF
 	// 2) The channel for ADMUX needs to be channel 0
 	// 3) The ADC needs to be enabled without interrupts
 	// 4) Division factor for the ADC needs to be set to 128 to keep the input clock 
 	//    frequency between 50kHz and 200kHz
 	
-	ADMUX = (1 << REFS1) | (1 << REFS0);
+	ADMUX = (1 << REFS0);
 	ADCSRA = (1 << ADEN) | (1 << ADPS0) | (1 << ADPS1) | (1 << ADPS2);
 	batChannel = 0;
 
@@ -132,7 +132,7 @@ void Initial(void)
 	
 	// The TIFR1 register and TOV1 flag are the overflow flag for timer1
 	TCCR1B = (1 << CS11) | (1 << CS10);    // start timer 1 with prescalar of 64
-	TCNT4 = 40536;
+	TCNT4 = 34286;                         // coupled with a prescalar of 256, this will make a 0.5 second timer
 	TCNT5 = 40536;
 	TIMSK4 = (1 << TOIE4);     // enable overflow interrupts for the GUI communication timer
 	TIMSK5 = (1 << TOIE5);     // enable overflow interrupts for the ESB communication timer
@@ -153,7 +153,6 @@ void Initial(void)
 	float pulse_flow = (density) * K_factor * max_time / 1000;   // number of pulses expected per g/sec
 	V_per_pulse = pump_m / pulse_flow;               // number of volts per pulse
 	opMode = 0;
-	overrideMode = 1;
 	newCommand = 1;
 	
 	// Initialize all of the data values to zero
@@ -161,8 +160,9 @@ void Initial(void)
 	Hall_effect = 0;
 	EGT = 0;
 	glow_plug = 0;
-	voltageFinal = 7.5;
+	voltage = 0;
 	repeatCount = 0;
+	doTransmit = 0;
 	
 	
 }

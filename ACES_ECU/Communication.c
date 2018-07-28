@@ -79,7 +79,8 @@ void GUI_Connect(void)
 		/* Put data into buffer, sends the data */
 		UDR0 = message[i];
 	}
-	connected = 1;
+	connected_GUI = 1;
+	doTransmit = -1;
 }
 
 /** @brief Transmits periodic data between the ECU and Windows GUI
@@ -94,21 +95,13 @@ void GUI_Connect(void)
  */
 void sendToLaptop(void)
 {
+	//loadESBData();
 	dummyData();    // remove this later
 	// This function will be responsible for packaging and sending the desired data to the Windows GUI
-	char message[21];              // this is the base length of the message with room for the parity bytes
+	char message[28];              // this is the base length of the message with room for the parity bytes
 	// now fill the message
-	if (overrideMode == 1){
+	if (!connected_ESB){
 		message[0] = 'b';          // This means that the ESB is not connected or it has lost connection
-		overrideMode = 0;
-	}
-	else if (overrideMode == 3){
-		message[0] = 'R';          // This means that RPM limit has been reached and the engine is shutting down
-		overrideMode = 0;
-	}
-	else if (overrideMode == 4){
-		message[0] = 'T';          // This means the Temperature limit has been reached and the engine is shutting down
-		overrideMode = 0;
 	}
 	else if (opMode == 0){
 		message[0] = 'S';          // This means that an engine shutdown is being carried out
@@ -137,20 +130,36 @@ void sendToLaptop(void)
 	else if (opMode == 10){
 		message[0] = 'I';          // This means that the engine has reached idle
 	}
+	else if (opMode == 11){
+		message[0] = 'c';          // This means that messages from the ECU have failed the parity check
+	}
+	else if (opMode == 12){
+		message[0] = 'R';          // This means that RPM limit has been reached and the engine is shutting down
+	}
+	else if (opMode == 13){
+		message[0] = 'T';          // This means the Temperature limit has been reached and the engine is shutting down
+	}
+	else if (opMode == 14){
+		message[0] = 's';          // This means that messages from the ESB have failed the parity check
+	}
 		
 	memcpy(message+1,&massFlow,sizeof(float));          // This should fill 1->4 with the float value
 	memcpy(message+5,&Hall_effect,sizeof(uint16_t));    // This should fill 5->6 with the Hall effect sensor value
-	memcpy(message+7,&EGT,sizeof(uint16_t));            // This should fill 7->8 with the EGT value 
-	memcpy(message+9,&voltageFinal,sizeof(float));      // this should fill 9->12 with the value of the battery voltage
-	memcpy(message+13,&glow_plug,sizeof(char));         // This should fill 13 with the glow plug on/off
-	memcpy(message+14,&ECU_temp,sizeof(float));         // This should fill 14->17 with the temperature of the ECU
+	memcpy(message+7,&EGT,sizeof(float));            // This should fill 7->8 with the EGT value 
+	memcpy(message+11,&voltage,sizeof(float));      // this should fill 9->12 with the value of the battery voltage
+	memcpy(message+15,&glow_plug,sizeof(char));         // This should fill 13 with the glow plug on/off
+	memcpy(message+16,&ECU_temp,sizeof(float));         // This should fill 14->17 with the temperature of the ECU
+	memcpy(message+20,&ESB_temp,sizeof(float));         // This should fill 18->21 with the ambient temperature of the ESB
 	
 	// now that the message is made, I need to calculate and populate the parity bytes
-	calculateParity(&message[0]);
+	message[24] = calculateParity(message, 0);
+	message[25] = calculateParity(message, 6);
+	message[26] = calculateParity(message, 12);
+	message[27] = calculateParity(message, 18);
 	
 	// At this point it is advantageous to turn off global interrupts so that this process is not interrupted
 	cli();
-	for (uint8_t i = 0; i < 21; i++){
+	for (uint8_t i = 0; i < 28; i++){
 		/* Wait for empty transmit buffer */
 		while ( !( UCSR0A & (1<<UDRE0)) );
 		/* Put data into buffer, sends the data */
@@ -158,7 +167,9 @@ void sendToLaptop(void)
 	}
 	sei();   // Now need to turn global interrupts back on
 	// Now start the timer
-	//TCCR4B = (1 << CS41) | (1 << CS40);      // start timer 5 with prescalar of 64
+	
+	TCCR4B = (1 << CS42);      // start timer 4 with prescalar of 256
+
 
 }
 
@@ -220,11 +231,11 @@ ISR(USART0_RX_vect)
 		}
 		else{
 			commandMode = 0;               // This will handle all undefined behavior
-			if (!connected)
+			if (!connected_GUI)
 				newCommand = 1;     // This was found to work during debugging as there is a 0 waiting in the buffer
 		}
 	}
-	else if (connected) {
+	else if (connected_GUI) {
 		newCommand = 1;
 		switch (commandMode){
 			case 0:
@@ -290,7 +301,7 @@ ISR(USART1_RX_vect)
 				break;
 			case 3:
 				if (data == 'E'){
-					connected = 1;
+					connected_ESB = 1;
 					TCCR5B |= (1 << CS52);      // start the ESB connection timer with a prescalar of 256
 				}
 				ESBreceiveCount = 0;
@@ -302,9 +313,10 @@ ISR(USART1_RX_vect)
 	else if (newCommand_ESB == 3){                     // This will handle the normal data transmission
 		ESBreceiveCount++;
 		ESBreceive[ESBreceiveCount] = data;
-		if (ESBreceiveCount >= 8){
+		if (ESBreceiveCount >= 10){
 			ESBreceiveCount = 0;
 			newCommand_ESB = 1;                       // This indicates the end of the data string
+			loadESBData();
 		}
 	}
 	
@@ -317,6 +329,8 @@ void packageMessage(void)
 	ESBtransmit[2] = massFlow.c[1];
 	ESBtransmit[3] = massFlow.c[2];
 	ESBtransmit[4] = massFlow.c[3];
+	ESBtransmit[5] = 0;
+	ESBtransmit[6] = calculateParity(ESBtransmit, 0);
 }
 
 /** @brief Requests the Windows GUI to repeat the last sent command
@@ -342,9 +356,9 @@ void repeatCommand(void)
 
 void i2c_Start(unsigned char address)
 {
-	TWCR = (1<<TWSTA) | (1<<TWINT) | (1 << TWEN);   // this will issue the start command
+	TWCR = (1<<TWSTA) | (1<<TWINT) | (1 << TWEN);   // this will issue the start command, enable TWI, and clear the interrupt flag, if needed
 	while (!(TWCR & (1<<TWINT)));    // wait for the start condition to be transmitted 
-	if ((TWSR & 0xF8) != 0x08)
+	if ((TWSR & 0xF8) != 0x08 && (TWSR & 0xF8) != 0x10)
 		i2c_Start(address);            // it will call this recursively until the start is transmitted
 		
 	// Now send the addressing byte 
@@ -353,7 +367,7 @@ void i2c_Start(unsigned char address)
 	
 	while (!(TWCR & (1<<TWINT)));    // wait for the address byte to be sent
 	
-	if ((TWSR & 0xF8) != 18 && (TWSR & 0xF8) != 0x40){    // the first is if it is in write mode and the second is if it is in read mode
+	if ((TWSR & 0xF8) != 0x18 && (TWSR & 0xF8) != 0x40){    // the first is if it is in write mode and the second is if it is in read mode
 		i2c_Stop();   // stop the current i2c message string
 		i2c_Start(address);  // retry.  This will make an infinite loop if something is wrong
 			
@@ -396,4 +410,23 @@ unsigned char i2c_read(unsigned char ack)
 	}
 	
 	return TWDR;
+}
+
+void loadESBData(void)
+{
+	// First need to check the parity bytes 
+	char parity1_check = calculateParity(ESBreceive, 0);
+	char parity2_check = calculateParity(ESBreceive, 6);
+	
+	if (parity1_check != ESBreceive[12] || parity2_check != ESBreceive[13]){      // This means that the parity bytes do not match
+		shutdown();         // hopefully this message still gets through
+		ESBreceive[0] = 12;      // this will set the correct opMode	
+	}
+	
+	// This will convert the values that were recorded from the communication into usable variables
+	memcpy(&opMode, ESBreceive+1, sizeof(uint8_t));
+	memcpy(&Hall_effect, ESBreceive+2, sizeof(uint16_t));
+	memcpy(&EGT, ESBreceive+3, sizeof(float));
+	memcpy(&glow_plug, ESBreceive+7, sizeof(uint8_t));
+	memcpy(&ESB_temp, ESBreceive+8, sizeof(float));
 }

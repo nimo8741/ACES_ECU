@@ -47,9 +47,6 @@
 //! defines if the HCU is present in the current configuration or not, 1 for yes, 0 for no
 #define HCU_present 0
 
-//! Defines the minimum RPM we say is engine is off
-#define offRPM 213    // This translates to 99.7 RPM
-
 //! Defines the maximum RPM of the engine
 #define maxRPM 60850      // This translates to 129989 RPM
 
@@ -58,6 +55,7 @@
 
 #define SLA_W 0x3E
 #define SLA_R 0x3F
+#define dec_MSK 0x0C     // This extracts the decimal numbers from the temperature sensor
 #define SPI_PORT PORTB
 #define flowData 5
 #define ESB_timer_val 3036
@@ -96,10 +94,11 @@ void i2c_Stop(void);
 void i2c_write(unsigned char data);
 unsigned char i2c_read(unsigned char ack);
 void readTempSensor(void);
-void calculateParity(char message[]);
+char calculateParity(char message[], uint8_t start_index);
 unsigned char countOnes(unsigned char byte);
 void packageMessage(void);
 void waitMS(uint16_t msec);
+void loadESBData(void);
 
 void dummyData(void);
 
@@ -109,9 +108,6 @@ void dummyData(void);
 
 //! Float which contains the current voltage level on the Lipo battery
 float voltage;
-
-//! Float which contains the final battery voltage after all three conversions
-float voltageFinal;
 
 //! Char which keeps track of which ADC channel we are on
 char batChannel;
@@ -132,13 +128,10 @@ union {
 uint16_t Hall_effect;
 
 //! uint_16 holding the current measurement of the exhaust gas thermocouple
-uint16_t EGT;
+float EGT;
 
 //! unsigned char holding whether or not the glow plug is currently on
 unsigned char glow_plug;
-
-//! Array of uint_16 holding the temperature of the various temperature sensors
-int16_t ESB_temp;
 
 //! This will keep track of how many pulses have been seen in the sampling window
 uint8_t pulse_count;
@@ -156,20 +149,23 @@ uint8_t newCommand;
 uint8_t hasInterrupted;
 
 //! will keep track of whether or not the ECU is connected to the windows GUI
-uint8_t connected;
+uint8_t connected_ESB;
+
+uint8_t connected_GUI;
 
 char voltage_s[3];    // this will keep track of the three digits for the battery voltage
 
-uint8_t ESBtransmit[5];
-uint8_t ESBreceive[8];   // might need to change this number later
+char ESBtransmit[7];
+char ESBreceive[14];   // might need to change this number later
 
 float ECU_temp;
+float ESB_temp;
 
-uint8_t overrideMode;
 uint8_t connect_count;
 uint8_t repeatCount;
 uint8_t newCommand_ESB;
 uint8_t ESBreceiveCount;
+int8_t doTransmit;
 
 
 #endif /* ECU_FUNCS_H_ */

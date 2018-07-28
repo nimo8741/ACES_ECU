@@ -37,24 +37,20 @@
 void Initial(void)
 {
 	////////////////////  Step 1: Initialize the Port directions  ///////////////////////////
-	DDRB = (1 << MOSI) | (1 << SCK) | (1 << Ethernet_SS);
-	DDRE = (1 << CJC_CLK) | (1 << CJC_SS);              // This is the SS line for the CJC, so set to output
-	assign_bit(&PORTE, CJC_SS, 1);     // Don't want to start conversion too soon
-	
 	// Now do port directions for the PWM outputs
 	DDRB |= (1 << PB4) | (1 << PB5) | (1 << PB7);   // This sets the output for the pump, starter motor, and solenoids
 	DDRE |= (1 << PE4);	
 	
 	
-	////////////       Step 2: Initialize the Master SPI with the CJC         ///////////////
+	////////////       Step 2: Initialize the SPI Module for the CJC         ///////////////
 	// The next things that need to be set are as follows
-	// 1) Set MSPI mode of operation and SPI data mode to 0
-	// 2) Enable the receiver and transmitter
-	// 3) Set the baud rate.  This has to be done after the the transmitter has been enabled
-	// 4) Set up timer 7 with a 0.1 second delay so that there is time in between sampling 
-		
-	UCSR0C = (1<<UMSEL01)|(1<<UMSEL00);   // by not explicitly defining the mode, it should be in mode 0
-	UCSR0B = (1<<RXEN0)|(1<<TXEN0);	UBRR0 = 7;    // This will have a baud rate of 1MHz with the 16MHz oscillator
+	// 1) Set Enable the correct port directions
+	// 2) Enable SPI, Master operation, and the clock rate
+	
+	DDRB = (1 << MOSI) | (1 << SCK) | (1 << CJC_SS) | (0 << MISO);
+	SPCR = (1 << SPE) | (1 << MSTR) | (1 << SPR0);   // This will enable SPI mode 0 with a clock rate of Fosc/16
+	
+	// The CJC will be sampled at the end of the Hall Effect Sampling period
 
 	
 	///////////////////  Step 3: Initialize External Interrupt line  ////////////////////////
@@ -107,6 +103,4 @@ void Initial(void)
 	commandCode = 0;        // This means that that the next received char is a new command
 	ECUreceiveCount = 0;
 	
-	//connected = 1;
-
 }
