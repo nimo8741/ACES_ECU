@@ -1,4 +1,4 @@
-/** @file Engine_funcs.c
+/** @file ECU_funcs.c
  *  @author Nick Moore
  *  @date March 20, 2018
  *  @brief Implementation for functions for local processes on the ECU
@@ -33,8 +33,8 @@ void batVoltage(void)
 	uint16_t result = (high_bits << 8) | low_bits;
 	
 	// Now I need to convert this 16 bit number into an actual temperature
-	voltage = 3.0 * (float) result;            // Convert to float value of the voltage
-	voltage = voltage * (4.96 / 1024.0);      // This will return Vin
+	voltage.f = 3.0 * (float) result;            // Convert to float value of the voltage
+	voltage.f = voltage.f * (4.96 / 1024.0);      // This will return Vin
 	
 	ADCSRA |= (1 << ADSC);                     // Start the next conversion
 		
@@ -115,6 +115,11 @@ void assign_bit(volatile uint8_t *sfr,uint8_t bit, uint8_t val)
 	}
 }
 
+/** @brief Interrupt Service Routine which invokes an engine shutdown should the communication timer with the Windows GUI overflow.
+ *
+ *  @param void
+ *  @return void
+ */
 ISR(TIMER4_OVF_vect)
 {
 	// If it makes it in here then the Computer is presumed to have gotten disconnected from the ECU
@@ -125,15 +130,25 @@ ISR(TIMER4_OVF_vect)
 	newCommand = 1;     // this will come in handy when trying to reconnect
 }
 
+/** @brief Interrupt Service Routine which changes global variables should the communication with the ESB overflow.
+ *
+ *  @param void
+ *  @return void
+ */
 ISR(TIMER5_OVF_vect)
 {
 	// If it makes it in here then the ESB is presumed to have gotten disconnected from the ECU
 	opMode = 5;
 	assign_bit(&TCCR5B, CS52, 0);            // turn off the timer
 	TCNT5 = ESB_timer_val;                           // reload the timer register
-	connected_GUI = 0;
+	connected_ESB = 0;
 }
 
+/** @brief Accesses memory within the MAX6675 and converts the data into a usable temperature.
+ *
+ *  @param void
+ *  @return void
+ */
 void readTempSensor(void)
 {
 	i2c_Start(SLA_W);   // this will write the temp address to the register on the sensor
@@ -172,6 +187,12 @@ void readTempSensor(void)
 
 }
 
+/** @brief Function to calculate the parity byte for a corresponding sequence of 6 bytes
+ *
+ *  @param[in] message Entire message which a subset will be used in order to calculate the parity byte
+ *  @param[in] start_index Starting index within message for which to calculate the parity byte
+ *  @return char
+ */
 char calculateParity(char message[], uint8_t start_index)
 {
 	// This will return the parity byte for a message made up of 6 sequential bytes, starting with start_index
@@ -193,6 +214,11 @@ char calculateParity(char message[], uint8_t start_index)
 		return parity;
 }
 
+/** @brief Subroutine to count the number of high bits within a designated byte.
+ *
+ *  @param[in] byte The byte by which to calculate the number of high bits within
+ *  @return unsigned char
+ */
 unsigned char countOnes(unsigned char byte)
 {
 	unsigned char count = 0;
@@ -204,34 +230,11 @@ unsigned char countOnes(unsigned char byte)
 	return count;
 }
 
-void dummyData(void)
-{
-		
-	// second dummy data for the hall effect sensor
-	Hall_effect += 5000;   // this will overflow all on its own
-	
-	// third dummy data for the EGT;
-	EGT += 30.24;
-	if (EGT > 1000)
-		EGT = 0;
-	
-	// fourth dummy data for the mass flow rate
-	massFlow.f += 0.05;
-	if (massFlow.f > 4.8)
-		massFlow.f = 0;
-		
-	// fifth the glow plug state
-	if (Hall_effect > 50000)
-		glow_plug = 1;
-	else
-		glow_plug = 0;
-		
-	ESB_temp = 69.69;
-			
-	// sixth need the operational mode
-	opMode = 5;  // this means that the engine is not doing anything
-}
-
+/** @brief Subroutine which will wait for a given number of milliseconds.
+ *
+ *  @param[in] msec Number of milliseconds to wait
+ *  @return void
+ */
 void waitMS(uint16_t msec)
 {
 	// This function utilizes timer 0 and a sequence of delay loops to delay for the desired time

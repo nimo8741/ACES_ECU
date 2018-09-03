@@ -1,0 +1,226 @@
+\hypertarget{_initial__funcs_8c}{}\section{C\+:/\+Users/nickm/\+Documents/\+Git\+Hub/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+Initial\+\_\+funcs.c File Reference}
+\label{_initial__funcs_8c}\index{C\+:/\+Users/nickm/\+Documents/\+Git\+Hub/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+Initial\+\_\+funcs.\+c@{C\+:/\+Users/nickm/\+Documents/\+Git\+Hub/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+Initial\+\_\+funcs.\+c}}
+
+
+Implementation of initialization routines.  
+
+
+{\ttfamily \#include $<$avr/io.\+h$>$}\newline
+{\ttfamily \#include $<$avr/interrupt.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}E\+C\+U\+\_\+funcs.\+h\char`\"{}}\newline
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{_initial__funcs_8c_a013b823a1365a9c8f46218f490f71b62}{pre\+\_\+\+Initial}} (void)
+\begin{DoxyCompactList}\small\item\em Performs the waiting cycle until the H\+CU signals to the E\+CU to being operating. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_initial__funcs_8c_a23459ced73501cbafb717ca9cbb10ce7}{Initial}} (void)
+\begin{DoxyCompactList}\small\item\em Initializes the microcontroller for its mainline execution. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Implementation of initialization routines. 
+
+\begin{DoxyAuthor}{Author}
+Nick Moore 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+March 16, 2018 
+\end{DoxyDate}
+\begin{DoxyRefDesc}{Bug}
+\item[\mbox{\hyperlink{bug__bug000006}{Bug}}]No known bugs. \end{DoxyRefDesc}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{_initial__funcs_8c_a23459ced73501cbafb717ca9cbb10ce7}\label{_initial__funcs_8c_a23459ced73501cbafb717ca9cbb10ce7}} 
+\index{Initial\+\_\+funcs.\+c@{Initial\+\_\+funcs.\+c}!Initial@{Initial}}
+\index{Initial@{Initial}!Initial\+\_\+funcs.\+c@{Initial\+\_\+funcs.\+c}}
+\subsubsection{\texorpdfstring{Initial()}{Initial()}}
+{\footnotesize\ttfamily void Initial (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Initializes the microcontroller for its mainline execution. 
+
+This performs the following functions\+:
+
+1) Initializes the P\+O\+RT data directions. 0 for input and 1 for output
+
+2) Initializes the asynchronous communication with the Windows G\+UI
+
+3) Initializes the S\+PI communication with the E\+SB
+
+4) Initializes the I2C communication with the on board temperature sensors
+
+5) Initializes the A\+DC for the Lipo battery voltage measurements
+
+6) Enable global interrupts
+
+7) Enable a timer for the E\+CU command cycle and start the timer
+
+
+\begin{DoxyParams}{Parameters}
+{\em void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 49 of file Initial\+\_\+funcs.\+c.
+
+
+\begin{DoxyCode}
+50 \{
+52     DDRD |= (1 << XCK1);          \textcolor{comment}{// Enable the SPI output pin for output.  This puts the ECU in master
+       mode for SPI}
+53     
+55     UBRR0 = 12;     \textcolor{comment}{// With a 16 MHz clock this will make a baud rate of 76800 (error of 0.16%)}
+56     
+57     \textcolor{comment}{// The next things that need to be set are as follows (reference page 220 in datasheet)}
+58     \textcolor{comment}{// 1) Enable receive interrupts}
+59     \textcolor{comment}{// 2) Enable receiver}
+60     \textcolor{comment}{// 3) Enable transmitter}
+61     UCSR0B = (1 << RXCIE0) | (1 << RXEN0) | (1 << TXEN0);
+62     
+63     \textcolor{comment}{// Now set the framing information}
+64     \textcolor{comment}{// I want the following things}
+65     \textcolor{comment}{// 1) Asynchronous USART}
+66     \textcolor{comment}{// 2) No Parity}
+67     \textcolor{comment}{// 3) 1 Stop bit}
+68     \textcolor{comment}{// 4) 8 bit character size}
+69     UCSR0C = (1 << UCSZ01) | (1 << UCSZ00);   \textcolor{comment}{// Now the USART should be ready to receive}
+70         
+72     
+73     UBRR1 = 12;     \textcolor{comment}{// With a 16 MHz clock this will make a baud rate of 76800 (error of 0.16%)}
+74     \textcolor{comment}{//  This is the same process as with communication with the GUI}
+75     
+76     UCSR1B = (1 << RXCIE1) | (1 << RXEN1) | (1 << TXEN1);
+77     
+78     \textcolor{comment}{// Now set the framing information}
+79     \textcolor{comment}{// I want the following things}
+80     \textcolor{comment}{// 1) Asynchronous USART}
+81     \textcolor{comment}{// 2) No Parity}
+82     \textcolor{comment}{// 3) 1 Stop bit}
+83     \textcolor{comment}{// 4) 8 bit character size}
+84     UCSR1C = (1 << UCSZ11) | (1 << UCSZ10);   \textcolor{comment}{// Now the USART should be ready to receive}
+85     \mbox{\hyperlink{_e_c_u__funcs_8h_a36d06dcce16c9c486a59c23947f2daf2}{newCommand\_ESB}} = 1;
+86     \mbox{\hyperlink{_e_c_u__funcs_8h_a229f3452d6df08f66a06e45b4ac03647}{ESBreceiveCount}} = 0;
+87     \mbox{\hyperlink{_e_c_u__funcs_8c_abfac85317b9c1522c7b5196d94e471bd}{waitMS}}(50);
+88     \textcolor{keywordflow}{while} (!connected)\{     \textcolor{comment}{// wait until connected with the ESB}
+89         \mbox{\hyperlink{_communication_8c_aa3590f927d6f0e270aad13cd890ba3d5}{ESB\_Connect}}();
+90         \mbox{\hyperlink{_e_c_u__funcs_8c_abfac85317b9c1522c7b5196d94e471bd}{waitMS}}(10);
+91     \}
+92                 
+94     
+95     \textcolor{comment}{// First set the bit rate and prescalar registers for a clock rate of 200 kHz (this is right in the
+       middle of the sensor's range)}
+96     DDRD |= (1 << PD0);     \textcolor{comment}{// this will make the clock line an output}
+97     TWBR = 8;  \textcolor{comment}{// Bit rate register}
+98     \mbox{\hyperlink{_e_c_u__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}{assign\_bit}}(&TWSR, TWPS0, 0);
+99     \mbox{\hyperlink{_e_c_u__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}{assign\_bit}}(&TWSR, TWPS1, 0);   \textcolor{comment}{// this makes a prescalar of 1}
+100     \textcolor{comment}{// Probably don't need to make these assignments but I am just making it explicit}
+101     
+102     \textcolor{comment}{// Second enable the interrupts for the Two Wire Interface}
+103     TWCR = (1<<TWEN);   \textcolor{comment}{// this will clear the interrupt flag and enable the TWI lines.}
+104     \textcolor{comment}{// the temp sensor will be read every quarter second    }
+105     
+106     
+108     
+109     \textcolor{comment}{// The next things that need to be set are as follows}
+110     \textcolor{comment}{// 1) The reference for the ADC needs to be set to the external AREF}
+111     \textcolor{comment}{// 2) The channel for ADMUX needs to be channel 0}
+112     \textcolor{comment}{// 3) The ADC needs to be enabled without interrupts}
+113     \textcolor{comment}{// 4) Division factor for the ADC needs to be set to 128 to keep the input clock }
+114     \textcolor{comment}{//    frequency between 50kHz and 200kHz}
+115     
+116     ADMUX = (1 << REFS0);
+117     ADCSRA = (1 << ADEN) | (1 << ADPS0) | (1 << ADPS1) | (1 << ADPS2);
+118     \mbox{\hyperlink{_e_c_u__funcs_8h_af76c5ac758d1858dffcde4e7aa84e889}{batChannel}} = 0;
+119 
+120 
+122     sei();
+123      
+125     
+126     \textcolor{comment}{// The next things that need to be set are as follows}
+127     \textcolor{comment}{// 1) Timer 1 needs a prescalar of 64 and timer register of 3036    for time of 0.25 sec, for
+       regulating communication with the ESB}
+128     \textcolor{comment}{// 2) Timer 3 needs a prescalar of 64 and timer register if 3036}
+129     \textcolor{comment}{// 3) Timer 4 and 5 needs to have interrupts enabled and create a 1 second timer}
+130     TCNT1 = 3036;
+131     TCNT3 = FlowTime;             \textcolor{comment}{// The flow meter timer does not need interrupts since it will be polled}
+132     
+133     \textcolor{comment}{// The TIFR1 register and TOV1 flag are the overflow flag for timer1}
+134     TCCR1B = (1 << CS11) | (1 << CS10);    \textcolor{comment}{// start timer 1 with prescalar of 64}
+135     TCNT4 = 34286;                         \textcolor{comment}{// coupled with a prescalar of 256, this will make a 0.5 second
+       timer}
+136     TCNT5 = 40536;
+137     TIMSK4 = (1 << TOIE4);     \textcolor{comment}{// enable overflow interrupts for the GUI communication timer}
+138     TIMSK5 = (1 << TOIE5);     \textcolor{comment}{// enable overflow interrupts for the ESB communication timer}
+139     TCNT5 = ESB\_timer\_val;     \textcolor{comment}{// loads Timer 5 with a value that will make a 1 second timer}
+140 
+141     
+142     \textcolor{comment}{// Begin the first conversion for the ADC}
+143     ADCSRA |= (1 << ADSC);
+144     
+145     \mbox{\hyperlink{_e_c_u__funcs_8h_a411b8ca204ac2d44a3755adcf4477c92}{massFlow}}.f = 0.0;
+146      
+147     \textcolor{comment}{// Now configure the external interrupts for the Flow meters}
+148     EICRA = (1 << ISC20) | (1 << ISC21);     \textcolor{comment}{// This will enable rising edge interrupts on INT2, see page
+       110 in datasheet}
+149     \mbox{\hyperlink{_e_c_u__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}{assign\_bit}}(&DDRD, INT2, 0);              \textcolor{comment}{// Configure the PD2 pin as an input so that it can
+       receive the signals}
+150      
+151      
+152     \textcolor{comment}{// Now configure the global variables for the flow meter}
+153     \textcolor{keywordtype}{float} pulse\_flow = (\mbox{\hyperlink{_e_c_u__funcs_8h_a959f7b5d831006ba86ebf2754975fdfc}{density}}) * \mbox{\hyperlink{_e_c_u__funcs_8h_a062607eaaffe8c3f8193991755e024f9}{K\_factor}} * \mbox{\hyperlink{_e_c_u__funcs_8h_a0f29307316da99a662028868a7f7636d}{max\_time}} / 1000;   \textcolor{comment}{// number of pulses
+       expected per g/sec}
+154     \mbox{\hyperlink{_e_c_u__funcs_8h_a4d33ec29c2398728e80d752eeced889e}{V\_per\_pulse}} = \mbox{\hyperlink{_e_c_u__funcs_8h_a8f24004cae5e9f858db493e25febf8c8}{pump\_m}} / pulse\_flow;               \textcolor{comment}{// number of volts per pulse}
+155     \mbox{\hyperlink{_e_c_u__funcs_8h_ab1fa4bbd357586cbfa309f1b8614c1ae}{opMode}} = 0;
+156     \mbox{\hyperlink{_e_c_u__funcs_8h_a4a8bbdf0f587322d8d34a2d4b84ea8a6}{newCommand}} = 1;
+157     
+158     \textcolor{comment}{// Initialize all of the data values to zero}
+159     \mbox{\hyperlink{_e_c_u__funcs_8h_a411b8ca204ac2d44a3755adcf4477c92}{massFlow}}.f = 0;
+160     \mbox{\hyperlink{_e_c_u__funcs_8h_afc4ac50caf210854dacff228ba315687}{Hall\_effect}} = 0;
+161     \mbox{\hyperlink{_e_c_u__funcs_8h_a34c104e39ff60265f33e3325bf865ab5}{EGT}} = 0;
+162     \mbox{\hyperlink{_e_c_u__funcs_8h_a17961c0bba1aa12ef80b5b9b78726530}{glow\_plug}} = 0;
+163     \mbox{\hyperlink{_e_c_u__funcs_8h_ad849b9fe0e266552696acb467ff745f7}{voltage}}.f = 0;
+164     \mbox{\hyperlink{_e_c_u__funcs_8h_aa8cc3e0359b222fe83e4f0351414d5a4}{doTransmit}} = 0;
+165     
+166     
+167 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_initial__funcs_8c_a013b823a1365a9c8f46218f490f71b62}\label{_initial__funcs_8c_a013b823a1365a9c8f46218f490f71b62}} 
+\index{Initial\+\_\+funcs.\+c@{Initial\+\_\+funcs.\+c}!pre\+\_\+\+Initial@{pre\+\_\+\+Initial}}
+\index{pre\+\_\+\+Initial@{pre\+\_\+\+Initial}!Initial\+\_\+funcs.\+c@{Initial\+\_\+funcs.\+c}}
+\subsubsection{\texorpdfstring{pre\+\_\+\+Initial()}{pre\_Initial()}}
+{\footnotesize\ttfamily void pre\+\_\+\+Initial (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Performs the waiting cycle until the H\+CU signals to the E\+CU to being operating. 
+
+This performs the following functions\+:
+
+1) Waits until the connection pin between the H\+CU and E\+CU is driven high
+
+
+\begin{DoxyParams}{Parameters}
+{\em void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 22 of file Initial\+\_\+funcs.\+c.
+
+
+\begin{DoxyCode}
+23 \{
+24     DDRC |= (0 << HCU\_link);      \textcolor{comment}{// set this pin for input}
+25     \textcolor{keywordflow}{while} (\mbox{\hyperlink{_e_c_u__funcs_8h_ad188fb0fbfd923bdb01294072367d024}{bit\_is\_clear}}(PINC, HCU\_link));    \textcolor{comment}{// just wait until the HCU tells the ECU to wake
+       up}
+26 \}
+\end{DoxyCode}

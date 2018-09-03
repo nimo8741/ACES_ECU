@@ -63,6 +63,7 @@
 #define ECU_timer_val 3036    // This is the reload value for the ECU connection timer
 #define HallTime 2760         // This was found experimentally to cause the space between the message to be exactly 0.25 sec (by logic analyzer)
 #define CJC_MSK 0x7           // This is the mask will will separate the MSB's of the temperature from the dummy sign bit, probably not needed
+#define normalDataIn 11         // This the length of a normal data message coming from the ECU
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -102,6 +103,7 @@ void waitMS(uint16_t msec);
 void ECUconnect(void);
 uint8_t calculateParity(uint8_t message[], uint8_t start_index);
 uint8_t countOnes(uint8_t byte);
+uint8_t checkParity(void);
 
 
 
@@ -111,30 +113,62 @@ uint8_t countOnes(uint8_t byte);
 
 //! This will describe whether or not the ESB is connected to the ECU
 uint8_t connected;
-uint8_t receive_mode;
-uint8_t receive_counter;
+
+//! Describes critical information about the current state of the engine
 uint8_t opMode;
+
+//! Value 1-100 for the the user wants to set the throttle to
 uint8_t throttle_val;
+
+//! Flag which describes if the current hall effect sampling period has concluded
 uint8_t hallDone;
+
+//! Flag which determines if an engine startup will currently be prevented
 uint8_t startUpLockOut;
+
+//! The number of pulses recorded in the current sampling period
 uint16_t hallCount;
+
+//! Flag which describes whether the current data transmission has been interrupted by an ISR
 uint8_t hasInterrupted;
+
+//! Describes which type of information the ESB is receiving from the ECU, either normal data or a command
 uint8_t commandCode;
+
+//! Counter to keep track of the current index in a message received from the ECU
 uint8_t ECUreceiveCount;
+
+//! Flag for if the glow plug is on or off
 unsigned char glowPlug;
+
+//! Value of the desired amount of fuel flow
 float desMFlow;
+
+//! Value for how much voltage applied to the fuel pump corresponds to a single pulse from the flow meter
 float V_per_pulse;
-float pulse_flow;
+
+//! The amount of pulses expected per each g/sec of fuel flow
+float pulse_flow;    
+
+//! Value of the current lipo battery voltage
 float bat_voltage;
-char string_volt[3];
-uint8_t fail_counter;
-uint8_t bytesToSend;
+
+//! Array for the message to send to the ECU
 uint8_t ECUtransmit[14];
+
+//! Array for the message received from the ECU
 uint8_t ECUreceive[7];
+
+//! Current RPM of recorded by the hall effect sensor
 uint16_t hallEffect;
+
+//! The current exhaust gas temperature
 float EGT;
+
+//! Ambient temperature recorded on the ESB.  This is currently unimplemented
 float ref_temp;
 
+//! Current value of mass flow
 union{
 	uint8_t c[4];
 	float f;	

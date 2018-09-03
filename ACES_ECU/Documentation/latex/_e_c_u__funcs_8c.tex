@@ -1,0 +1,497 @@
+\hypertarget{_e_c_u__funcs_8c}{}\section{C\+:/\+Users/nickm/\+Documents/\+Git\+Hub/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+E\+C\+U\+\_\+funcs.c File Reference}
+\label{_e_c_u__funcs_8c}\index{C\+:/\+Users/nickm/\+Documents/\+Git\+Hub/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+E\+C\+U\+\_\+funcs.\+c@{C\+:/\+Users/nickm/\+Documents/\+Git\+Hub/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+E\+C\+U\+\_\+funcs.\+c}}
+
+
+Implementation for functions for local processes on the E\+CU.  
+
+
+{\ttfamily \#include $<$avr/io.\+h$>$}\newline
+{\ttfamily \#include $<$avr/interrupt.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}E\+C\+U\+\_\+funcs.\+h\char`\"{}}\newline
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{_e_c_u__funcs_8c_a9dc66b4b2df662c440d4d05da08e6d6a}{bat\+Voltage}} (void)
+\begin{DoxyCompactList}\small\item\em Measures the voltage on the Lipo battery from the 3 different A\+DC channels. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_e_c_u__funcs_8c_a61322b047675f61caefcfaca81cfa48b}{measure\+Flow}} (void)
+\begin{DoxyCompactList}\small\item\em Measures the fuel flow passing through the Flow meter. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{_e_c_u__funcs_8c_a30a0ad88a89a84c0161cf09eace108e8}{I\+SR}} (I\+N\+T2\+\_\+vect)
+\begin{DoxyCompactList}\small\item\em Interrupt Service Routine which reads in the pulse train and increments a count. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_e_c_u__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}{assign\+\_\+bit}} (volatile uint8\+\_\+t $\ast$sfr, uint8\+\_\+t bit, uint8\+\_\+t val)
+\begin{DoxyCompactList}\small\item\em Sets the specified bit to the specified value or does nothing if it already set to that. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{_e_c_u__funcs_8c_a33c40fdd48fd7bb540f034e5c489a38b}{I\+SR}} (T\+I\+M\+E\+R4\+\_\+\+O\+V\+F\+\_\+vect)
+\begin{DoxyCompactList}\small\item\em Interrupt Service Routine which invokes an engine shutdown should the communication timer with the Windows G\+UI overflow. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{_e_c_u__funcs_8c_a4ecf85c13d47309a0b3b3a39721432ae}{I\+SR}} (T\+I\+M\+E\+R5\+\_\+\+O\+V\+F\+\_\+vect)
+\begin{DoxyCompactList}\small\item\em Interrupt Service Routine which changes global variables should the communication with the E\+SB overflow. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_e_c_u__funcs_8c_a17727302d45ecff548af8f81d06f3a7e}{read\+Temp\+Sensor}} (void)
+\begin{DoxyCompactList}\small\item\em Accesses memory within the M\+A\+X6675 and converts the data into a usable temperature. \end{DoxyCompactList}\item 
+char \mbox{\hyperlink{_e_c_u__funcs_8c_adc85b180d655324bb96dcb29cff05af3}{calculate\+Parity}} (char message\mbox{[}$\,$\mbox{]}, uint8\+\_\+t start\+\_\+index)
+\begin{DoxyCompactList}\small\item\em Function to calculate the parity byte for a corresponding sequence of 6 bytes. \end{DoxyCompactList}\item 
+unsigned char \mbox{\hyperlink{_e_c_u__funcs_8c_adb2fefa1023fbf227e5102e1ea3c9d4b}{count\+Ones}} (unsigned char byte)
+\begin{DoxyCompactList}\small\item\em Subroutine to count the number of high bits within a designated byte. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_e_c_u__funcs_8c_abfac85317b9c1522c7b5196d94e471bd}{wait\+MS}} (uint16\+\_\+t msec)
+\begin{DoxyCompactList}\small\item\em Subroutine which will wait for a given number of milliseconds. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Implementation for functions for local processes on the E\+CU. 
+
+\begin{DoxyAuthor}{Author}
+Nick Moore 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+March 20, 2018 
+\end{DoxyDate}
+\begin{DoxyRefDesc}{Bug}
+\item[\mbox{\hyperlink{bug__bug000002}{Bug}}]No known bugs. \end{DoxyRefDesc}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{_e_c_u__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}\label{_e_c_u__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}} 
+\index{E\+C\+U\+\_\+funcs.\+c@{E\+C\+U\+\_\+funcs.\+c}!assign\+\_\+bit@{assign\+\_\+bit}}
+\index{assign\+\_\+bit@{assign\+\_\+bit}!E\+C\+U\+\_\+funcs.\+c@{E\+C\+U\+\_\+funcs.\+c}}
+\subsubsection{\texorpdfstring{assign\+\_\+bit()}{assign\_bit()}}
+{\footnotesize\ttfamily void assign\+\_\+bit (\begin{DoxyParamCaption}\item[{volatile uint8\+\_\+t $\ast$}]{sfr,  }\item[{uint8\+\_\+t}]{bit,  }\item[{uint8\+\_\+t}]{val }\end{DoxyParamCaption})}
+
+
+
+Sets the specified bit to the specified value or does nothing if it already set to that. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt out}  & {\em sfr} & Pointer to Special Function Register the bit is located in. \\
+\hline
+\mbox{\tt in}  & {\em bit} & Denotes the bit which would like to be changed. \\
+\hline
+\mbox{\tt in}  & {\em val} & The value, either 1 or 0, that the user would like the bit to be after the function call. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 104 of file E\+C\+U\+\_\+funcs.\+c.
+
+
+\begin{DoxyCode}
+105 \{
+106     \textcolor{keywordflow}{if} (val)      \textcolor{comment}{// This is for if I want the value to be a 1}
+107     \{
+108         val = (val << bit);
+109         *sfr |= val;
+110     \}
+111     \textcolor{keywordflow}{else}             \textcolor{comment}{// This is for if I want the value to be a 0}
+112     \{
+113         val = ~(1 << bit);
+114         *sfr &= val;
+115     \}
+116 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_e_c_u__funcs_8c_a9dc66b4b2df662c440d4d05da08e6d6a}\label{_e_c_u__funcs_8c_a9dc66b4b2df662c440d4d05da08e6d6a}} 
+\index{E\+C\+U\+\_\+funcs.\+c@{E\+C\+U\+\_\+funcs.\+c}!bat\+Voltage@{bat\+Voltage}}
+\index{bat\+Voltage@{bat\+Voltage}!E\+C\+U\+\_\+funcs.\+c@{E\+C\+U\+\_\+funcs.\+c}}
+\subsubsection{\texorpdfstring{bat\+Voltage()}{batVoltage()}}
+{\footnotesize\ttfamily void bat\+Voltage (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Measures the voltage on the Lipo battery from the 3 different A\+DC channels. 
+
+This performs the following functions\+:
+
+1) Measures the A\+DC voltage on the current A\+DC channel 2) Combines this result will the current float value of the voltage 3) Changes the A\+DC channel to the next one in the rotation 0-\/$>$1-\/$>$2-\/$>$0
+
+
+\begin{DoxyParams}{Parameters}
+{\em void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 25 of file E\+C\+U\+\_\+funcs.\+c.
+
+
+
+References bit\+\_\+is\+\_\+set, and voltage.
+
+
+\begin{DoxyCode}
+26 \{
+27     \textcolor{comment}{// first check to see if the conversion has completed}
+28     \textcolor{keywordflow}{if} (\mbox{\hyperlink{_e_c_u__funcs_8h_a3b034cb1d74b9addc7599bd6ea6bd0d9}{bit\_is\_set}}(ADCSRA,ADSC))
+29         \textcolor{keywordflow}{return};
+30     
+31     uint8\_t low\_bits = ADCL;
+32     uint8\_t high\_bits = ADCH;                        \textcolor{comment}{// Do the shifting so that there is room made inside
+       of the 16 bit register}
+33     uint16\_t result = (high\_bits << 8) | low\_bits;
+34     
+35     \textcolor{comment}{// Now I need to convert this 16 bit number into an actual temperature}
+36     \mbox{\hyperlink{_e_c_u__funcs_8h_ad849b9fe0e266552696acb467ff745f7}{voltage}}.f = 3.0 * (float) result;            \textcolor{comment}{// Convert to float value of the voltage}
+37     \mbox{\hyperlink{_e_c_u__funcs_8h_ad849b9fe0e266552696acb467ff745f7}{voltage}}.f = \mbox{\hyperlink{_e_c_u__funcs_8h_ad849b9fe0e266552696acb467ff745f7}{voltage}}.f * (4.96 / 1024.0);      \textcolor{comment}{// This will return Vin}
+38     
+39     ADCSRA |= (1 << ADSC);                     \textcolor{comment}{// Start the next conversion}
+40         
+41 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_e_c_u__funcs_8c_adc85b180d655324bb96dcb29cff05af3}\label{_e_c_u__funcs_8c_adc85b180d655324bb96dcb29cff05af3}} 
+\index{E\+C\+U\+\_\+funcs.\+c@{E\+C\+U\+\_\+funcs.\+c}!calculate\+Parity@{calculate\+Parity}}
+\index{calculate\+Parity@{calculate\+Parity}!E\+C\+U\+\_\+funcs.\+c@{E\+C\+U\+\_\+funcs.\+c}}
+\subsubsection{\texorpdfstring{calculate\+Parity()}{calculateParity()}}
+{\footnotesize\ttfamily char calculate\+Parity (\begin{DoxyParamCaption}\item[{char}]{message\mbox{[}$\,$\mbox{]},  }\item[{uint8\+\_\+t}]{start\+\_\+index }\end{DoxyParamCaption})}
+
+
+
+Function to calculate the parity byte for a corresponding sequence of 6 bytes. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em message} & Entire message which a subset will be used in order to calculate the parity byte \\
+\hline
+\mbox{\tt in}  & {\em start\+\_\+index} & Starting index within message for which to calculate the parity byte \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+char 
+\end{DoxyReturn}
+
+
+Definition at line 196 of file E\+C\+U\+\_\+funcs.\+c.
+
+
+
+References count\+Ones().
+
+
+\begin{DoxyCode}
+197 \{
+198     \textcolor{comment}{// This will return the parity byte for a message made up of 6 sequential bytes, starting with
+       start\_index}
+199         \textcolor{keywordtype}{char} parity = 0;
+200         
+201         \textcolor{comment}{// first need to get the number of high bits in the first three bytes in the set}
+202         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{unsigned} \textcolor{keyword}{set} = 0; \textcolor{keyword}{set} < 2; \textcolor{keyword}{set}++)\{
+203             \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} count = 0;
+204             \textcolor{keywordflow}{for} (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} i = 0; i < 3; i++)\{
+205                 count += \mbox{\hyperlink{_e_c_u__funcs_8c_adb2fefa1023fbf227e5102e1ea3c9d4b}{countOnes}}(message[start\_index + \textcolor{keyword}{set}*3 + i]);
+206             \}
+207             \textcolor{comment}{// now that I have the count for this set, I need to take the modulo}
+208             count = count % 16;   \textcolor{comment}{// Modulo with 16 because I have 4 bits to play with}
+209             
+210             \textcolor{comment}{// now add this into the parity byte}
+211             parity |= count << (4 * \textcolor{keyword}{set});   \textcolor{comment}{// this will make it so that bytes 0-2 will take up the LSB of
+       the parity byte}
+212         \}
+213         \textcolor{comment}{// now copy this byte into memory}
+214         \textcolor{keywordflow}{return} parity;
+215 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_e_c_u__funcs_8c_adb2fefa1023fbf227e5102e1ea3c9d4b}\label{_e_c_u__funcs_8c_adb2fefa1023fbf227e5102e1ea3c9d4b}} 
+\index{E\+C\+U\+\_\+funcs.\+c@{E\+C\+U\+\_\+funcs.\+c}!count\+Ones@{count\+Ones}}
+\index{count\+Ones@{count\+Ones}!E\+C\+U\+\_\+funcs.\+c@{E\+C\+U\+\_\+funcs.\+c}}
+\subsubsection{\texorpdfstring{count\+Ones()}{countOnes()}}
+{\footnotesize\ttfamily unsigned char count\+Ones (\begin{DoxyParamCaption}\item[{unsigned char}]{byte }\end{DoxyParamCaption})}
+
+
+
+Subroutine to count the number of high bits within a designated byte. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em byte} & The byte by which to calculate the number of high bits within \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+unsigned char 
+\end{DoxyReturn}
+
+
+Definition at line 222 of file E\+C\+U\+\_\+funcs.\+c.
+
+
+\begin{DoxyCode}
+223 \{
+224     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} count = 0;
+225     \textcolor{keywordflow}{while} (byte)
+226     \{
+227         count += byte & 1;    \textcolor{comment}{// this was essentially lifted from geeksforgeeks.com}
+228         byte >>= 1;
+229     \}
+230     \textcolor{keywordflow}{return} count;
+231 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_e_c_u__funcs_8c_a30a0ad88a89a84c0161cf09eace108e8}\label{_e_c_u__funcs_8c_a30a0ad88a89a84c0161cf09eace108e8}} 
+\index{E\+C\+U\+\_\+funcs.\+c@{E\+C\+U\+\_\+funcs.\+c}!I\+SR@{I\+SR}}
+\index{I\+SR@{I\+SR}!E\+C\+U\+\_\+funcs.\+c@{E\+C\+U\+\_\+funcs.\+c}}
+\subsubsection{\texorpdfstring{I\+S\+R()}{ISR()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily I\+SR (\begin{DoxyParamCaption}\item[{I\+N\+T2\+\_\+vect}]{ }\end{DoxyParamCaption})}
+
+
+
+Interrupt Service Routine which reads in the pulse train and increments a count. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em pulse\+\_\+count} & This is the number which describes how many pulses have been received for the sampling period. It is an implicit argument as it is a global variable which is not explicitly passed in. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+flow\+Meter 
+\end{DoxySeeAlso}
+
+
+Definition at line 92 of file E\+C\+U\+\_\+funcs.\+c.
+
+
+
+References pulse\+\_\+count.
+
+
+\begin{DoxyCode}
+93 \{
+94     \mbox{\hyperlink{_e_c_u__funcs_8h_af9e36069f73b8a3642ae276fd3b672a1}{pulse\_count}}++;  \textcolor{comment}{// The interrupt flag will automatically be cleared by hardware}
+95 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_e_c_u__funcs_8c_a33c40fdd48fd7bb540f034e5c489a38b}\label{_e_c_u__funcs_8c_a33c40fdd48fd7bb540f034e5c489a38b}} 
+\index{E\+C\+U\+\_\+funcs.\+c@{E\+C\+U\+\_\+funcs.\+c}!I\+SR@{I\+SR}}
+\index{I\+SR@{I\+SR}!E\+C\+U\+\_\+funcs.\+c@{E\+C\+U\+\_\+funcs.\+c}}
+\subsubsection{\texorpdfstring{I\+S\+R()}{ISR()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily I\+SR (\begin{DoxyParamCaption}\item[{T\+I\+M\+E\+R4\+\_\+\+O\+V\+F\+\_\+vect}]{ }\end{DoxyParamCaption})}
+
+
+
+Interrupt Service Routine which invokes an engine shutdown should the communication timer with the Windows G\+UI overflow. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 123 of file E\+C\+U\+\_\+funcs.\+c.
+
+
+
+References assign\+\_\+bit(), connected\+\_\+\+G\+UI, new\+Command, and shutdown().
+
+
+\begin{DoxyCode}
+124 \{
+125     \textcolor{comment}{// If it makes it in here then the Computer is presumed to have gotten disconnected from the ECU}
+126     \mbox{\hyperlink{_e_c_u__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}{assign\_bit}}(&TCCR4B, CS42, 0);
+127     TCNT4 = 34286;                           \textcolor{comment}{// reload the timer register}
+128     \mbox{\hyperlink{_e_c_u__funcs_8h_a1c9d5e29ad8899afe0c34571ddee18f9}{shutdown}}();
+129     \mbox{\hyperlink{_e_c_u__funcs_8h_aaaa9e2d2909ceb75751c9dbfab30661c}{connected\_GUI}} = 0;
+130     \mbox{\hyperlink{_e_c_u__funcs_8h_a4a8bbdf0f587322d8d34a2d4b84ea8a6}{newCommand}} = 1;     \textcolor{comment}{// this will come in handy when trying to reconnect}
+131 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_e_c_u__funcs_8c_a4ecf85c13d47309a0b3b3a39721432ae}\label{_e_c_u__funcs_8c_a4ecf85c13d47309a0b3b3a39721432ae}} 
+\index{E\+C\+U\+\_\+funcs.\+c@{E\+C\+U\+\_\+funcs.\+c}!I\+SR@{I\+SR}}
+\index{I\+SR@{I\+SR}!E\+C\+U\+\_\+funcs.\+c@{E\+C\+U\+\_\+funcs.\+c}}
+\subsubsection{\texorpdfstring{I\+S\+R()}{ISR()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily I\+SR (\begin{DoxyParamCaption}\item[{T\+I\+M\+E\+R5\+\_\+\+O\+V\+F\+\_\+vect}]{ }\end{DoxyParamCaption})}
+
+
+
+Interrupt Service Routine which changes global variables should the communication with the E\+SB overflow. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 138 of file E\+C\+U\+\_\+funcs.\+c.
+
+
+
+References assign\+\_\+bit(), and op\+Mode.
+
+
+\begin{DoxyCode}
+139 \{
+140     \textcolor{comment}{// If it makes it in here then the ESB is presumed to have gotten disconnected from the ECU}
+141     \mbox{\hyperlink{_e_c_u__funcs_8h_ab1fa4bbd357586cbfa309f1b8614c1ae}{opMode}} = 5;
+142     \mbox{\hyperlink{_e_c_u__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}{assign\_bit}}(&TCCR5B, CS52, 0);            \textcolor{comment}{// turn off the timer}
+143     TCNT5 = ESB\_timer\_val;                           \textcolor{comment}{// reload the timer register}
+144     \mbox{\hyperlink{_e_c_u__funcs_8h_a20d5783317799eb3e211c4cae2516cec}{connected\_ESB}} = 0;
+145 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_e_c_u__funcs_8c_a61322b047675f61caefcfaca81cfa48b}\label{_e_c_u__funcs_8c_a61322b047675f61caefcfaca81cfa48b}} 
+\index{E\+C\+U\+\_\+funcs.\+c@{E\+C\+U\+\_\+funcs.\+c}!measure\+Flow@{measure\+Flow}}
+\index{measure\+Flow@{measure\+Flow}!E\+C\+U\+\_\+funcs.\+c@{E\+C\+U\+\_\+funcs.\+c}}
+\subsubsection{\texorpdfstring{measure\+Flow()}{measureFlow()}}
+{\footnotesize\ttfamily void measure\+Flow (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Measures the fuel flow passing through the Flow meter. 
+
+This performs the following functions\+:
+
+1) If the flow meter measurement has not started, it enables the appropriate interrupts and returns 2) If the flow meter measurement is in progress, it simply returns 3) If the flow meter measurement has concluded, it calculates the recorded pulses
+
+
+\begin{DoxyParams}{Parameters}
+{\em void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 54 of file E\+C\+U\+\_\+funcs.\+c.
+
+
+
+References assign\+\_\+bit(), bit\+\_\+is\+\_\+clear, and pulse\+\_\+count.
+
+
+\begin{DoxyCode}
+55 \{
+56     \mbox{\hyperlink{_e_c_u__funcs_8h_af9e36069f73b8a3642ae276fd3b672a1}{pulse\_count}} = 0;
+57 
+58     EIMSK |= (1 << INT2);    \textcolor{comment}{// enable the external interrupts}
+59     
+60     \textcolor{comment}{// Now start Timer3 to run for 0.25 sec}
+61     TCCR3B |= (1 << CS31) | (1 << CS30);
+62     
+63     \textcolor{keywordflow}{while} (\mbox{\hyperlink{_e_c_u__funcs_8h_ad188fb0fbfd923bdb01294072367d024}{bit\_is\_clear}}(TIFR3, TOV3));       \textcolor{comment}{// hog execution until the overflow flag has been
+       set}
+64     TIFR3 |= (1 << TOV3);                    \textcolor{comment}{// clear the interrupt flag}
+65     
+66     \textcolor{comment}{// now disable the external interrupt}
+67     \mbox{\hyperlink{_e_c_u__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}{assign\_bit}}(&EIMSK, INT2, 0);
+68     
+69     \textcolor{comment}{// Now turn off Timer 3}
+70     \mbox{\hyperlink{_e_c_u__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}{assign\_bit}}(&TCCR3B, CS31, 0);
+71     \mbox{\hyperlink{_e_c_u__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}{assign\_bit}}(&TCCR3B, CS30, 0);
+72     
+73     \textcolor{comment}{// Now reset the value inside of the TIMER3 register}
+74     TCNT3 = FlowTime;    \textcolor{comment}{// This will allow the timer to run for 0.25 sec once the prescalars are restored}
+75     
+76     \textcolor{comment}{// Now need to convert the pulses detected into an actual flow rate}
+77     \textcolor{comment}{//massFlow.f = V\_per\_pulse * (float) pulse\_count;}
+78     \textcolor{comment}{//massFlow.f = (massFlow.f - pump\_b) / pump\_m;}
+79 
+80     \textcolor{comment}{// now set the doTransmit flag}
+81     \textcolor{keywordflow}{if} (\mbox{\hyperlink{_e_c_u__funcs_8h_aa8cc3e0359b222fe83e4f0351414d5a4}{doTransmit}} < 1)\{
+82         \mbox{\hyperlink{_e_c_u__funcs_8h_aa8cc3e0359b222fe83e4f0351414d5a4}{doTransmit}}++;
+83     \}
+84 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_e_c_u__funcs_8c_a17727302d45ecff548af8f81d06f3a7e}\label{_e_c_u__funcs_8c_a17727302d45ecff548af8f81d06f3a7e}} 
+\index{E\+C\+U\+\_\+funcs.\+c@{E\+C\+U\+\_\+funcs.\+c}!read\+Temp\+Sensor@{read\+Temp\+Sensor}}
+\index{read\+Temp\+Sensor@{read\+Temp\+Sensor}!E\+C\+U\+\_\+funcs.\+c@{E\+C\+U\+\_\+funcs.\+c}}
+\subsubsection{\texorpdfstring{read\+Temp\+Sensor()}{readTempSensor()}}
+{\footnotesize\ttfamily void read\+Temp\+Sensor (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Accesses memory within the M\+A\+X6675 and converts the data into a usable temperature. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 152 of file E\+C\+U\+\_\+funcs.\+c.
+
+
+\begin{DoxyCode}
+153 \{
+154     i2c\_Start(SLA\_W);   \textcolor{comment}{// this will write the temp address to the register on the sensor}
+155     i2c\_write(0x05);    \textcolor{comment}{// this references the temperatures location in memory}
+156     
+157     \textcolor{comment}{// now restart I2C so that it will be configured for reading the temperature}
+158     i2c\_Start(SLA\_R);
+159     
+160     \textcolor{comment}{// now read the upper and lower bytes}
+161     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} upper = i2c\_read(1);   \textcolor{comment}{// this will send the acknowledged bit}
+162     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} lower = i2c\_read(0);   \textcolor{comment}{// this will send the not acknowledged bit}
+163     i2c\_Stop();
+164     
+165     \textcolor{comment}{// now process the data into a usable temperature}
+166     \textcolor{comment}{//First Check flag bits}
+167     \textcolor{keywordflow}{if} ((upper & 0x80) == 0x80)\{ \textcolor{comment}{//TA >= TCRIT}
+168     \}
+169     
+170     \textcolor{keywordflow}{if} ((upper & 0x40) == 0x40)\{ \textcolor{comment}{//TA > TUPPER}
+171     \}
+172     
+173     \textcolor{keywordflow}{if} ((upper & 0x20) == 0x20)\{ \textcolor{comment}{//TA < TLOWER}
+174     \}
+175     
+176     upper = upper & 0x1F; \textcolor{comment}{//Clear flag bits}
+177     uint8\_t decimal = (lower & dec\_MSK) >> 2;
+178     \textcolor{keywordflow}{if} ((upper & 0x10) == 0x10)\{ \textcolor{comment}{//TA < 0°C}
+179         upper = upper & 0x0F; \textcolor{comment}{//Clear SIGN}
+180         \mbox{\hyperlink{_e_c_u__funcs_8h_ad0434de2efd3a26ea1211a9cec967577}{ECU\_temp}} = (float)(256 - ((upper << 4) + (lower >> 4)));
+181         \mbox{\hyperlink{_e_c_u__funcs_8h_ad0434de2efd3a26ea1211a9cec967577}{ECU\_temp}} -= (0.25 * decimal);
+182     \}
+183     \textcolor{keywordflow}{else} \{ \textcolor{comment}{//TA >= 0°C}
+184         \mbox{\hyperlink{_e_c_u__funcs_8h_ad0434de2efd3a26ea1211a9cec967577}{ECU\_temp}} = (float)((upper << 4) + (lower >> 4));     \textcolor{comment}{//Temperature = Ambient Temperature
+       (°C)}
+185         \mbox{\hyperlink{_e_c_u__funcs_8h_ad0434de2efd3a26ea1211a9cec967577}{ECU\_temp}} += (0.25 * decimal);
+186     \}
+187 
+188 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_e_c_u__funcs_8c_abfac85317b9c1522c7b5196d94e471bd}\label{_e_c_u__funcs_8c_abfac85317b9c1522c7b5196d94e471bd}} 
+\index{E\+C\+U\+\_\+funcs.\+c@{E\+C\+U\+\_\+funcs.\+c}!wait\+MS@{wait\+MS}}
+\index{wait\+MS@{wait\+MS}!E\+C\+U\+\_\+funcs.\+c@{E\+C\+U\+\_\+funcs.\+c}}
+\subsubsection{\texorpdfstring{wait\+M\+S()}{waitMS()}}
+{\footnotesize\ttfamily void wait\+MS (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{msec }\end{DoxyParamCaption})}
+
+
+
+Subroutine which will wait for a given number of milliseconds. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em msec} & Number of milliseconds to wait \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 238 of file E\+C\+U\+\_\+funcs.\+c.
+
+
+\begin{DoxyCode}
+239 \{
+240     \textcolor{comment}{// This function utilizes timer 0 and a sequence of delay loops to delay for the desired time}
+241     TCNT0 = 5;
+242     \textcolor{comment}{// begin the timer}
+243     TCCR0B |= (1 << CS01) | (1 << CS00);       \textcolor{comment}{// this will start the timer with a prescalar of 64}
+244     \textcolor{keywordflow}{for} (uint16\_t i = 0; i < msec; i++)\{
+245         \textcolor{keywordflow}{while}(\mbox{\hyperlink{_e_c_u__funcs_8h_ad188fb0fbfd923bdb01294072367d024}{bit\_is\_clear}}(TIFR0, TOV0));
+246         TIFR0 |= (1 << TOV0);                  \textcolor{comment}{// Clear the overflow flag by writing a 1 to it}
+247     \}
+248     \mbox{\hyperlink{_e_c_u__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}{assign\_bit}}(&TCCR0B, CS01, 0);
+249     \mbox{\hyperlink{_e_c_u__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}{assign\_bit}}(&TCCR0B, CS00, 0);              \textcolor{comment}{// Turn off the timer}
+250 \}
+\end{DoxyCode}

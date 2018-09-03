@@ -1,0 +1,163 @@
+\hypertarget{_engine__funcs_8c}{}\section{C\+:/\+Users/nickm/\+Documents/\+Git\+Hub/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+Engine\+\_\+funcs.c File Reference}
+\label{_engine__funcs_8c}\index{C\+:/\+Users/nickm/\+Documents/\+Git\+Hub/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+Engine\+\_\+funcs.\+c@{C\+:/\+Users/nickm/\+Documents/\+Git\+Hub/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+Engine\+\_\+funcs.\+c}}
+
+
+Implementation for functions directly related to the operation of the jet engine.  
+
+
+{\ttfamily \#include $<$avr/io.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}E\+C\+U\+\_\+funcs.\+h\char`\"{}}\newline
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{_engine__funcs_8c_a1c9d5e29ad8899afe0c34571ddee18f9}{shutdown}} (void)
+\begin{DoxyCompactList}\small\item\em Commands the E\+SB to shutdown and awaits the confirmation code. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_engine__funcs_8c_ab0c801cf89f8b3058ff2460c666154c3}{startup}} (void)
+\begin{DoxyCompactList}\small\item\em Commands the E\+SB to startup and awaits the confirmation code. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_engine__funcs_8c_a54163ad9d4f9e7fa08b4aae836a1b316}{throttle}} (void)
+\begin{DoxyCompactList}\small\item\em Commands the E\+SB to adjust the throttle and awaits the confirmation code. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Implementation for functions directly related to the operation of the jet engine. 
+
+\begin{DoxyAuthor}{Author}
+Nick Moore 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+March 16, 2018 
+\end{DoxyDate}
+\begin{DoxyRefDesc}{Bug}
+\item[\mbox{\hyperlink{bug__bug000004}{Bug}}]No known bugs. \end{DoxyRefDesc}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{_engine__funcs_8c_a1c9d5e29ad8899afe0c34571ddee18f9}\label{_engine__funcs_8c_a1c9d5e29ad8899afe0c34571ddee18f9}} 
+\index{Engine\+\_\+funcs.\+c@{Engine\+\_\+funcs.\+c}!shutdown@{shutdown}}
+\index{shutdown@{shutdown}!Engine\+\_\+funcs.\+c@{Engine\+\_\+funcs.\+c}}
+\subsubsection{\texorpdfstring{shutdown()}{shutdown()}}
+{\footnotesize\ttfamily void shutdown (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Commands the E\+SB to shutdown and awaits the confirmation code. 
+
+This performs the following functions\+:
+
+1) Transmits the char to the E\+SB for the shutdown sequence 2) Waits for the appropriate return message 3) If the function was interrupted part way through by an interrupt, it is restarted
+
+
+\begin{DoxyParams}{Parameters}
+{\em void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 24 of file Engine\+\_\+funcs.\+c.
+
+
+
+References E\+S\+Breceive, E\+S\+Btransmit, send\+To\+E\+S\+B(), and wait\+M\+S().
+
+
+\begin{DoxyCode}
+25 \{
+26     \mbox{\hyperlink{_e_c_u__funcs_8h_a346573bf31cc5cb1e4a0d2d95029782a}{ESBtransmit}}[0] = \textcolor{charliteral}{'S'};
+27     \textcolor{keywordflow}{while} (\mbox{\hyperlink{_e_c_u__funcs_8h_a4f9a0a6bf8fe3144553864f4081b3144}{ESBreceive}}[0] != \textcolor{charliteral}{'K'})\{                    \textcolor{comment}{// Loop until the ESB says K}
+28         \mbox{\hyperlink{_communication_8c_a9ad78c90a2e828201a614444385801c7}{sendToESB}}(1);
+29         \mbox{\hyperlink{_e_c_u__funcs_8c_abfac85317b9c1522c7b5196d94e471bd}{waitMS}}(5);
+30     \}
+31     \mbox{\hyperlink{_e_c_u__funcs_8h_a4f9a0a6bf8fe3144553864f4081b3144}{ESBreceive}}[0] = 0;                              \textcolor{comment}{// clear out the first char so that it
+       actually transmits}
+32 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_engine__funcs_8c_ab0c801cf89f8b3058ff2460c666154c3}\label{_engine__funcs_8c_ab0c801cf89f8b3058ff2460c666154c3}} 
+\index{Engine\+\_\+funcs.\+c@{Engine\+\_\+funcs.\+c}!startup@{startup}}
+\index{startup@{startup}!Engine\+\_\+funcs.\+c@{Engine\+\_\+funcs.\+c}}
+\subsubsection{\texorpdfstring{startup()}{startup()}}
+{\footnotesize\ttfamily void startup (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Commands the E\+SB to startup and awaits the confirmation code. 
+
+This performs the following functions\+:
+
+1) Transmits the char to the E\+SB for the startup sequence 2) Waits for the appropriate return message 3) If the function was interrupted part way through by an interrupt, it is restarted
+
+
+\begin{DoxyParams}{Parameters}
+{\em void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 45 of file Engine\+\_\+funcs.\+c.
+
+
+
+References E\+S\+Breceive, E\+S\+Btransmit, send\+To\+E\+S\+B(), and wait\+M\+S().
+
+
+\begin{DoxyCode}
+46 \{
+47     \mbox{\hyperlink{_e_c_u__funcs_8h_a346573bf31cc5cb1e4a0d2d95029782a}{ESBtransmit}}[0] = \textcolor{charliteral}{'r'};
+48     \textcolor{keywordflow}{while} (\mbox{\hyperlink{_e_c_u__funcs_8h_a4f9a0a6bf8fe3144553864f4081b3144}{ESBreceive}}[0] != \textcolor{charliteral}{'K'})\{
+49         \mbox{\hyperlink{_communication_8c_a9ad78c90a2e828201a614444385801c7}{sendToESB}}(1);
+50         \mbox{\hyperlink{_e_c_u__funcs_8c_abfac85317b9c1522c7b5196d94e471bd}{waitMS}}(5);   
+51     \}
+52     \mbox{\hyperlink{_e_c_u__funcs_8h_a4f9a0a6bf8fe3144553864f4081b3144}{ESBreceive}}[0] = 0;              \textcolor{comment}{// Change this character so I actually have to receive it in
+       the future   }
+53     
+54 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_engine__funcs_8c_a54163ad9d4f9e7fa08b4aae836a1b316}\label{_engine__funcs_8c_a54163ad9d4f9e7fa08b4aae836a1b316}} 
+\index{Engine\+\_\+funcs.\+c@{Engine\+\_\+funcs.\+c}!throttle@{throttle}}
+\index{throttle@{throttle}!Engine\+\_\+funcs.\+c@{Engine\+\_\+funcs.\+c}}
+\subsubsection{\texorpdfstring{throttle()}{throttle()}}
+{\footnotesize\ttfamily void throttle (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Commands the E\+SB to adjust the throttle and awaits the confirmation code. 
+
+This performs the following functions\+:
+
+1) Transmits the char to the E\+SB to change the throttle 2) Sends the new value the throttle should be changed to 3) Awaits for the appropriate return message 4) If the function was interrupted part way through by an interrupt, it is restarted
+
+
+\begin{DoxyParams}{Parameters}
+{\em void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 68 of file Engine\+\_\+funcs.\+c.
+
+
+
+References E\+S\+Breceive, E\+S\+Btransmit, send\+To\+E\+S\+B(), throttle\+\_\+per, and wait\+M\+S().
+
+
+\begin{DoxyCode}
+69 \{
+70     \mbox{\hyperlink{_e_c_u__funcs_8h_a346573bf31cc5cb1e4a0d2d95029782a}{ESBtransmit}}[0] = \textcolor{charliteral}{'t'};
+71     \mbox{\hyperlink{_e_c_u__funcs_8h_a346573bf31cc5cb1e4a0d2d95029782a}{ESBtransmit}}[1] = \mbox{\hyperlink{_e_c_u__funcs_8h_a800e7967d4d08ade3357ea12c132dd46}{throttle\_per}};
+72     \textcolor{keywordflow}{while} (\mbox{\hyperlink{_e_c_u__funcs_8h_a4f9a0a6bf8fe3144553864f4081b3144}{ESBreceive}}[0] != \textcolor{charliteral}{'K'})\{
+73         \mbox{\hyperlink{_communication_8c_a9ad78c90a2e828201a614444385801c7}{sendToESB}}(2);
+74         \mbox{\hyperlink{_e_c_u__funcs_8c_abfac85317b9c1522c7b5196d94e471bd}{waitMS}}(5);
+75     \}
+76     \mbox{\hyperlink{_e_c_u__funcs_8h_a4f9a0a6bf8fe3144553864f4081b3144}{ESBreceive}}[0] = 0;                   \textcolor{comment}{// clear out the first char so that it actually
+       transmits}
+77 \}
+\end{DoxyCode}

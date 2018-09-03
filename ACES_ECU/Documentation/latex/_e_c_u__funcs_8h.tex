@@ -1,0 +1,1208 @@
+\hypertarget{_e_c_u__funcs_8h}{}\section{C\+:/\+Users/nickm/\+Documents/\+Git\+Hub/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+E\+C\+U\+\_\+funcs.h File Reference}
+\label{_e_c_u__funcs_8h}\index{C\+:/\+Users/nickm/\+Documents/\+Git\+Hub/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+E\+C\+U\+\_\+funcs.\+h@{C\+:/\+Users/nickm/\+Documents/\+Git\+Hub/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+E\+C\+U\+\_\+funcs.\+h}}
+
+
+Function prototypes, macros, constants, and global variables for E\+CU microcontroller.  
+
+
+{\ttfamily \#include $<$avr/sfr\+\_\+defs.\+h$>$}\newline
+{\ttfamily \#include $<$float.\+h$>$}\newline
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a3b034cb1d74b9addc7599bd6ea6bd0d9}\label{_e_c_u__funcs_8h_a3b034cb1d74b9addc7599bd6ea6bd0d9}} 
+\#define \mbox{\hyperlink{_e_c_u__funcs_8h_a3b034cb1d74b9addc7599bd6ea6bd0d9}{bit\+\_\+is\+\_\+set}}(sfr,  bit)~(\+\_\+\+S\+F\+R\+\_\+\+B\+Y\+TE(sfr) \& \+\_\+\+BV(bit))
+\begin{DoxyCompactList}\small\item\em Simple function define for testing if the bit is set. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_ad188fb0fbfd923bdb01294072367d024}\label{_e_c_u__funcs_8h_ad188fb0fbfd923bdb01294072367d024}} 
+\#define \mbox{\hyperlink{_e_c_u__funcs_8h_ad188fb0fbfd923bdb01294072367d024}{bit\+\_\+is\+\_\+clear}}(sfr,  bit)~(!(\+\_\+\+S\+F\+R\+\_\+\+B\+Y\+TE(sfr) \& \+\_\+\+BV(bit)))
+\begin{DoxyCompactList}\small\item\em Simple function define for testing if the bit is clear. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a621ae94764567a61b20de29cf0a367f3}\label{_e_c_u__funcs_8h_a621ae94764567a61b20de29cf0a367f3}} 
+\#define {\bfseries E\+C\+U\+\_\+temp\+\_\+sensors}~0
+\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a5e20970ac4e6bc924ea5e6073b820d26}\label{_e_c_u__funcs_8h_a5e20970ac4e6bc924ea5e6073b820d26}} 
+\#define {\bfseries E\+S\+B\+\_\+temp\+\_\+sensors}~0
+\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a062607eaaffe8c3f8193991755e024f9}\label{_e_c_u__funcs_8h_a062607eaaffe8c3f8193991755e024f9}} 
+\#define \mbox{\hyperlink{_e_c_u__funcs_8h_a062607eaaffe8c3f8193991755e024f9}{K\+\_\+factor}}~91387
+\begin{DoxyCompactList}\small\item\em Assumed K factor for the flow meter in pulses per liter. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a959f7b5d831006ba86ebf2754975fdfc}\label{_e_c_u__funcs_8h_a959f7b5d831006ba86ebf2754975fdfc}} 
+\#define \mbox{\hyperlink{_e_c_u__funcs_8h_a959f7b5d831006ba86ebf2754975fdfc}{density}}~0.\+81
+\begin{DoxyCompactList}\small\item\em Density of the kerosene in g/ml. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a0f29307316da99a662028868a7f7636d}\label{_e_c_u__funcs_8h_a0f29307316da99a662028868a7f7636d}} 
+\#define \mbox{\hyperlink{_e_c_u__funcs_8h_a0f29307316da99a662028868a7f7636d}{max\+\_\+time}}~0.\+25
+\begin{DoxyCompactList}\small\item\em Maximum amount of time for an 8 bit timer with a prescalar of 1024. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a8f24004cae5e9f858db493e25febf8c8}\label{_e_c_u__funcs_8h_a8f24004cae5e9f858db493e25febf8c8}} 
+\#define \mbox{\hyperlink{_e_c_u__funcs_8h_a8f24004cae5e9f858db493e25febf8c8}{pump\+\_\+m}}~0.\+382587
+\begin{DoxyCompactList}\small\item\em Slope for the linear relationship between voltage and mass flow (put in mf, get volts) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a355b9fced824741eba5498a7bc74371e}\label{_e_c_u__funcs_8h_a355b9fced824741eba5498a7bc74371e}} 
+\#define \mbox{\hyperlink{_e_c_u__funcs_8h_a355b9fced824741eba5498a7bc74371e}{pump\+\_\+b}}~0.\+195783
+\begin{DoxyCompactList}\small\item\em Y-\/intercept for the linear relationship between voltage and mass flow. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a5faa2a8a3cb2e4b3261a182fa2e83251}\label{_e_c_u__funcs_8h_a5faa2a8a3cb2e4b3261a182fa2e83251}} 
+\#define \mbox{\hyperlink{_e_c_u__funcs_8h_a5faa2a8a3cb2e4b3261a182fa2e83251}{H\+C\+U\+\_\+present}}~0
+\begin{DoxyCompactList}\small\item\em defines if the H\+CU is present in the current configuration or not, 1 for yes, 0 for no \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a9eaf9196d649f839a674cfa4ad10cedc}\label{_e_c_u__funcs_8h_a9eaf9196d649f839a674cfa4ad10cedc}} 
+\#define \mbox{\hyperlink{_e_c_u__funcs_8h_a9eaf9196d649f839a674cfa4ad10cedc}{max\+R\+PM}}~60850
+\begin{DoxyCompactList}\small\item\em Defines the maximum R\+PM of the engine. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a02c1f67075d989a060a5fd5632e88707}\label{_e_c_u__funcs_8h_a02c1f67075d989a060a5fd5632e88707}} 
+\#define \mbox{\hyperlink{_e_c_u__funcs_8h_a02c1f67075d989a060a5fd5632e88707}{idle\+R\+PM}}~16384
+\begin{DoxyCompactList}\small\item\em Defines the idle R\+PM of the engine. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a3df22e1e7b66be8b74b33ce077824292}\label{_e_c_u__funcs_8h_a3df22e1e7b66be8b74b33ce077824292}} 
+\#define {\bfseries S\+L\+A\+\_\+W}~0x3E
+\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_ae4af1f304be9d3202a445e7d6c235eaa}\label{_e_c_u__funcs_8h_ae4af1f304be9d3202a445e7d6c235eaa}} 
+\#define {\bfseries S\+L\+A\+\_\+R}~0x3F
+\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a74e79eb2bec9cc994f749e94520dba5b}\label{_e_c_u__funcs_8h_a74e79eb2bec9cc994f749e94520dba5b}} 
+\#define {\bfseries dec\+\_\+\+M\+SK}~0x0C
+\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a8112c985f7444e82198d7571ce0a9160}\label{_e_c_u__funcs_8h_a8112c985f7444e82198d7571ce0a9160}} 
+\#define {\bfseries S\+P\+I\+\_\+\+P\+O\+RT}~P\+O\+R\+TB
+\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_abed35d9048e296d7781c7c85d1347214}\label{_e_c_u__funcs_8h_abed35d9048e296d7781c7c85d1347214}} 
+\#define {\bfseries normal\+Data}~11
+\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a78dbbb8d5a9fbe59bf96ee4c5be96d4e}\label{_e_c_u__funcs_8h_a78dbbb8d5a9fbe59bf96ee4c5be96d4e}} 
+\#define {\bfseries E\+S\+B\+\_\+timer\+\_\+val}~3036
+\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_aa13614160d2709946793367a83e2b5cb}\label{_e_c_u__funcs_8h_aa13614160d2709946793367a83e2b5cb}} 
+\#define {\bfseries Flow\+Time}~3700
+\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_adadb83dbf93c641471da7d08630309da}\label{_e_c_u__funcs_8h_adadb83dbf93c641471da7d08630309da}} 
+\#define {\bfseries X\+C\+K1}~5
+\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_abb59fbc9d7da71bc6b6abd1a275e54e1}\label{_e_c_u__funcs_8h_abb59fbc9d7da71bc6b6abd1a275e54e1}} 
+\#define {\bfseries U\+C\+P\+H\+A1}~1
+\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_ad3bacb68e72ad3fba2c7b1b26a4cb130}\label{_e_c_u__funcs_8h_ad3bacb68e72ad3fba2c7b1b26a4cb130}} 
+\#define {\bfseries E\+S\+B\+\_\+\+SS}~0
+\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_aa5ee236ff60450d32c390fec0247266f}\label{_e_c_u__funcs_8h_aa5ee236ff60450d32c390fec0247266f}} 
+\#define {\bfseries H\+C\+U\+\_\+link}~1
+\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a5d3f11f2fdf8a7e27b975291e0c2c8cc}\label{_e_c_u__funcs_8h_a5d3f11f2fdf8a7e27b975291e0c2c8cc}} 
+\#define {\bfseries M\+O\+SI}~2
+\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a2dd443a4430713d325ab86895a4a45eb}\label{_e_c_u__funcs_8h_a2dd443a4430713d325ab86895a4a45eb}} 
+\#define {\bfseries S\+CK}~1
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{_e_c_u__funcs_8h_a013b823a1365a9c8f46218f490f71b62}{pre\+\_\+\+Initial}} (void)
+\begin{DoxyCompactList}\small\item\em Performs the waiting cycle until the H\+CU signals to the E\+CU to being operating. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_e_c_u__funcs_8h_a23459ced73501cbafb717ca9cbb10ce7}{Initial}} (void)
+\begin{DoxyCompactList}\small\item\em Initializes the microcontroller for its mainline execution. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_e_c_u__funcs_8h_a1c9d5e29ad8899afe0c34571ddee18f9}{shutdown}} (void)
+\begin{DoxyCompactList}\small\item\em Commands the E\+SB to shutdown and awaits the confirmation code. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_e_c_u__funcs_8h_ab0c801cf89f8b3058ff2460c666154c3}{startup}} (void)
+\begin{DoxyCompactList}\small\item\em Commands the E\+SB to startup and awaits the confirmation code. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_e_c_u__funcs_8h_a54163ad9d4f9e7fa08b4aae836a1b316}{throttle}} (void)
+\begin{DoxyCompactList}\small\item\em Commands the E\+SB to adjust the throttle and awaits the confirmation code. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_e_c_u__funcs_8h_a9dc66b4b2df662c440d4d05da08e6d6a}{bat\+Voltage}} (void)
+\begin{DoxyCompactList}\small\item\em Measures the voltage on the Lipo battery from the 3 different A\+DC channels. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_e_c_u__funcs_8h_aba7fa75d6dd6ebcdc6225282a798fcd2}{assign\+\_\+bit}} (volatile uint8\+\_\+t $\ast$sfr, uint8\+\_\+t bit, uint8\+\_\+t val)
+\begin{DoxyCompactList}\small\item\em Sets the specified bit to the specified value or does nothing if it already set to that. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_e_c_u__funcs_8h_a9ad78c90a2e828201a614444385801c7}{send\+To\+E\+SB}} (uint8\+\_\+t len)
+\begin{DoxyCompactList}\small\item\em Transmits data between the E\+CU and E\+SB. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_e_c_u__funcs_8h_aa3590f927d6f0e270aad13cd890ba3d5}{E\+S\+B\+\_\+\+Connect}} (void)
+\begin{DoxyCompactList}\small\item\em Establishes the connection between the E\+CU and E\+SB. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_e_c_u__funcs_8h_a61322b047675f61caefcfaca81cfa48b}{measure\+Flow}} (void)
+\begin{DoxyCompactList}\small\item\em Measures the fuel flow passing through the Flow meter. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_e_c_u__funcs_8h_aebc6f692b7c3787a859445b96ab3ec5f}{send\+To\+Laptop}} (void)
+\begin{DoxyCompactList}\small\item\em Transmits periodic data between the E\+CU and Windows G\+UI. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_e_c_u__funcs_8h_a285a2f8773a070acdcea234b60cf38ca}{repeat\+Command}} (void)
+\begin{DoxyCompactList}\small\item\em Requests the Windows G\+UI to repeat the last sent command. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_e_c_u__funcs_8h_ada467eaa29152bd3a35afbf4d62e53fd}{G\+U\+I\+\_\+\+Connect}} (void)
+\begin{DoxyCompactList}\small\item\em Establishes the connection between the E\+CU and Windows G\+UI. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_ae11da7e638c4141fa09c2b3748f713fd}\label{_e_c_u__funcs_8h_ae11da7e638c4141fa09c2b3748f713fd}} 
+void {\bfseries i2c\+\_\+\+Start} (unsigned char address)
+\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a7d7492476cf394bef5161e2a6503fc1e}\label{_e_c_u__funcs_8h_a7d7492476cf394bef5161e2a6503fc1e}} 
+void {\bfseries i2c\+\_\+\+Stop} (void)
+\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_ab00dbbd4d0d7c829374f726f66020bcc}\label{_e_c_u__funcs_8h_ab00dbbd4d0d7c829374f726f66020bcc}} 
+void {\bfseries i2c\+\_\+write} (unsigned char data)
+\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a669c0357614a79b3b35ae815f6f50e82}\label{_e_c_u__funcs_8h_a669c0357614a79b3b35ae815f6f50e82}} 
+unsigned char {\bfseries i2c\+\_\+read} (unsigned char ack)
+\item 
+void \mbox{\hyperlink{_e_c_u__funcs_8h_a17727302d45ecff548af8f81d06f3a7e}{read\+Temp\+Sensor}} (void)
+\begin{DoxyCompactList}\small\item\em Accesses memory within the M\+A\+X6675 and converts the data into a usable temperature. \end{DoxyCompactList}\item 
+char \mbox{\hyperlink{_e_c_u__funcs_8h_adc85b180d655324bb96dcb29cff05af3}{calculate\+Parity}} (char message\mbox{[}$\,$\mbox{]}, uint8\+\_\+t start\+\_\+index)
+\begin{DoxyCompactList}\small\item\em Function to calculate the parity byte for a corresponding sequence of 6 bytes. \end{DoxyCompactList}\item 
+unsigned char \mbox{\hyperlink{_e_c_u__funcs_8h_adb2fefa1023fbf227e5102e1ea3c9d4b}{count\+Ones}} (unsigned char byte)
+\begin{DoxyCompactList}\small\item\em Subroutine to count the number of high bits within a designated byte. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_ae173d68280445c6d2838fe28f007ebaf}\label{_e_c_u__funcs_8h_ae173d68280445c6d2838fe28f007ebaf}} 
+void {\bfseries package\+Message} (void)
+\item 
+void \mbox{\hyperlink{_e_c_u__funcs_8h_abfac85317b9c1522c7b5196d94e471bd}{wait\+MS}} (uint16\+\_\+t msec)
+\begin{DoxyCompactList}\small\item\em Subroutine which will wait for a given number of milliseconds. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_afa161ecc9fae4c6dbf5ef7063d777d1d}\label{_e_c_u__funcs_8h_afa161ecc9fae4c6dbf5ef7063d777d1d}} 
+void {\bfseries load\+E\+S\+B\+Data} (void)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_ad849b9fe0e266552696acb467ff745f7}\label{_e_c_u__funcs_8h_ad849b9fe0e266552696acb467ff745f7}} 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+union \{\\
+\>float {\bfseries f}\\
+\>unsigned char {\bfseries c} \mbox{[}4\mbox{]}\\
+\} \mbox{\hyperlink{_e_c_u__funcs_8h_ad849b9fe0e266552696acb467ff745f7}{voltage}}\\
+
+\end{tabbing}\begin{DoxyCompactList}\small\item\em Float which contains the current voltage level on the Lipo battery. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_af76c5ac758d1858dffcde4e7aa84e889}\label{_e_c_u__funcs_8h_af76c5ac758d1858dffcde4e7aa84e889}} 
+char \mbox{\hyperlink{_e_c_u__funcs_8h_af76c5ac758d1858dffcde4e7aa84e889}{bat\+Channel}}
+\begin{DoxyCompactList}\small\item\em Char which keeps track of which A\+DC channel we are on. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_ab1fa4bbd357586cbfa309f1b8614c1ae}\label{_e_c_u__funcs_8h_ab1fa4bbd357586cbfa309f1b8614c1ae}} 
+char \mbox{\hyperlink{_e_c_u__funcs_8h_ab1fa4bbd357586cbfa309f1b8614c1ae}{op\+Mode}}
+\begin{DoxyCompactList}\small\item\em Holds the current operational mode of the engine. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a800e7967d4d08ade3357ea12c132dd46}\label{_e_c_u__funcs_8h_a800e7967d4d08ade3357ea12c132dd46}} 
+uint8\+\_\+t \mbox{\hyperlink{_e_c_u__funcs_8h_a800e7967d4d08ade3357ea12c132dd46}{throttle\+\_\+per}}
+\begin{DoxyCompactList}\small\item\em Char which keeps track of the throttle percentage 0-\/100. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a411b8ca204ac2d44a3755adcf4477c92}\label{_e_c_u__funcs_8h_a411b8ca204ac2d44a3755adcf4477c92}} 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+union \{\\
+\>float {\bfseries f}\\
+\>unsigned char {\bfseries c} \mbox{[}4\mbox{]}\\
+\} \mbox{\hyperlink{_e_c_u__funcs_8h_a411b8ca204ac2d44a3755adcf4477c92}{massFlow}}\\
+
+\end{tabbing}\begin{DoxyCompactList}\small\item\em Float holding the current mass flow rate. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_afc4ac50caf210854dacff228ba315687}\label{_e_c_u__funcs_8h_afc4ac50caf210854dacff228ba315687}} 
+uint16\+\_\+t \mbox{\hyperlink{_e_c_u__funcs_8h_afc4ac50caf210854dacff228ba315687}{Hall\+\_\+effect}}
+\begin{DoxyCompactList}\small\item\em uint\+\_\+16 holding the current measurement of the hall effect sensor \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a34c104e39ff60265f33e3325bf865ab5}\label{_e_c_u__funcs_8h_a34c104e39ff60265f33e3325bf865ab5}} 
+float \mbox{\hyperlink{_e_c_u__funcs_8h_a34c104e39ff60265f33e3325bf865ab5}{E\+GT}}
+\begin{DoxyCompactList}\small\item\em uint\+\_\+16 holding the current measurement of the exhaust gas thermocouple \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a17961c0bba1aa12ef80b5b9b78726530}\label{_e_c_u__funcs_8h_a17961c0bba1aa12ef80b5b9b78726530}} 
+unsigned char \mbox{\hyperlink{_e_c_u__funcs_8h_a17961c0bba1aa12ef80b5b9b78726530}{glow\+\_\+plug}}
+\begin{DoxyCompactList}\small\item\em unsigned char holding whether or not the glow plug is currently on \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_af9e36069f73b8a3642ae276fd3b672a1}\label{_e_c_u__funcs_8h_af9e36069f73b8a3642ae276fd3b672a1}} 
+uint8\+\_\+t \mbox{\hyperlink{_e_c_u__funcs_8h_af9e36069f73b8a3642ae276fd3b672a1}{pulse\+\_\+count}}
+\begin{DoxyCompactList}\small\item\em This will keep track of how many pulses have been seen in the sampling window. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a4d33ec29c2398728e80d752eeced889e}\label{_e_c_u__funcs_8h_a4d33ec29c2398728e80d752eeced889e}} 
+float \mbox{\hyperlink{_e_c_u__funcs_8h_a4d33ec29c2398728e80d752eeced889e}{V\+\_\+per\+\_\+pulse}}
+\begin{DoxyCompactList}\small\item\em Variable to convert the pulses into a voltage. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a543395e72464c9afc14f3766126d2d59}\label{_e_c_u__funcs_8h_a543395e72464c9afc14f3766126d2d59}} 
+uint8\+\_\+t \mbox{\hyperlink{_e_c_u__funcs_8h_a543395e72464c9afc14f3766126d2d59}{command\+Mode}}
+\begin{DoxyCompactList}\small\item\em Will keep track of the input format that the E\+CU will be expecting. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a4a8bbdf0f587322d8d34a2d4b84ea8a6}\label{_e_c_u__funcs_8h_a4a8bbdf0f587322d8d34a2d4b84ea8a6}} 
+uint8\+\_\+t \mbox{\hyperlink{_e_c_u__funcs_8h_a4a8bbdf0f587322d8d34a2d4b84ea8a6}{new\+Command}}
+\begin{DoxyCompactList}\small\item\em Will keep track of whether or not it is possible for a new command stream to be coming in. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_ac8b367a3ec51bcbf0a598e54edda7610}\label{_e_c_u__funcs_8h_ac8b367a3ec51bcbf0a598e54edda7610}} 
+uint8\+\_\+t \mbox{\hyperlink{_e_c_u__funcs_8h_ac8b367a3ec51bcbf0a598e54edda7610}{has\+Interrupted}}
+\begin{DoxyCompactList}\small\item\em Will keep track of whether or not the message to the E\+SB has been interrupted by the PC. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a20d5783317799eb3e211c4cae2516cec}\label{_e_c_u__funcs_8h_a20d5783317799eb3e211c4cae2516cec}} 
+uint8\+\_\+t \mbox{\hyperlink{_e_c_u__funcs_8h_a20d5783317799eb3e211c4cae2516cec}{connected\+\_\+\+E\+SB}}
+\begin{DoxyCompactList}\small\item\em Will keep track of whether or not the E\+CU is connected to the windows G\+UI. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_aaaa9e2d2909ceb75751c9dbfab30661c}\label{_e_c_u__funcs_8h_aaaa9e2d2909ceb75751c9dbfab30661c}} 
+uint8\+\_\+t \mbox{\hyperlink{_e_c_u__funcs_8h_aaaa9e2d2909ceb75751c9dbfab30661c}{connected\+\_\+\+G\+UI}}
+\begin{DoxyCompactList}\small\item\em Essentially boolean describing if the E\+CU is connected to the G\+UI or not. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a346573bf31cc5cb1e4a0d2d95029782a}\label{_e_c_u__funcs_8h_a346573bf31cc5cb1e4a0d2d95029782a}} 
+char \mbox{\hyperlink{_e_c_u__funcs_8h_a346573bf31cc5cb1e4a0d2d95029782a}{E\+S\+Btransmit}} \mbox{[}11\mbox{]}
+\begin{DoxyCompactList}\small\item\em Array of data which will be transmitted to the E\+SB. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a4f9a0a6bf8fe3144553864f4081b3144}\label{_e_c_u__funcs_8h_a4f9a0a6bf8fe3144553864f4081b3144}} 
+char \mbox{\hyperlink{_e_c_u__funcs_8h_a4f9a0a6bf8fe3144553864f4081b3144}{E\+S\+Breceive}} \mbox{[}14\mbox{]}
+\begin{DoxyCompactList}\small\item\em Array containing the data received from the E\+SB. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_ad0434de2efd3a26ea1211a9cec967577}\label{_e_c_u__funcs_8h_ad0434de2efd3a26ea1211a9cec967577}} 
+float \mbox{\hyperlink{_e_c_u__funcs_8h_ad0434de2efd3a26ea1211a9cec967577}{E\+C\+U\+\_\+temp}}
+\begin{DoxyCompactList}\small\item\em Ambient temperature of the E\+CU. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a359dd774222ff15507f3efb2d0e89bbe}\label{_e_c_u__funcs_8h_a359dd774222ff15507f3efb2d0e89bbe}} 
+float \mbox{\hyperlink{_e_c_u__funcs_8h_a359dd774222ff15507f3efb2d0e89bbe}{E\+S\+B\+\_\+temp}}
+\begin{DoxyCompactList}\small\item\em Ambient temperature of the E\+SB. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a04e4c743fe091014b2a959319bc508ef}\label{_e_c_u__funcs_8h_a04e4c743fe091014b2a959319bc508ef}} 
+uint8\+\_\+t \mbox{\hyperlink{_e_c_u__funcs_8h_a04e4c743fe091014b2a959319bc508ef}{connect\+\_\+count}}
+\begin{DoxyCompactList}\small\item\em Counter for index into the connection string (The connection string is A\+C\+ES) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a36d06dcce16c9c486a59c23947f2daf2}\label{_e_c_u__funcs_8h_a36d06dcce16c9c486a59c23947f2daf2}} 
+uint8\+\_\+t \mbox{\hyperlink{_e_c_u__funcs_8h_a36d06dcce16c9c486a59c23947f2daf2}{new\+Command\+\_\+\+E\+SB}}
+\begin{DoxyCompactList}\small\item\em Flag which describes if the next received command is the beginning of a new command or the continuation of an old command. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a229f3452d6df08f66a06e45b4ac03647}\label{_e_c_u__funcs_8h_a229f3452d6df08f66a06e45b4ac03647}} 
+uint8\+\_\+t \mbox{\hyperlink{_e_c_u__funcs_8h_a229f3452d6df08f66a06e45b4ac03647}{E\+S\+Breceive\+Count}}
+\begin{DoxyCompactList}\small\item\em Counter for the received byte in the current message. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_e_c_u__funcs_8h_aa8cc3e0359b222fe83e4f0351414d5a4}\label{_e_c_u__funcs_8h_aa8cc3e0359b222fe83e4f0351414d5a4}} 
+int8\+\_\+t \mbox{\hyperlink{_e_c_u__funcs_8h_aa8cc3e0359b222fe83e4f0351414d5a4}{do\+Transmit}}
+\begin{DoxyCompactList}\small\item\em Flag which is used to synchronize when messages are allowed to be sent to the G\+UI. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Function prototypes, macros, constants, and global variables for E\+CU microcontroller. 
+
+Control register definitions and function prototypes for the E\+N\+C28\+J60 Ethernet controller.
+
+\begin{DoxyAuthor}{Author}
+Nick Moore 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+March 16, 2018 
+\end{DoxyDate}
+\begin{DoxyRefDesc}{Bug}
+\item[\mbox{\hyperlink{bug__bug000003}{Bug}}]No known bugs \end{DoxyRefDesc}
+
+
+\begin{DoxyAuthor}{Author}
+Nick Moore 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+June 21, 2018 
+\end{DoxyDate}
+\begin{DoxyRefDesc}{Bug}
+\item[\mbox{\hyperlink{bug__bug000005}{Bug}}]No known bugs \end{DoxyRefDesc}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{_e_c_u__funcs_8h_aba7fa75d6dd6ebcdc6225282a798fcd2}\label{_e_c_u__funcs_8h_aba7fa75d6dd6ebcdc6225282a798fcd2}} 
+\index{E\+C\+U\+\_\+funcs.\+h@{E\+C\+U\+\_\+funcs.\+h}!assign\+\_\+bit@{assign\+\_\+bit}}
+\index{assign\+\_\+bit@{assign\+\_\+bit}!E\+C\+U\+\_\+funcs.\+h@{E\+C\+U\+\_\+funcs.\+h}}
+\subsubsection{\texorpdfstring{assign\+\_\+bit()}{assign\_bit()}}
+{\footnotesize\ttfamily void assign\+\_\+bit (\begin{DoxyParamCaption}\item[{volatile uint8\+\_\+t $\ast$}]{sfr,  }\item[{uint8\+\_\+t}]{bit,  }\item[{uint8\+\_\+t}]{val }\end{DoxyParamCaption})}
+
+
+
+Sets the specified bit to the specified value or does nothing if it already set to that. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt out}  & {\em sfr} & Pointer to Special Function Register the bit is located in. \\
+\hline
+\mbox{\tt in}  & {\em bit} & Denotes the bit which would like to be changed. \\
+\hline
+\mbox{\tt in}  & {\em val} & The value, either 1 or 0, that the user would like the bit to be after the function call. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 104 of file E\+C\+U\+\_\+funcs.\+c.
+
+
+\begin{DoxyCode}
+105 \{
+106     \textcolor{keywordflow}{if} (val)      \textcolor{comment}{// This is for if I want the value to be a 1}
+107     \{
+108         val = (val << bit);
+109         *sfr |= val;
+110     \}
+111     \textcolor{keywordflow}{else}             \textcolor{comment}{// This is for if I want the value to be a 0}
+112     \{
+113         val = ~(1 << bit);
+114         *sfr &= val;
+115     \}
+116 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a9dc66b4b2df662c440d4d05da08e6d6a}\label{_e_c_u__funcs_8h_a9dc66b4b2df662c440d4d05da08e6d6a}} 
+\index{E\+C\+U\+\_\+funcs.\+h@{E\+C\+U\+\_\+funcs.\+h}!bat\+Voltage@{bat\+Voltage}}
+\index{bat\+Voltage@{bat\+Voltage}!E\+C\+U\+\_\+funcs.\+h@{E\+C\+U\+\_\+funcs.\+h}}
+\subsubsection{\texorpdfstring{bat\+Voltage()}{batVoltage()}}
+{\footnotesize\ttfamily void bat\+Voltage (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Measures the voltage on the Lipo battery from the 3 different A\+DC channels. 
+
+This performs the following functions\+:
+
+1) Measures the A\+DC voltage on the current A\+DC channel 2) Combines this result will the current float value of the voltage 3) Changes the A\+DC channel to the next one in the rotation 0-\/$>$1-\/$>$2-\/$>$0
+
+
+\begin{DoxyParams}{Parameters}
+{\em void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 25 of file E\+C\+U\+\_\+funcs.\+c.
+
+
+
+References bit\+\_\+is\+\_\+set, and voltage.
+
+
+\begin{DoxyCode}
+26 \{
+27     \textcolor{comment}{// first check to see if the conversion has completed}
+28     \textcolor{keywordflow}{if} (\mbox{\hyperlink{_e_c_u__funcs_8h_a3b034cb1d74b9addc7599bd6ea6bd0d9}{bit\_is\_set}}(ADCSRA,ADSC))
+29         \textcolor{keywordflow}{return};
+30     
+31     uint8\_t low\_bits = ADCL;
+32     uint8\_t high\_bits = ADCH;                        \textcolor{comment}{// Do the shifting so that there is room made inside
+       of the 16 bit register}
+33     uint16\_t result = (high\_bits << 8) | low\_bits;
+34     
+35     \textcolor{comment}{// Now I need to convert this 16 bit number into an actual temperature}
+36     \mbox{\hyperlink{_e_c_u__funcs_8h_ad849b9fe0e266552696acb467ff745f7}{voltage}}.f = 3.0 * (float) result;            \textcolor{comment}{// Convert to float value of the voltage}
+37     \mbox{\hyperlink{_e_c_u__funcs_8h_ad849b9fe0e266552696acb467ff745f7}{voltage}}.f = \mbox{\hyperlink{_e_c_u__funcs_8h_ad849b9fe0e266552696acb467ff745f7}{voltage}}.f * (4.96 / 1024.0);      \textcolor{comment}{// This will return Vin}
+38     
+39     ADCSRA |= (1 << ADSC);                     \textcolor{comment}{// Start the next conversion}
+40         
+41 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_e_c_u__funcs_8h_adc85b180d655324bb96dcb29cff05af3}\label{_e_c_u__funcs_8h_adc85b180d655324bb96dcb29cff05af3}} 
+\index{E\+C\+U\+\_\+funcs.\+h@{E\+C\+U\+\_\+funcs.\+h}!calculate\+Parity@{calculate\+Parity}}
+\index{calculate\+Parity@{calculate\+Parity}!E\+C\+U\+\_\+funcs.\+h@{E\+C\+U\+\_\+funcs.\+h}}
+\subsubsection{\texorpdfstring{calculate\+Parity()}{calculateParity()}}
+{\footnotesize\ttfamily char calculate\+Parity (\begin{DoxyParamCaption}\item[{char}]{message\mbox{[}$\,$\mbox{]},  }\item[{uint8\+\_\+t}]{start\+\_\+index }\end{DoxyParamCaption})}
+
+
+
+Function to calculate the parity byte for a corresponding sequence of 6 bytes. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em message} & Entire message which a subset will be used in order to calculate the parity byte \\
+\hline
+\mbox{\tt in}  & {\em start\+\_\+index} & Starting index within message for which to calculate the parity byte \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+char 
+\end{DoxyReturn}
+
+
+Definition at line 196 of file E\+C\+U\+\_\+funcs.\+c.
+
+
+
+References count\+Ones().
+
+
+\begin{DoxyCode}
+197 \{
+198     \textcolor{comment}{// This will return the parity byte for a message made up of 6 sequential bytes, starting with
+       start\_index}
+199         \textcolor{keywordtype}{char} parity = 0;
+200         
+201         \textcolor{comment}{// first need to get the number of high bits in the first three bytes in the set}
+202         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{unsigned} \textcolor{keyword}{set} = 0; \textcolor{keyword}{set} < 2; \textcolor{keyword}{set}++)\{
+203             \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} count = 0;
+204             \textcolor{keywordflow}{for} (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} i = 0; i < 3; i++)\{
+205                 count += \mbox{\hyperlink{_e_c_u__funcs_8c_adb2fefa1023fbf227e5102e1ea3c9d4b}{countOnes}}(message[start\_index + \textcolor{keyword}{set}*3 + i]);
+206             \}
+207             \textcolor{comment}{// now that I have the count for this set, I need to take the modulo}
+208             count = count % 16;   \textcolor{comment}{// Modulo with 16 because I have 4 bits to play with}
+209             
+210             \textcolor{comment}{// now add this into the parity byte}
+211             parity |= count << (4 * \textcolor{keyword}{set});   \textcolor{comment}{// this will make it so that bytes 0-2 will take up the LSB of
+       the parity byte}
+212         \}
+213         \textcolor{comment}{// now copy this byte into memory}
+214         \textcolor{keywordflow}{return} parity;
+215 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_e_c_u__funcs_8h_adb2fefa1023fbf227e5102e1ea3c9d4b}\label{_e_c_u__funcs_8h_adb2fefa1023fbf227e5102e1ea3c9d4b}} 
+\index{E\+C\+U\+\_\+funcs.\+h@{E\+C\+U\+\_\+funcs.\+h}!count\+Ones@{count\+Ones}}
+\index{count\+Ones@{count\+Ones}!E\+C\+U\+\_\+funcs.\+h@{E\+C\+U\+\_\+funcs.\+h}}
+\subsubsection{\texorpdfstring{count\+Ones()}{countOnes()}}
+{\footnotesize\ttfamily unsigned char count\+Ones (\begin{DoxyParamCaption}\item[{unsigned char}]{byte }\end{DoxyParamCaption})}
+
+
+
+Subroutine to count the number of high bits within a designated byte. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em byte} & The byte by which to calculate the number of high bits within \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+unsigned char 
+\end{DoxyReturn}
+
+
+Definition at line 222 of file E\+C\+U\+\_\+funcs.\+c.
+
+
+\begin{DoxyCode}
+223 \{
+224     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} count = 0;
+225     \textcolor{keywordflow}{while} (byte)
+226     \{
+227         count += byte & 1;    \textcolor{comment}{// this was essentially lifted from geeksforgeeks.com}
+228         byte >>= 1;
+229     \}
+230     \textcolor{keywordflow}{return} count;
+231 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_e_c_u__funcs_8h_aa3590f927d6f0e270aad13cd890ba3d5}\label{_e_c_u__funcs_8h_aa3590f927d6f0e270aad13cd890ba3d5}} 
+\index{E\+C\+U\+\_\+funcs.\+h@{E\+C\+U\+\_\+funcs.\+h}!E\+S\+B\+\_\+\+Connect@{E\+S\+B\+\_\+\+Connect}}
+\index{E\+S\+B\+\_\+\+Connect@{E\+S\+B\+\_\+\+Connect}!E\+C\+U\+\_\+funcs.\+h@{E\+C\+U\+\_\+funcs.\+h}}
+\subsubsection{\texorpdfstring{E\+S\+B\+\_\+\+Connect()}{ESB\_Connect()}}
+{\footnotesize\ttfamily void E\+S\+B\+\_\+\+Connect (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Establishes the connection between the E\+CU and E\+SB. 
+
+This performs the following functions\+:
+
+1) Prepares the E\+CU\textquotesingle{}s password for transmission 2) Sends the password to the E\+SB 3) Awaits the correct return password from the E\+SB 4) repeats steps 2-\/4 until the proper return password is received
+
+
+\begin{DoxyParams}{Parameters}
+{\em void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 53 of file Communication.\+c.
+
+
+
+References E\+S\+Btransmit, and send\+To\+E\+S\+B().
+
+
+\begin{DoxyCode}
+54 \{
+55 
+56     \mbox{\hyperlink{_e_c_u__funcs_8h_a346573bf31cc5cb1e4a0d2d95029782a}{ESBtransmit}}[0] = \textcolor{charliteral}{'A'};
+57     \mbox{\hyperlink{_e_c_u__funcs_8h_a346573bf31cc5cb1e4a0d2d95029782a}{ESBtransmit}}[1] = \textcolor{charliteral}{'C'};
+58     \mbox{\hyperlink{_e_c_u__funcs_8h_a346573bf31cc5cb1e4a0d2d95029782a}{ESBtransmit}}[2] = \textcolor{charliteral}{'E'};
+59     \mbox{\hyperlink{_e_c_u__funcs_8h_a346573bf31cc5cb1e4a0d2d95029782a}{ESBtransmit}}[3] = \textcolor{charliteral}{'S'};
+60     \mbox{\hyperlink{_communication_8c_a9ad78c90a2e828201a614444385801c7}{sendToESB}}(4);  
+61 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_e_c_u__funcs_8h_ada467eaa29152bd3a35afbf4d62e53fd}\label{_e_c_u__funcs_8h_ada467eaa29152bd3a35afbf4d62e53fd}} 
+\index{E\+C\+U\+\_\+funcs.\+h@{E\+C\+U\+\_\+funcs.\+h}!G\+U\+I\+\_\+\+Connect@{G\+U\+I\+\_\+\+Connect}}
+\index{G\+U\+I\+\_\+\+Connect@{G\+U\+I\+\_\+\+Connect}!E\+C\+U\+\_\+funcs.\+h@{E\+C\+U\+\_\+funcs.\+h}}
+\subsubsection{\texorpdfstring{G\+U\+I\+\_\+\+Connect()}{GUI\_Connect()}}
+{\footnotesize\ttfamily void G\+U\+I\+\_\+\+Connect (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Establishes the connection between the E\+CU and Windows G\+UI. 
+
+This performs the following functions\+:
+
+1) Prepares the E\+CU\textquotesingle{}s password for transmission 2) Sends the password to the Windows G\+UI
+
+
+\begin{DoxyParams}{Parameters}
+{\em void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 73 of file Communication.\+c.
+
+
+
+References connected\+\_\+\+G\+UI, and do\+Transmit.
+
+
+\begin{DoxyCode}
+74 \{
+75     \textcolor{keywordtype}{char} message[] = \textcolor{stringliteral}{"DALE"};
+76     \textcolor{keywordflow}{for} (uint8\_t i = 0; i < 4; i++)\{                \textcolor{comment}{// This will also send the terminator}
+77         \textcolor{comment}{/* Wait for empty transmit buffer */}
+78         \textcolor{keywordflow}{while} ( !( UCSR0A & (1<<UDRE0)) );
+79         \textcolor{comment}{/* Put data into buffer, sends the data */}
+80         UDR0 = message[i];
+81     \}
+82     \mbox{\hyperlink{_e_c_u__funcs_8h_aaaa9e2d2909ceb75751c9dbfab30661c}{connected\_GUI}} = 1;
+83     \mbox{\hyperlink{_e_c_u__funcs_8h_aa8cc3e0359b222fe83e4f0351414d5a4}{doTransmit}} = -1;
+84 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a23459ced73501cbafb717ca9cbb10ce7}\label{_e_c_u__funcs_8h_a23459ced73501cbafb717ca9cbb10ce7}} 
+\index{E\+C\+U\+\_\+funcs.\+h@{E\+C\+U\+\_\+funcs.\+h}!Initial@{Initial}}
+\index{Initial@{Initial}!E\+C\+U\+\_\+funcs.\+h@{E\+C\+U\+\_\+funcs.\+h}}
+\subsubsection{\texorpdfstring{Initial()}{Initial()}}
+{\footnotesize\ttfamily void Initial (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Initializes the microcontroller for its mainline execution. 
+
+This performs the following functions\+:
+
+1) Initializes the P\+O\+RT data directions. 0 for input and 1 for output
+
+2) Initializes the asynchronous communication with the Windows G\+UI
+
+3) Initializes the S\+PI communication with the E\+SB
+
+4) Initializes the I2C communication with the on board temperature sensors
+
+5) Initializes the A\+DC for the Lipo battery voltage measurements
+
+6) Enable global interrupts
+
+7) Enable a timer for the E\+CU command cycle and start the timer
+
+
+\begin{DoxyParams}{Parameters}
+{\em void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 49 of file Initial\+\_\+funcs.\+c.
+
+
+\begin{DoxyCode}
+50 \{
+52     DDRD |= (1 << XCK1);          \textcolor{comment}{// Enable the SPI output pin for output.  This puts the ECU in master
+       mode for SPI}
+53     
+55     UBRR0 = 12;     \textcolor{comment}{// With a 16 MHz clock this will make a baud rate of 76800 (error of 0.16%)}
+56     
+57     \textcolor{comment}{// The next things that need to be set are as follows (reference page 220 in datasheet)}
+58     \textcolor{comment}{// 1) Enable receive interrupts}
+59     \textcolor{comment}{// 2) Enable receiver}
+60     \textcolor{comment}{// 3) Enable transmitter}
+61     UCSR0B = (1 << RXCIE0) | (1 << RXEN0) | (1 << TXEN0);
+62     
+63     \textcolor{comment}{// Now set the framing information}
+64     \textcolor{comment}{// I want the following things}
+65     \textcolor{comment}{// 1) Asynchronous USART}
+66     \textcolor{comment}{// 2) No Parity}
+67     \textcolor{comment}{// 3) 1 Stop bit}
+68     \textcolor{comment}{// 4) 8 bit character size}
+69     UCSR0C = (1 << UCSZ01) | (1 << UCSZ00);   \textcolor{comment}{// Now the USART should be ready to receive}
+70         
+72     
+73     UBRR1 = 12;     \textcolor{comment}{// With a 16 MHz clock this will make a baud rate of 76800 (error of 0.16%)}
+74     \textcolor{comment}{//  This is the same process as with communication with the GUI}
+75     
+76     UCSR1B = (1 << RXCIE1) | (1 << RXEN1) | (1 << TXEN1);
+77     
+78     \textcolor{comment}{// Now set the framing information}
+79     \textcolor{comment}{// I want the following things}
+80     \textcolor{comment}{// 1) Asynchronous USART}
+81     \textcolor{comment}{// 2) No Parity}
+82     \textcolor{comment}{// 3) 1 Stop bit}
+83     \textcolor{comment}{// 4) 8 bit character size}
+84     UCSR1C = (1 << UCSZ11) | (1 << UCSZ10);   \textcolor{comment}{// Now the USART should be ready to receive}
+85     \mbox{\hyperlink{_e_c_u__funcs_8h_a36d06dcce16c9c486a59c23947f2daf2}{newCommand\_ESB}} = 1;
+86     \mbox{\hyperlink{_e_c_u__funcs_8h_a229f3452d6df08f66a06e45b4ac03647}{ESBreceiveCount}} = 0;
+87     \mbox{\hyperlink{_e_c_u__funcs_8c_abfac85317b9c1522c7b5196d94e471bd}{waitMS}}(50);
+88     \textcolor{keywordflow}{while} (!connected)\{     \textcolor{comment}{// wait until connected with the ESB}
+89         \mbox{\hyperlink{_communication_8c_aa3590f927d6f0e270aad13cd890ba3d5}{ESB\_Connect}}();
+90         \mbox{\hyperlink{_e_c_u__funcs_8c_abfac85317b9c1522c7b5196d94e471bd}{waitMS}}(10);
+91     \}
+92                 
+94     
+95     \textcolor{comment}{// First set the bit rate and prescalar registers for a clock rate of 200 kHz (this is right in the
+       middle of the sensor's range)}
+96     DDRD |= (1 << PD0);     \textcolor{comment}{// this will make the clock line an output}
+97     TWBR = 8;  \textcolor{comment}{// Bit rate register}
+98     \mbox{\hyperlink{_e_c_u__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}{assign\_bit}}(&TWSR, TWPS0, 0);
+99     \mbox{\hyperlink{_e_c_u__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}{assign\_bit}}(&TWSR, TWPS1, 0);   \textcolor{comment}{// this makes a prescalar of 1}
+100     \textcolor{comment}{// Probably don't need to make these assignments but I am just making it explicit}
+101     
+102     \textcolor{comment}{// Second enable the interrupts for the Two Wire Interface}
+103     TWCR = (1<<TWEN);   \textcolor{comment}{// this will clear the interrupt flag and enable the TWI lines.}
+104     \textcolor{comment}{// the temp sensor will be read every quarter second    }
+105     
+106     
+108     
+109     \textcolor{comment}{// The next things that need to be set are as follows}
+110     \textcolor{comment}{// 1) The reference for the ADC needs to be set to the external AREF}
+111     \textcolor{comment}{// 2) The channel for ADMUX needs to be channel 0}
+112     \textcolor{comment}{// 3) The ADC needs to be enabled without interrupts}
+113     \textcolor{comment}{// 4) Division factor for the ADC needs to be set to 128 to keep the input clock }
+114     \textcolor{comment}{//    frequency between 50kHz and 200kHz}
+115     
+116     ADMUX = (1 << REFS0);
+117     ADCSRA = (1 << ADEN) | (1 << ADPS0) | (1 << ADPS1) | (1 << ADPS2);
+118     \mbox{\hyperlink{_e_c_u__funcs_8h_af76c5ac758d1858dffcde4e7aa84e889}{batChannel}} = 0;
+119 
+120 
+122     sei();
+123      
+125     
+126     \textcolor{comment}{// The next things that need to be set are as follows}
+127     \textcolor{comment}{// 1) Timer 1 needs a prescalar of 64 and timer register of 3036    for time of 0.25 sec, for
+       regulating communication with the ESB}
+128     \textcolor{comment}{// 2) Timer 3 needs a prescalar of 64 and timer register if 3036}
+129     \textcolor{comment}{// 3) Timer 4 and 5 needs to have interrupts enabled and create a 1 second timer}
+130     TCNT1 = 3036;
+131     TCNT3 = FlowTime;             \textcolor{comment}{// The flow meter timer does not need interrupts since it will be polled}
+132     
+133     \textcolor{comment}{// The TIFR1 register and TOV1 flag are the overflow flag for timer1}
+134     TCCR1B = (1 << CS11) | (1 << CS10);    \textcolor{comment}{// start timer 1 with prescalar of 64}
+135     TCNT4 = 34286;                         \textcolor{comment}{// coupled with a prescalar of 256, this will make a 0.5 second
+       timer}
+136     TCNT5 = 40536;
+137     TIMSK4 = (1 << TOIE4);     \textcolor{comment}{// enable overflow interrupts for the GUI communication timer}
+138     TIMSK5 = (1 << TOIE5);     \textcolor{comment}{// enable overflow interrupts for the ESB communication timer}
+139     TCNT5 = ESB\_timer\_val;     \textcolor{comment}{// loads Timer 5 with a value that will make a 1 second timer}
+140 
+141     
+142     \textcolor{comment}{// Begin the first conversion for the ADC}
+143     ADCSRA |= (1 << ADSC);
+144     
+145     \mbox{\hyperlink{_e_c_u__funcs_8h_a411b8ca204ac2d44a3755adcf4477c92}{massFlow}}.f = 0.0;
+146      
+147     \textcolor{comment}{// Now configure the external interrupts for the Flow meters}
+148     EICRA = (1 << ISC20) | (1 << ISC21);     \textcolor{comment}{// This will enable rising edge interrupts on INT2, see page
+       110 in datasheet}
+149     \mbox{\hyperlink{_e_c_u__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}{assign\_bit}}(&DDRD, INT2, 0);              \textcolor{comment}{// Configure the PD2 pin as an input so that it can
+       receive the signals}
+150      
+151      
+152     \textcolor{comment}{// Now configure the global variables for the flow meter}
+153     \textcolor{keywordtype}{float} pulse\_flow = (\mbox{\hyperlink{_e_c_u__funcs_8h_a959f7b5d831006ba86ebf2754975fdfc}{density}}) * \mbox{\hyperlink{_e_c_u__funcs_8h_a062607eaaffe8c3f8193991755e024f9}{K\_factor}} * \mbox{\hyperlink{_e_c_u__funcs_8h_a0f29307316da99a662028868a7f7636d}{max\_time}} / 1000;   \textcolor{comment}{// number of pulses
+       expected per g/sec}
+154     \mbox{\hyperlink{_e_c_u__funcs_8h_a4d33ec29c2398728e80d752eeced889e}{V\_per\_pulse}} = \mbox{\hyperlink{_e_c_u__funcs_8h_a8f24004cae5e9f858db493e25febf8c8}{pump\_m}} / pulse\_flow;               \textcolor{comment}{// number of volts per pulse}
+155     \mbox{\hyperlink{_e_c_u__funcs_8h_ab1fa4bbd357586cbfa309f1b8614c1ae}{opMode}} = 0;
+156     \mbox{\hyperlink{_e_c_u__funcs_8h_a4a8bbdf0f587322d8d34a2d4b84ea8a6}{newCommand}} = 1;
+157     
+158     \textcolor{comment}{// Initialize all of the data values to zero}
+159     \mbox{\hyperlink{_e_c_u__funcs_8h_a411b8ca204ac2d44a3755adcf4477c92}{massFlow}}.f = 0;
+160     \mbox{\hyperlink{_e_c_u__funcs_8h_afc4ac50caf210854dacff228ba315687}{Hall\_effect}} = 0;
+161     \mbox{\hyperlink{_e_c_u__funcs_8h_a34c104e39ff60265f33e3325bf865ab5}{EGT}} = 0;
+162     \mbox{\hyperlink{_e_c_u__funcs_8h_a17961c0bba1aa12ef80b5b9b78726530}{glow\_plug}} = 0;
+163     \mbox{\hyperlink{_e_c_u__funcs_8h_ad849b9fe0e266552696acb467ff745f7}{voltage}}.f = 0;
+164     \mbox{\hyperlink{_e_c_u__funcs_8h_aa8cc3e0359b222fe83e4f0351414d5a4}{doTransmit}} = 0;
+165     
+166     
+167 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a61322b047675f61caefcfaca81cfa48b}\label{_e_c_u__funcs_8h_a61322b047675f61caefcfaca81cfa48b}} 
+\index{E\+C\+U\+\_\+funcs.\+h@{E\+C\+U\+\_\+funcs.\+h}!measure\+Flow@{measure\+Flow}}
+\index{measure\+Flow@{measure\+Flow}!E\+C\+U\+\_\+funcs.\+h@{E\+C\+U\+\_\+funcs.\+h}}
+\subsubsection{\texorpdfstring{measure\+Flow()}{measureFlow()}}
+{\footnotesize\ttfamily void measure\+Flow (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Measures the fuel flow passing through the Flow meter. 
+
+This performs the following functions\+:
+
+1) If the flow meter measurement has not started, it enables the appropriate interrupts and returns 2) If the flow meter measurement is in progress, it simply returns 3) If the flow meter measurement has concluded, it calculates the recorded pulses
+
+
+\begin{DoxyParams}{Parameters}
+{\em void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 54 of file E\+C\+U\+\_\+funcs.\+c.
+
+
+
+References assign\+\_\+bit(), bit\+\_\+is\+\_\+clear, and pulse\+\_\+count.
+
+
+\begin{DoxyCode}
+55 \{
+56     \mbox{\hyperlink{_e_c_u__funcs_8h_af9e36069f73b8a3642ae276fd3b672a1}{pulse\_count}} = 0;
+57 
+58     EIMSK |= (1 << INT2);    \textcolor{comment}{// enable the external interrupts}
+59     
+60     \textcolor{comment}{// Now start Timer3 to run for 0.25 sec}
+61     TCCR3B |= (1 << CS31) | (1 << CS30);
+62     
+63     \textcolor{keywordflow}{while} (\mbox{\hyperlink{_e_c_u__funcs_8h_ad188fb0fbfd923bdb01294072367d024}{bit\_is\_clear}}(TIFR3, TOV3));       \textcolor{comment}{// hog execution until the overflow flag has been
+       set}
+64     TIFR3 |= (1 << TOV3);                    \textcolor{comment}{// clear the interrupt flag}
+65     
+66     \textcolor{comment}{// now disable the external interrupt}
+67     \mbox{\hyperlink{_e_c_u__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}{assign\_bit}}(&EIMSK, INT2, 0);
+68     
+69     \textcolor{comment}{// Now turn off Timer 3}
+70     \mbox{\hyperlink{_e_c_u__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}{assign\_bit}}(&TCCR3B, CS31, 0);
+71     \mbox{\hyperlink{_e_c_u__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}{assign\_bit}}(&TCCR3B, CS30, 0);
+72     
+73     \textcolor{comment}{// Now reset the value inside of the TIMER3 register}
+74     TCNT3 = FlowTime;    \textcolor{comment}{// This will allow the timer to run for 0.25 sec once the prescalars are restored}
+75     
+76     \textcolor{comment}{// Now need to convert the pulses detected into an actual flow rate}
+77     \textcolor{comment}{//massFlow.f = V\_per\_pulse * (float) pulse\_count;}
+78     \textcolor{comment}{//massFlow.f = (massFlow.f - pump\_b) / pump\_m;}
+79 
+80     \textcolor{comment}{// now set the doTransmit flag}
+81     \textcolor{keywordflow}{if} (\mbox{\hyperlink{_e_c_u__funcs_8h_aa8cc3e0359b222fe83e4f0351414d5a4}{doTransmit}} < 1)\{
+82         \mbox{\hyperlink{_e_c_u__funcs_8h_aa8cc3e0359b222fe83e4f0351414d5a4}{doTransmit}}++;
+83     \}
+84 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a013b823a1365a9c8f46218f490f71b62}\label{_e_c_u__funcs_8h_a013b823a1365a9c8f46218f490f71b62}} 
+\index{E\+C\+U\+\_\+funcs.\+h@{E\+C\+U\+\_\+funcs.\+h}!pre\+\_\+\+Initial@{pre\+\_\+\+Initial}}
+\index{pre\+\_\+\+Initial@{pre\+\_\+\+Initial}!E\+C\+U\+\_\+funcs.\+h@{E\+C\+U\+\_\+funcs.\+h}}
+\subsubsection{\texorpdfstring{pre\+\_\+\+Initial()}{pre\_Initial()}}
+{\footnotesize\ttfamily void pre\+\_\+\+Initial (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Performs the waiting cycle until the H\+CU signals to the E\+CU to being operating. 
+
+This performs the following functions\+:
+
+1) Waits until the connection pin between the H\+CU and E\+CU is driven high
+
+
+\begin{DoxyParams}{Parameters}
+{\em void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 22 of file Initial\+\_\+funcs.\+c.
+
+
+\begin{DoxyCode}
+23 \{
+24     DDRC |= (0 << HCU\_link);      \textcolor{comment}{// set this pin for input}
+25     \textcolor{keywordflow}{while} (\mbox{\hyperlink{_e_c_u__funcs_8h_ad188fb0fbfd923bdb01294072367d024}{bit\_is\_clear}}(PINC, HCU\_link));    \textcolor{comment}{// just wait until the HCU tells the ECU to wake
+       up}
+26 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a17727302d45ecff548af8f81d06f3a7e}\label{_e_c_u__funcs_8h_a17727302d45ecff548af8f81d06f3a7e}} 
+\index{E\+C\+U\+\_\+funcs.\+h@{E\+C\+U\+\_\+funcs.\+h}!read\+Temp\+Sensor@{read\+Temp\+Sensor}}
+\index{read\+Temp\+Sensor@{read\+Temp\+Sensor}!E\+C\+U\+\_\+funcs.\+h@{E\+C\+U\+\_\+funcs.\+h}}
+\subsubsection{\texorpdfstring{read\+Temp\+Sensor()}{readTempSensor()}}
+{\footnotesize\ttfamily void read\+Temp\+Sensor (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Accesses memory within the M\+A\+X6675 and converts the data into a usable temperature. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 152 of file E\+C\+U\+\_\+funcs.\+c.
+
+
+\begin{DoxyCode}
+153 \{
+154     i2c\_Start(SLA\_W);   \textcolor{comment}{// this will write the temp address to the register on the sensor}
+155     i2c\_write(0x05);    \textcolor{comment}{// this references the temperatures location in memory}
+156     
+157     \textcolor{comment}{// now restart I2C so that it will be configured for reading the temperature}
+158     i2c\_Start(SLA\_R);
+159     
+160     \textcolor{comment}{// now read the upper and lower bytes}
+161     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} upper = i2c\_read(1);   \textcolor{comment}{// this will send the acknowledged bit}
+162     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} lower = i2c\_read(0);   \textcolor{comment}{// this will send the not acknowledged bit}
+163     i2c\_Stop();
+164     
+165     \textcolor{comment}{// now process the data into a usable temperature}
+166     \textcolor{comment}{//First Check flag bits}
+167     \textcolor{keywordflow}{if} ((upper & 0x80) == 0x80)\{ \textcolor{comment}{//TA >= TCRIT}
+168     \}
+169     
+170     \textcolor{keywordflow}{if} ((upper & 0x40) == 0x40)\{ \textcolor{comment}{//TA > TUPPER}
+171     \}
+172     
+173     \textcolor{keywordflow}{if} ((upper & 0x20) == 0x20)\{ \textcolor{comment}{//TA < TLOWER}
+174     \}
+175     
+176     upper = upper & 0x1F; \textcolor{comment}{//Clear flag bits}
+177     uint8\_t decimal = (lower & dec\_MSK) >> 2;
+178     \textcolor{keywordflow}{if} ((upper & 0x10) == 0x10)\{ \textcolor{comment}{//TA < 0°C}
+179         upper = upper & 0x0F; \textcolor{comment}{//Clear SIGN}
+180         \mbox{\hyperlink{_e_c_u__funcs_8h_ad0434de2efd3a26ea1211a9cec967577}{ECU\_temp}} = (float)(256 - ((upper << 4) + (lower >> 4)));
+181         \mbox{\hyperlink{_e_c_u__funcs_8h_ad0434de2efd3a26ea1211a9cec967577}{ECU\_temp}} -= (0.25 * decimal);
+182     \}
+183     \textcolor{keywordflow}{else} \{ \textcolor{comment}{//TA >= 0°C}
+184         \mbox{\hyperlink{_e_c_u__funcs_8h_ad0434de2efd3a26ea1211a9cec967577}{ECU\_temp}} = (float)((upper << 4) + (lower >> 4));     \textcolor{comment}{//Temperature = Ambient Temperature
+       (°C)}
+185         \mbox{\hyperlink{_e_c_u__funcs_8h_ad0434de2efd3a26ea1211a9cec967577}{ECU\_temp}} += (0.25 * decimal);
+186     \}
+187 
+188 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a285a2f8773a070acdcea234b60cf38ca}\label{_e_c_u__funcs_8h_a285a2f8773a070acdcea234b60cf38ca}} 
+\index{E\+C\+U\+\_\+funcs.\+h@{E\+C\+U\+\_\+funcs.\+h}!repeat\+Command@{repeat\+Command}}
+\index{repeat\+Command@{repeat\+Command}!E\+C\+U\+\_\+funcs.\+h@{E\+C\+U\+\_\+funcs.\+h}}
+\subsubsection{\texorpdfstring{repeat\+Command()}{repeatCommand()}}
+{\footnotesize\ttfamily void repeat\+Command (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Requests the Windows G\+UI to repeat the last sent command. 
+
+This performs the following functions\+:
+
+1) Sends the char to the G\+UI which signals a command repetition is required
+
+
+\begin{DoxyParams}{Parameters}
+{\em void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 349 of file Communication.\+c.
+
+
+\begin{DoxyCode}
+350 \{
+351     \textcolor{comment}{/* Wait for empty transmit buffer */}
+352     \textcolor{keywordflow}{while} ( !( UCSR0A & (1<<UDRE0)) );
+353     
+354     \textcolor{comment}{/* Put data into buffer, sends the data */}
+355     UDR0 = \textcolor{charliteral}{'V'}; 
+356     \textcolor{comment}{// Will have to see in unit testing how long this takes to get the response from the GUI}
+357 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a9ad78c90a2e828201a614444385801c7}\label{_e_c_u__funcs_8h_a9ad78c90a2e828201a614444385801c7}} 
+\index{E\+C\+U\+\_\+funcs.\+h@{E\+C\+U\+\_\+funcs.\+h}!send\+To\+E\+SB@{send\+To\+E\+SB}}
+\index{send\+To\+E\+SB@{send\+To\+E\+SB}!E\+C\+U\+\_\+funcs.\+h@{E\+C\+U\+\_\+funcs.\+h}}
+\subsubsection{\texorpdfstring{send\+To\+E\+S\+B()}{sendToESB()}}
+{\footnotesize\ttfamily void send\+To\+E\+SB (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{len }\end{DoxyParamCaption})}
+
+
+
+Transmits data between the E\+CU and E\+SB. 
+
+This performs the following functions\+:
+
+1) Pulls the SS line for the E\+SB low, this will cause the E\+SB to listen to the com line 2) Fills the specified data into the transmit buffer 3) Waits for the data to be received from the E\+SB 4) Pulls the SS line high to end communication with E\+SB for that byte
+
+
+\begin{DoxyParams}{Parameters}
+{\em char} & The byte that is going to be sent to the E\+SB \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+char The received byte from the E\+SB 
+\end{DoxyReturn}
+
+
+Definition at line 28 of file Communication.\+c.
+
+
+
+References E\+S\+Btransmit.
+
+
+\begin{DoxyCode}
+29 \{
+30     \textcolor{comment}{// this will send the number of character in ESBmessage up to len}
+31     cli();
+32     \textcolor{keywordflow}{for}(uint8\_t i = 0; i < len; i++)
+33     \{
+34         \textcolor{keywordflow}{while} ( !( UCSR1A & (1<<UDRE1)) );
+35         \textcolor{comment}{/* Put data into buffer, sends the data */}
+36         UDR1 = \mbox{\hyperlink{_e_c_u__funcs_8h_a346573bf31cc5cb1e4a0d2d95029782a}{ESBtransmit}}[i];
+37     \}
+38     sei();
+39 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_e_c_u__funcs_8h_aebc6f692b7c3787a859445b96ab3ec5f}\label{_e_c_u__funcs_8h_aebc6f692b7c3787a859445b96ab3ec5f}} 
+\index{E\+C\+U\+\_\+funcs.\+h@{E\+C\+U\+\_\+funcs.\+h}!send\+To\+Laptop@{send\+To\+Laptop}}
+\index{send\+To\+Laptop@{send\+To\+Laptop}!E\+C\+U\+\_\+funcs.\+h@{E\+C\+U\+\_\+funcs.\+h}}
+\subsubsection{\texorpdfstring{send\+To\+Laptop()}{sendToLaptop()}}
+{\footnotesize\ttfamily void send\+To\+Laptop (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Transmits periodic data between the E\+CU and Windows G\+UI. 
+
+This performs the following functions\+:
+
+1) Prepares the message to send to the Windows G\+UI 2) Loops through this message, sending it one byte at a time
+
+
+\begin{DoxyParams}{Parameters}
+{\em void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 96 of file Communication.\+c.
+
+
+
+References calculate\+Parity(), connected\+\_\+\+E\+SB, E\+C\+U\+\_\+temp, E\+GT, E\+S\+B\+\_\+temp, glow\+\_\+plug, Hall\+\_\+effect, mass\+Flow, op\+Mode, and voltage.
+
+
+\begin{DoxyCode}
+97 \{
+98     \textcolor{comment}{//loadESBData();}
+99     dummyData();    \textcolor{comment}{// remove this later}
+100     \textcolor{comment}{// This function will be responsible for packaging and sending the desired data to the Windows GUI}
+101     \textcolor{keywordtype}{char} message[28];              \textcolor{comment}{// this is the base length of the message with room for the parity bytes}
+102     \textcolor{comment}{// now fill the message}
+103     \textcolor{keywordflow}{if} (!\mbox{\hyperlink{_e_c_u__funcs_8h_a20d5783317799eb3e211c4cae2516cec}{connected\_ESB}})\{
+104         message[0] = \textcolor{charliteral}{'b'};          \textcolor{comment}{// This means that the ESB is not connected or it has lost connection}
+105     \}
+106     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\mbox{\hyperlink{_e_c_u__funcs_8h_ab1fa4bbd357586cbfa309f1b8614c1ae}{opMode}} == 0)\{
+107         message[0] = \textcolor{charliteral}{'S'};          \textcolor{comment}{// This means that an engine shutdown is being carried out}
+108     \}
+109     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if}(\mbox{\hyperlink{_e_c_u__funcs_8h_ab1fa4bbd357586cbfa309f1b8614c1ae}{opMode}} == 1)\{
+110         message[0] = \textcolor{charliteral}{'r'};          \textcolor{comment}{// This means that an engine startup is in progress}
+111     \}
+112     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if}(\mbox{\hyperlink{_e_c_u__funcs_8h_ab1fa4bbd357586cbfa309f1b8614c1ae}{opMode}} == 2)\{
+113         message[0] = \textcolor{charliteral}{'t'};          \textcolor{comment}{// This means that a throttle adjustment has been requested and is being
+       carried out}
+114     \}
+115     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if}(\mbox{\hyperlink{_e_c_u__funcs_8h_ab1fa4bbd357586cbfa309f1b8614c1ae}{opMode}} == 4)\{
+116         message[0] = \textcolor{charliteral}{'C'};          \textcolor{comment}{// This means that the engine is in the cooling mode}
+117     \}
+118     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if}(\mbox{\hyperlink{_e_c_u__funcs_8h_ab1fa4bbd357586cbfa309f1b8614c1ae}{opMode}} == 5)\{
+119         message[0] = \textcolor{charliteral}{'n'};          \textcolor{comment}{// The engine is not doing anything}
+120     \}
+121     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\mbox{\hyperlink{_e_c_u__funcs_8h_ab1fa4bbd357586cbfa309f1b8614c1ae}{opMode}} == 6)\{
+122         message[0] = \textcolor{charliteral}{'g'};          \textcolor{comment}{// Special shutdown, the EGT is not working properly and there cannot be
+       a normal cooling mode}
+123     \}
+124     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\mbox{\hyperlink{_e_c_u__funcs_8h_ab1fa4bbd357586cbfa309f1b8614c1ae}{opMode}} == 7)\{
+125         message[0] = \textcolor{charliteral}{'N'};          \textcolor{comment}{// This means that the engine has reached the desired throttle, within
+       the error tolerance}
+126     \}
+127     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\mbox{\hyperlink{_e_c_u__funcs_8h_ab1fa4bbd357586cbfa309f1b8614c1ae}{opMode}} == 9)\{         \textcolor{comment}{// This means that fuel is not flowing when it should be flowing}
+128         message[0] = \textcolor{charliteral}{'P'};   
+129     \}
+130     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\mbox{\hyperlink{_e_c_u__funcs_8h_ab1fa4bbd357586cbfa309f1b8614c1ae}{opMode}} == 10)\{
+131         message[0] = \textcolor{charliteral}{'I'};          \textcolor{comment}{// This means that the engine has reached idle}
+132     \}
+133     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\mbox{\hyperlink{_e_c_u__funcs_8h_ab1fa4bbd357586cbfa309f1b8614c1ae}{opMode}} == 11)\{
+134         message[0] = \textcolor{charliteral}{'c'};          \textcolor{comment}{// This means that messages from the ECU have failed the parity check}
+135     \}
+136     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\mbox{\hyperlink{_e_c_u__funcs_8h_ab1fa4bbd357586cbfa309f1b8614c1ae}{opMode}} == 12)\{
+137         message[0] = \textcolor{charliteral}{'R'};          \textcolor{comment}{// This means that RPM limit has been reached and the engine is shutting
+       down}
+138     \}
+139     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\mbox{\hyperlink{_e_c_u__funcs_8h_ab1fa4bbd357586cbfa309f1b8614c1ae}{opMode}} == 13)\{
+140         message[0] = \textcolor{charliteral}{'T'};          \textcolor{comment}{// This means the Temperature limit has been reached and the engine is
+       shutting down}
+141     \}
+142     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\mbox{\hyperlink{_e_c_u__funcs_8h_ab1fa4bbd357586cbfa309f1b8614c1ae}{opMode}} == 14)\{
+143         message[0] = \textcolor{charliteral}{'s'};          \textcolor{comment}{// This means that messages from the ESB have failed the parity check}
+144     \}
+145         
+146     memcpy(message+1,&\mbox{\hyperlink{_e_c_u__funcs_8h_a411b8ca204ac2d44a3755adcf4477c92}{massFlow}},\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}));          \textcolor{comment}{// This should fill 1->4 with the float
+       value}
+147     memcpy(message+5,&\mbox{\hyperlink{_e_c_u__funcs_8h_afc4ac50caf210854dacff228ba315687}{Hall\_effect}},\textcolor{keyword}{sizeof}(uint16\_t));    \textcolor{comment}{// This should fill 5->6 with the Hall
+       effect sensor value}
+148     memcpy(message+7,&\mbox{\hyperlink{_e_c_u__funcs_8h_a34c104e39ff60265f33e3325bf865ab5}{EGT}},\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}));            \textcolor{comment}{// This should fill 7->8 with the EGT value }
+149     memcpy(message+11,&\mbox{\hyperlink{_e_c_u__funcs_8h_ad849b9fe0e266552696acb467ff745f7}{voltage}},\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}));      \textcolor{comment}{// this should fill 9->12 with the value of the
+       battery voltage}
+150     memcpy(message+15,&\mbox{\hyperlink{_e_c_u__funcs_8h_a17961c0bba1aa12ef80b5b9b78726530}{glow\_plug}},\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{char}));         \textcolor{comment}{// This should fill 13 with the glow plug
+       on/off}
+151     memcpy(message+16,&\mbox{\hyperlink{_e_c_u__funcs_8h_ad0434de2efd3a26ea1211a9cec967577}{ECU\_temp}},\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}));         \textcolor{comment}{// This should fill 14->17 with the
+       temperature of the ECU}
+152     memcpy(message+20,&\mbox{\hyperlink{_e_c_u__funcs_8h_a359dd774222ff15507f3efb2d0e89bbe}{ESB\_temp}},\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}));         \textcolor{comment}{// This should fill 18->21 with the ambient
+       temperature of the ESB}
+153     
+154     \textcolor{comment}{// now that the message is made, I need to calculate and populate the parity bytes}
+155     message[24] = \mbox{\hyperlink{_e_c_u__funcs_8c_adc85b180d655324bb96dcb29cff05af3}{calculateParity}}(message, 0);
+156     message[25] = \mbox{\hyperlink{_e_c_u__funcs_8c_adc85b180d655324bb96dcb29cff05af3}{calculateParity}}(message, 6);
+157     message[26] = \mbox{\hyperlink{_e_c_u__funcs_8c_adc85b180d655324bb96dcb29cff05af3}{calculateParity}}(message, 12);
+158     message[27] = \mbox{\hyperlink{_e_c_u__funcs_8c_adc85b180d655324bb96dcb29cff05af3}{calculateParity}}(message, 18);
+159     
+160     \textcolor{comment}{// At this point it is advantageous to turn off global interrupts so that this process is not
+       interrupted}
+161     cli();
+162     \textcolor{keywordflow}{for} (uint8\_t i = 0; i < 28; i++)\{
+163         \textcolor{comment}{/* Wait for empty transmit buffer */}
+164         \textcolor{keywordflow}{while} ( !( UCSR0A & (1<<UDRE0)) );
+165         \textcolor{comment}{/* Put data into buffer, sends the data */}
+166         UDR0 = message[i];
+167     \}
+168     sei();   \textcolor{comment}{// Now need to turn global interrupts back on}
+169     \textcolor{comment}{// Now start the timer}
+170     
+171     TCCR4B = (1 << CS42);      \textcolor{comment}{// start timer 4 with prescalar of 256}
+172 
+173 
+174 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a1c9d5e29ad8899afe0c34571ddee18f9}\label{_e_c_u__funcs_8h_a1c9d5e29ad8899afe0c34571ddee18f9}} 
+\index{E\+C\+U\+\_\+funcs.\+h@{E\+C\+U\+\_\+funcs.\+h}!shutdown@{shutdown}}
+\index{shutdown@{shutdown}!E\+C\+U\+\_\+funcs.\+h@{E\+C\+U\+\_\+funcs.\+h}}
+\subsubsection{\texorpdfstring{shutdown()}{shutdown()}}
+{\footnotesize\ttfamily void shutdown (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Commands the E\+SB to shutdown and awaits the confirmation code. 
+
+This performs the following functions\+:
+
+1) Transmits the char to the E\+SB for the shutdown sequence 2) Waits for the appropriate return message 3) If the function was interrupted part way through by an interrupt, it is restarted
+
+
+\begin{DoxyParams}{Parameters}
+{\em void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 24 of file Engine\+\_\+funcs.\+c.
+
+
+
+References E\+S\+Breceive, E\+S\+Btransmit, send\+To\+E\+S\+B(), and wait\+M\+S().
+
+
+\begin{DoxyCode}
+25 \{
+26     \mbox{\hyperlink{_e_c_u__funcs_8h_a346573bf31cc5cb1e4a0d2d95029782a}{ESBtransmit}}[0] = \textcolor{charliteral}{'S'};
+27     \textcolor{keywordflow}{while} (\mbox{\hyperlink{_e_c_u__funcs_8h_a4f9a0a6bf8fe3144553864f4081b3144}{ESBreceive}}[0] != \textcolor{charliteral}{'K'})\{                    \textcolor{comment}{// Loop until the ESB says K}
+28         \mbox{\hyperlink{_communication_8c_a9ad78c90a2e828201a614444385801c7}{sendToESB}}(1);
+29         \mbox{\hyperlink{_e_c_u__funcs_8c_abfac85317b9c1522c7b5196d94e471bd}{waitMS}}(5);
+30     \}
+31     \mbox{\hyperlink{_e_c_u__funcs_8h_a4f9a0a6bf8fe3144553864f4081b3144}{ESBreceive}}[0] = 0;                              \textcolor{comment}{// clear out the first char so that it
+       actually transmits}
+32 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_e_c_u__funcs_8h_ab0c801cf89f8b3058ff2460c666154c3}\label{_e_c_u__funcs_8h_ab0c801cf89f8b3058ff2460c666154c3}} 
+\index{E\+C\+U\+\_\+funcs.\+h@{E\+C\+U\+\_\+funcs.\+h}!startup@{startup}}
+\index{startup@{startup}!E\+C\+U\+\_\+funcs.\+h@{E\+C\+U\+\_\+funcs.\+h}}
+\subsubsection{\texorpdfstring{startup()}{startup()}}
+{\footnotesize\ttfamily void startup (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Commands the E\+SB to startup and awaits the confirmation code. 
+
+This performs the following functions\+:
+
+1) Transmits the char to the E\+SB for the startup sequence 2) Waits for the appropriate return message 3) If the function was interrupted part way through by an interrupt, it is restarted
+
+
+\begin{DoxyParams}{Parameters}
+{\em void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 45 of file Engine\+\_\+funcs.\+c.
+
+
+
+References E\+S\+Breceive, E\+S\+Btransmit, send\+To\+E\+S\+B(), and wait\+M\+S().
+
+
+\begin{DoxyCode}
+46 \{
+47     \mbox{\hyperlink{_e_c_u__funcs_8h_a346573bf31cc5cb1e4a0d2d95029782a}{ESBtransmit}}[0] = \textcolor{charliteral}{'r'};
+48     \textcolor{keywordflow}{while} (\mbox{\hyperlink{_e_c_u__funcs_8h_a4f9a0a6bf8fe3144553864f4081b3144}{ESBreceive}}[0] != \textcolor{charliteral}{'K'})\{
+49         \mbox{\hyperlink{_communication_8c_a9ad78c90a2e828201a614444385801c7}{sendToESB}}(1);
+50         \mbox{\hyperlink{_e_c_u__funcs_8c_abfac85317b9c1522c7b5196d94e471bd}{waitMS}}(5);   
+51     \}
+52     \mbox{\hyperlink{_e_c_u__funcs_8h_a4f9a0a6bf8fe3144553864f4081b3144}{ESBreceive}}[0] = 0;              \textcolor{comment}{// Change this character so I actually have to receive it in
+       the future   }
+53     
+54 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_e_c_u__funcs_8h_a54163ad9d4f9e7fa08b4aae836a1b316}\label{_e_c_u__funcs_8h_a54163ad9d4f9e7fa08b4aae836a1b316}} 
+\index{E\+C\+U\+\_\+funcs.\+h@{E\+C\+U\+\_\+funcs.\+h}!throttle@{throttle}}
+\index{throttle@{throttle}!E\+C\+U\+\_\+funcs.\+h@{E\+C\+U\+\_\+funcs.\+h}}
+\subsubsection{\texorpdfstring{throttle()}{throttle()}}
+{\footnotesize\ttfamily void throttle (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Commands the E\+SB to adjust the throttle and awaits the confirmation code. 
+
+This performs the following functions\+:
+
+1) Transmits the char to the E\+SB to change the throttle 2) Sends the new value the throttle should be changed to 3) Awaits for the appropriate return message 4) If the function was interrupted part way through by an interrupt, it is restarted
+
+
+\begin{DoxyParams}{Parameters}
+{\em void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 68 of file Engine\+\_\+funcs.\+c.
+
+
+
+References E\+S\+Breceive, E\+S\+Btransmit, send\+To\+E\+S\+B(), throttle\+\_\+per, and wait\+M\+S().
+
+
+\begin{DoxyCode}
+69 \{
+70     \mbox{\hyperlink{_e_c_u__funcs_8h_a346573bf31cc5cb1e4a0d2d95029782a}{ESBtransmit}}[0] = \textcolor{charliteral}{'t'};
+71     \mbox{\hyperlink{_e_c_u__funcs_8h_a346573bf31cc5cb1e4a0d2d95029782a}{ESBtransmit}}[1] = \mbox{\hyperlink{_e_c_u__funcs_8h_a800e7967d4d08ade3357ea12c132dd46}{throttle\_per}};
+72     \textcolor{keywordflow}{while} (\mbox{\hyperlink{_e_c_u__funcs_8h_a4f9a0a6bf8fe3144553864f4081b3144}{ESBreceive}}[0] != \textcolor{charliteral}{'K'})\{
+73         \mbox{\hyperlink{_communication_8c_a9ad78c90a2e828201a614444385801c7}{sendToESB}}(2);
+74         \mbox{\hyperlink{_e_c_u__funcs_8c_abfac85317b9c1522c7b5196d94e471bd}{waitMS}}(5);
+75     \}
+76     \mbox{\hyperlink{_e_c_u__funcs_8h_a4f9a0a6bf8fe3144553864f4081b3144}{ESBreceive}}[0] = 0;                   \textcolor{comment}{// clear out the first char so that it actually
+       transmits}
+77 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_e_c_u__funcs_8h_abfac85317b9c1522c7b5196d94e471bd}\label{_e_c_u__funcs_8h_abfac85317b9c1522c7b5196d94e471bd}} 
+\index{E\+C\+U\+\_\+funcs.\+h@{E\+C\+U\+\_\+funcs.\+h}!wait\+MS@{wait\+MS}}
+\index{wait\+MS@{wait\+MS}!E\+C\+U\+\_\+funcs.\+h@{E\+C\+U\+\_\+funcs.\+h}}
+\subsubsection{\texorpdfstring{wait\+M\+S()}{waitMS()}}
+{\footnotesize\ttfamily void wait\+MS (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{msec }\end{DoxyParamCaption})}
+
+
+
+Subroutine which will wait for a given number of milliseconds. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em msec} & Number of milliseconds to wait \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 238 of file E\+C\+U\+\_\+funcs.\+c.
+
+
+
+References assign\+\_\+bit(), and bit\+\_\+is\+\_\+clear.
+
+
+\begin{DoxyCode}
+239 \{
+240     \textcolor{comment}{// This function utilizes timer 0 and a sequence of delay loops to delay for the desired time}
+241     TCNT0 = 5;
+242     \textcolor{comment}{// begin the timer}
+243     TCCR0B |= (1 << CS01) | (1 << CS00);       \textcolor{comment}{// this will start the timer with a prescalar of 64}
+244     \textcolor{keywordflow}{for} (uint16\_t i = 0; i < msec; i++)\{
+245         \textcolor{keywordflow}{while}(\mbox{\hyperlink{_e_c_u__funcs_8h_ad188fb0fbfd923bdb01294072367d024}{bit\_is\_clear}}(TIFR0, TOV0));
+246         TIFR0 |= (1 << TOV0);                  \textcolor{comment}{// Clear the overflow flag by writing a 1 to it}
+247     \}
+248     \mbox{\hyperlink{_e_c_u__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}{assign\_bit}}(&TCCR0B, CS01, 0);
+249     \mbox{\hyperlink{_e_c_u__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}{assign\_bit}}(&TCCR0B, CS00, 0);              \textcolor{comment}{// Turn off the timer}
+250 \}
+\end{DoxyCode}

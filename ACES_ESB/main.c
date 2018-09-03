@@ -34,6 +34,8 @@ int main(void)
 				package_message();
 				sendToECU(allData);
 			}
+			else if (opMode == 11)
+				shutdown();               // needs to shutdown because the engine has been disconnected from the ECU
 		}		
     }
 }

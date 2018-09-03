@@ -133,7 +133,6 @@ void Initial(void)
 	// The TIFR1 register and TOV1 flag are the overflow flag for timer1
 	TCCR1B = (1 << CS11) | (1 << CS10);    // start timer 1 with prescalar of 64
 	TCNT4 = 34286;                         // coupled with a prescalar of 256, this will make a 0.5 second timer
-	TCNT5 = 40536;
 	TIMSK4 = (1 << TOIE4);     // enable overflow interrupts for the GUI communication timer
 	TIMSK5 = (1 << TOIE5);     // enable overflow interrupts for the ESB communication timer
 	TCNT5 = ESB_timer_val;     // loads Timer 5 with a value that will make a 1 second timer
@@ -160,8 +159,7 @@ void Initial(void)
 	Hall_effect = 0;
 	EGT = 0;
 	glow_plug = 0;
-	voltage = 0;
-	repeatCount = 0;
+	voltage.f = 0;
 	doTransmit = 0;
 	
 	

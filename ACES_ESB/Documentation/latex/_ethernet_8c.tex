@@ -1,0 +1,899 @@
+\hypertarget{_ethernet_8c}{}\section{C\+:/\+Users/nickm/\+Documents/\+Git\+Hub/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+A\+C\+E\+S\+\_\+\+E\+S\+B/\+Ethernet.c File Reference}
+\label{_ethernet_8c}\index{C\+:/\+Users/nickm/\+Documents/\+Git\+Hub/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+A\+C\+E\+S\+\_\+\+E\+S\+B/\+Ethernet.\+c@{C\+:/\+Users/nickm/\+Documents/\+Git\+Hub/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+A\+C\+E\+S\+\_\+\+E\+S\+B/\+Ethernet.\+c}}
+
+
+Function implementation for use of the E\+N\+C28\+J60 Ethernet module.  
+
+
+{\ttfamily \#include $<$avr/io.\+h$>$}\newline
+{\ttfamily \#include $<$avr/interrupt.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}Ethernet.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}E\+S\+B\+\_\+funcs.\+h\char`\"{}}\newline
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{_ethernet_8c_a572c72b2a5d733ffa42948217b88c859}{read\+Basic}} (uint8\+\_\+t op, uint8\+\_\+t address)
+\begin{DoxyCompactList}\small\item\em Performs a low level read operation of a register. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_ethernet_8c_a3b4720ee947ebfc7ef6f78b5bf7f908e}{write\+Basic}} (uint8\+\_\+t op, uint8\+\_\+t address, uint8\+\_\+t data)
+\begin{DoxyCompactList}\small\item\em Performs a low level write operation of a register. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_ethernet_8c_ad70790336fc77ed46bb37335070ab701}{read\+Buffer}} (uint8\+\_\+t len, uint8\+\_\+t $\ast$data)
+\begin{DoxyCompactList}\small\item\em Reads a specified number of bytes from the buffer and stores them in an array. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_ethernet_8c_a1ec20cb477cceb19339d0c85c1ea3f2d}{write\+Buffer}} (uint8\+\_\+t len, uint8\+\_\+t $\ast$data)
+\begin{DoxyCompactList}\small\item\em Writes a specified number of bytes into the buffer memory. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_ethernet_8c_abc02bef712b1833f950bb0d0f6d8cfbb}{set\+Bank}} (uint8\+\_\+t address)
+\begin{DoxyCompactList}\small\item\em Set the current bank to that which corresponds to that of a specified register for the E\+N\+C28\+J60. \end{DoxyCompactList}\item 
+uint8\+\_\+t \mbox{\hyperlink{_ethernet_8c_a2209347bbe1ae9f1c7eb0ebca476c738}{Register\+Read}} (uint8\+\_\+t address)
+\begin{DoxyCompactList}\small\item\em Reads the value for a specified register in memory for the E\+N\+C28\+J60. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{Register\+Write}} (uint8\+\_\+t address, uint8\+\_\+t data)
+\begin{DoxyCompactList}\small\item\em Writes a byte of data to a specified register location for the E\+N\+C28\+J60. \end{DoxyCompactList}\item 
+uint16\+\_\+t \mbox{\hyperlink{_ethernet_8c_a7ccc6cf3c31ec6e940d59ba624f6475e}{Phy\+Read}} (uint8\+\_\+t address)
+\begin{DoxyCompactList}\small\item\em Reads from a register location from the P\+HY module within the E\+N\+C28\+J60. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_ethernet_8c_a8d0157635c4899444e7e6e03611338a2}{Phy\+Write}} (uint8\+\_\+t address, uint16\+\_\+t data)
+\begin{DoxyCompactList}\small\item\em Writes to a register location in the P\+HY module within the E\+N\+C28\+J60. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_ethernet_8c_adc041443ef6fa5494279d2c71caea464}{Init\+Phy}} (void)
+\begin{DoxyCompactList}\small\item\em Initialization routine for using the P\+HY module of the E\+N\+C18\+J60, mostly sets L\+ED blink patterns. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_ethernet_8c_abfac85317b9c1522c7b5196d94e471bd}{wait\+MS}} (uint16\+\_\+t msec)
+\begin{DoxyCompactList}\small\item\em Delay loop for a desired amount of milliseconds. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_ethernet_8c_a8babb527fd3779d20aa43951ffc6e475}{Init\+Ethernet}} (void)
+\begin{DoxyCompactList}\small\item\em Initialization routine for use of the E\+N\+C28\+J60 in this project. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_ethernet_8c_aa2b63dd88471c29c579eccd9c7aab493}{packet\+Send}} (uint8\+\_\+t len, uint8\+\_\+t $\ast$packet)
+\begin{DoxyCompactList}\small\item\em Sends a packet of information using the Ethernet module. \end{DoxyCompactList}\item 
+uint16\+\_\+t \mbox{\hyperlink{_ethernet_8c_a5bd649237943093785e9102edb256a56}{packet\+Recieve}} (uint8\+\_\+t max\+\_\+length, uint8\+\_\+t $\ast$packets)
+\begin{DoxyCompactList}\small\item\em Receives packet of information which is waiting in the buffer. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_ethernet_8c_a8f98d3be0e5169ea19d39b9cfc093f34}{transmit\+Header}} (uint8\+\_\+t $\ast$buffer)
+\begin{DoxyCompactList}\small\item\em Place the proper header bytes to the beginning of the array which will hold the message. \end{DoxyCompactList}\item 
+uint8\+\_\+t \mbox{\hyperlink{_ethernet_8c_a5d16624bda4278d3e38b5a2748cae427}{load\+Data}} (uint8\+\_\+t $\ast$full\+Message, uint8\+\_\+t $\ast$message, uint8\+\_\+t len)
+\begin{DoxyCompactList}\small\item\em Places data from temporary string into the final array which will be sent to the E\+N\+C28\+J60. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_ethernet_8c_a42af1f96afdc7493b47219e8d7164356}{read\+T\+X\+\_\+\+Status\+Vec}} (uint8\+\_\+t $\ast$Status)
+\begin{DoxyCompactList}\small\item\em Reads the transmit status vector from the address which is the end of the transmit buffer + 1. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Function implementation for use of the E\+N\+C28\+J60 Ethernet module. 
+
+\begin{DoxyAuthor}{Author}
+Nick Moore 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+June 21, 2018 
+\end{DoxyDate}
+\begin{DoxyRefDesc}{Bug}
+\item[\mbox{\hyperlink{bug__bug000005}{Bug}}]The L\+E\+Ds on the E\+N\+C28\+J60 fail to light up when transmitting/receiving 
+
+The read\+T\+X\+\_\+\+Status\+Vec function does not seem to receive the data that it should be receiving \end{DoxyRefDesc}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{_ethernet_8c_a8babb527fd3779d20aa43951ffc6e475}\label{_ethernet_8c_a8babb527fd3779d20aa43951ffc6e475}} 
+\index{Ethernet.\+c@{Ethernet.\+c}!Init\+Ethernet@{Init\+Ethernet}}
+\index{Init\+Ethernet@{Init\+Ethernet}!Ethernet.\+c@{Ethernet.\+c}}
+\subsubsection{\texorpdfstring{Init\+Ethernet()}{InitEthernet()}}
+{\footnotesize\ttfamily void Init\+Ethernet (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Initialization routine for use of the E\+N\+C28\+J60 in this project. 
+
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 256 of file Ethernet.\+c.
+
+
+
+References read\+Basic().
+
+
+\begin{DoxyCode}
+257 \{
+258     \textcolor{comment}{// First perform a system reset.  This will ensure register start with their expected values}
+259     \mbox{\hyperlink{_ethernet_8c_a572c72b2a5d733ffa42948217b88c859}{readBasic}}(SOFT\_RESET,SOFT\_RESET);        \textcolor{comment}{// normally read returns something but this will
+       serve as a write with fewer operations}
+260     \mbox{\hyperlink{_ethernet_8c_abfac85317b9c1522c7b5196d94e471bd}{waitMS}}(50);                              \textcolor{comment}{// give the chip time to restart}
+261     
+263     nextPacketPtr = RXSTART\_INIT;
+264     
+265     \textcolor{comment}{// Rx start}
+266     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ERXSTL, RXSTART\_INIT);        \textcolor{comment}{// Low byte first and then high byte}
+267     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ERXSTH, RXSTART\_INIT >> 8);
+268     
+269     \textcolor{comment}{// Now set the current receive pointer address}
+270     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ERDPTL, RXSTART\_INIT);
+271     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ERDPTH, RXSTART\_INIT >> 8);   \textcolor{comment}{// Again, low byte first}
+272     
+273     \textcolor{comment}{// RX end}
+274     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ERXNDL, RXSTOP\_INIT & 0xFF);    \textcolor{comment}{// doing the 0xFF will trim off the higher
+       byte}
+275     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ERXNDH, RXSTOP\_INIT >> 8);
+276     
+277     \textcolor{comment}{// TX Start}
+278     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ETXSTL, TXSTART\_INIT & 0xFF);
+279     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ETXSTH, TXSTART\_INIT >> 8);
+280     
+281     \textcolor{comment}{// TX end}
+282     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ETXNDL, TXSTOP\_INIT & 0xFF);
+283     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ETXNDH, TXSTOP\_INIT >> 8);
+284     
+285     \textcolor{comment}{// Now configure the packet filters}
+286     \textcolor{comment}{// Everything will be filtered with Unicast}
+287     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ERXFCON, ERXFCON\_ANDOR);      \textcolor{comment}{// have no filters for now}
+288     \textcolor{comment}{//RegisterWrite(ERXFCON, ERXFCON\_UCEN | ERXFCON\_ANDOR);}
+289     \textcolor{comment}{// The above line will ignore all packets which don't have the destination address}
+290     \textcolor{comment}{// matching this device's MAC address}
+291     
+292     \textcolor{comment}{// Now enable the MAC and other features}
+293     \textcolor{comment}{// This will enable the MAC to receive packets}
+294     \textcolor{comment}{// allow MAC to transmit pause control frame}
+295     \textcolor{comment}{// and inhibit transmission when pause control frames are received}
+296     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(MACON1, MACON1\_MARXEN | MACON1\_TXPAUS | MACON1\_RXPAUS);
+297     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(MACON2, 0);     \textcolor{comment}{// this will cause the MAC to enter "normal operation" as
+       per the data sheet p61}
+298     \textcolor{comment}{//writeBasic(BIT\_FIELD\_SET, MACON3,MACON3\_FRMLNEN);     // This will check to make sure that the frame
+       length is what it said it was going to be and not impact the others}
+299     
+300     \textcolor{comment}{// Now do Inter-Packet gap (not back-to-back)}
+301     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(MAIPGL, 0x12);      \textcolor{comment}{// This was what the data sheet recommended (p34)}
+302     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(MAIPGH, 0x0C);      \textcolor{comment}{// Also what the data sheet recommended}
+303     
+304     \textcolor{comment}{// Now write the MAC Address to the device}
+305     \textcolor{comment}{// Note, the ENC28J60 is byte backwards, at least that is the consensus on the Internet}
+306     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(MAADR5, ESB\_mac[0]);
+307     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(MAADR4, ESB\_mac[1]);
+308     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(MAADR3, ESB\_mac[2]);
+309     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(MAADR2, ESB\_mac[3]);
+310     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(MAADR1, ESB\_mac[4]);
+311     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(MAADR0, ESB\_mac[5]);
+312     
+313     \textcolor{comment}{// Now prevent loop back of transmitted frames}
+314     \mbox{\hyperlink{_ethernet_8c_a8d0157635c4899444e7e6e03611338a2}{PhyWrite}}(PHCON2, PHCON2\_HDLDIS | PHCON2\_FRCLINK);
+315     
+316     \textcolor{comment}{// enable packet reception}
+317     \mbox{\hyperlink{_ethernet_8c_a3b4720ee947ebfc7ef6f78b5bf7f908e}{writeBasic}}(BIT\_FIELD\_SET, ECON1, ECON1\_RXEN);
+318     
+319     \textcolor{comment}{// now enable the interrupt flags}
+320     \mbox{\hyperlink{_ethernet_8c_a3b4720ee947ebfc7ef6f78b5bf7f908e}{writeBasic}}(BIT\_FIELD\_SET, EIE, EIE\_PKTIE | EIE\_TXIE | EIE\_TXERIE | EIE\_RXERIE);
+321     \textcolor{comment}{// The above line will enable the interrupt flags for Receive Packet Pending, Transmit, Transmit error,
+       and receive packet error}
+322     
+323 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_ethernet_8c_adc041443ef6fa5494279d2c71caea464}\label{_ethernet_8c_adc041443ef6fa5494279d2c71caea464}} 
+\index{Ethernet.\+c@{Ethernet.\+c}!Init\+Phy@{Init\+Phy}}
+\index{Init\+Phy@{Init\+Phy}!Ethernet.\+c@{Ethernet.\+c}}
+\subsubsection{\texorpdfstring{Init\+Phy()}{InitPhy()}}
+{\footnotesize\ttfamily void Init\+Phy (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Initialization routine for using the P\+HY module of the E\+N\+C18\+J60, mostly sets L\+ED blink patterns. 
+
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 209 of file Ethernet.\+c.
+
+
+
+References Phy\+Write().
+
+
+\begin{DoxyCode}
+210 \{
+211     \textcolor{comment}{// Turn the LEDs on}
+212     \mbox{\hyperlink{_ethernet_8c_a8d0157635c4899444e7e6e03611338a2}{PhyWrite}}(PHLCON, LED\_on);             \textcolor{comment}{// Turn both LEDs on}
+213     \mbox{\hyperlink{_ethernet_8c_abfac85317b9c1522c7b5196d94e471bd}{waitMS}}(500);
+214     \textcolor{comment}{// Turn the LEDs off}
+215     \mbox{\hyperlink{_ethernet_8c_a8d0157635c4899444e7e6e03611338a2}{PhyWrite}}(PHLCON, LED\_off);
+216     \mbox{\hyperlink{_ethernet_8c_abfac85317b9c1522c7b5196d94e471bd}{waitMS}}(500);
+217     
+218     \textcolor{comment}{// Turn the LEDs back on}
+219     \mbox{\hyperlink{_ethernet_8c_a8d0157635c4899444e7e6e03611338a2}{PhyWrite}}(PHLCON, LED\_on);
+220     \mbox{\hyperlink{_ethernet_8c_abfac85317b9c1522c7b5196d94e471bd}{waitMS}}(500);
+221     
+222     \textcolor{comment}{// Turn LEDs off again}
+223     \mbox{\hyperlink{_ethernet_8c_a8d0157635c4899444e7e6e03611338a2}{PhyWrite}}(PHLCON, LED\_off);
+224     \mbox{\hyperlink{_ethernet_8c_abfac85317b9c1522c7b5196d94e471bd}{waitMS}}(500);
+225     
+226     \textcolor{comment}{// Set the LEDs for normal operation}
+227     \textcolor{comment}{// This means that LEDA (green) will correspond to link status}
+228     \textcolor{comment}{// And LEDB (yellow) will correspond to receive/transmit}
+229     \mbox{\hyperlink{_ethernet_8c_a8d0157635c4899444e7e6e03611338a2}{PhyWrite}}(PHLCON, LED\_normal);
+230     \mbox{\hyperlink{_ethernet_8c_abfac85317b9c1522c7b5196d94e471bd}{waitMS}}(100);                     \textcolor{comment}{// The example code has this in here, don't know if I really
+       need it}
+231 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_ethernet_8c_a5d16624bda4278d3e38b5a2748cae427}\label{_ethernet_8c_a5d16624bda4278d3e38b5a2748cae427}} 
+\index{Ethernet.\+c@{Ethernet.\+c}!load\+Data@{load\+Data}}
+\index{load\+Data@{load\+Data}!Ethernet.\+c@{Ethernet.\+c}}
+\subsubsection{\texorpdfstring{load\+Data()}{loadData()}}
+{\footnotesize\ttfamily uint8\+\_\+t load\+Data (\begin{DoxyParamCaption}\item[{uint8\+\_\+t $\ast$}]{full\+Message,  }\item[{uint8\+\_\+t $\ast$}]{message,  }\item[{uint8\+\_\+t}]{len }\end{DoxyParamCaption})}
+
+
+
+Places data from temporary string into the final array which will be sent to the E\+N\+C28\+J60. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em full\+Message} & Final array which will be sent to the E\+N\+C28\+J60 \\
+\hline
+\mbox{\tt in}  & {\em message} & Original and temporary array containing the user\textquotesingle{}s message to sent \\
+\hline
+\mbox{\tt in}  & {\em len} & The length of the sub array of message that is wanting to be sent \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 438 of file Ethernet.\+c.
+
+
+\begin{DoxyCode}
+439 \{
+440     uint8\_t i = 0;
+441     
+442     \textcolor{comment}{// First load the length of the message}
+443     fullMessage[LEN\_INDEX] = len + 14;
+444     fullMessage[LEN\_INDEX + 1] = 0;    \textcolor{comment}{// Since I know the length will be much less than 256}
+445     
+446     \textcolor{comment}{// Next load the MAC Addresses into the full message}
+447     \mbox{\hyperlink{_ethernet_8c_a8f98d3be0e5169ea19d39b9cfc093f34}{transmitHeader}}(fullMessage);
+448     
+449     \textcolor{comment}{// Now load the data from the message into the full message}
+450     \textcolor{keywordflow}{while} (i < len)
+451     \{
+452         fullMessage[LEN\_INDEX + 2 + i] = message[i];
+453         i++;
+454     \}
+455     \textcolor{keywordflow}{return} (14 + len);
+456 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_ethernet_8c_a5bd649237943093785e9102edb256a56}\label{_ethernet_8c_a5bd649237943093785e9102edb256a56}} 
+\index{Ethernet.\+c@{Ethernet.\+c}!packet\+Recieve@{packet\+Recieve}}
+\index{packet\+Recieve@{packet\+Recieve}!Ethernet.\+c@{Ethernet.\+c}}
+\subsubsection{\texorpdfstring{packet\+Recieve()}{packetRecieve()}}
+{\footnotesize\ttfamily uint16\+\_\+t packet\+Recieve (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{max\+\_\+length,  }\item[{uint8\+\_\+t $\ast$}]{packets }\end{DoxyParamCaption})}
+
+
+
+Receives packet of information which is waiting in the buffer. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em max\+\_\+length} & The maximum length (in bytes) that will be read \\
+\hline
+\mbox{\tt out}  & {\em packets} & Array for where to place the data which is sitting in the buffer \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 363 of file Ethernet.\+c.
+
+
+
+References Register\+Read().
+
+
+\begin{DoxyCode}
+364 \{
+365     uint16\_t rxstat;
+366     uint16\_t len;
+367     
+368     \textcolor{comment}{// Check to see if a packet has been received, if not, then return}
+369     \textcolor{keywordflow}{if} (!\mbox{\hyperlink{_ethernet_8c_a2209347bbe1ae9f1c7eb0ebca476c738}{RegisterRead}}(EPKTCNT))
+370         \textcolor{keywordflow}{return}(0);
+371         
+372     \textcolor{comment}{// Set the read pointer to the start of the received packet}
+373     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ERDPTL, nextPacketPtr);
+374     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ERDPTH, nextPacketPtr >> 8);
+375     
+376     \textcolor{comment}{// Read the next packet pointer (see page 43 in data sheet)}
+377     nextPacketPtr = \mbox{\hyperlink{_ethernet_8c_a572c72b2a5d733ffa42948217b88c859}{readBasic}}(READ\_BUF\_MEM, 0);
+378     nextPacketPtr |= \mbox{\hyperlink{_ethernet_8c_a572c72b2a5d733ffa42948217b88c859}{readBasic}}(READ\_BUF\_MEM, 0) << 8;
+379     \textcolor{comment}{// Reading from the memory buffer automatically increments to the next byte}
+380     
+381     \textcolor{comment}{// read the packet length}
+382     len = \mbox{\hyperlink{_ethernet_8c_a572c72b2a5d733ffa42948217b88c859}{readBasic}}(READ\_BUF\_MEM, 0);
+383     len |= \mbox{\hyperlink{_ethernet_8c_a572c72b2a5d733ffa42948217b88c859}{readBasic}}(READ\_BUF\_MEM, 0) << 8;
+384     \textcolor{comment}{// in the example, 4 is subtracted from this but I don't have CRC checking implemented since I don't
+       think it is necessary}
+385     
+386     \textcolor{comment}{// read the receive status}
+387     rxstat = \mbox{\hyperlink{_ethernet_8c_a572c72b2a5d733ffa42948217b88c859}{readBasic}}(READ\_BUF\_MEM, 0);
+388     rxstat |= \mbox{\hyperlink{_ethernet_8c_a572c72b2a5d733ffa42948217b88c859}{readBasic}}(READ\_BUF\_MEM, 0) << 8;
+389     
+390     \textcolor{comment}{// limit the receive length}
+391     \textcolor{keywordflow}{if} (len > max\_length)
+392         len = max\_length;
+393         
+394     \textcolor{comment}{// check for symbol errors}
+395     \textcolor{keywordflow}{if} (!(rxstat & 0x80))\{
+396         \textcolor{comment}{// this is an invalid packet}
+397         len = 0;
+398     \}
+399     \textcolor{keywordflow}{else}\{
+400         \mbox{\hyperlink{_ethernet_8c_ad70790336fc77ed46bb37335070ab701}{readBuffer}}(len, packets);
+401     \}
+402     
+403     \textcolor{comment}{// move the RX pointer to the start of the next received packet}
+404     \textcolor{comment}{// This frees the memory we just read out}
+405     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ERXRDPTL, nextPacketPtr);
+406     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ERXRDPTH, nextPacketPtr >> 8);
+407         
+408     \textcolor{comment}{// decrement the packet counter indicate we are done with this packet}
+409     \mbox{\hyperlink{_ethernet_8c_a3b4720ee947ebfc7ef6f78b5bf7f908e}{writeBasic}}(BIT\_FIELD\_SET, ECON2, ECON2\_PKTDEC);
+410     \textcolor{keywordflow}{return}(len);
+411 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_ethernet_8c_aa2b63dd88471c29c579eccd9c7aab493}\label{_ethernet_8c_aa2b63dd88471c29c579eccd9c7aab493}} 
+\index{Ethernet.\+c@{Ethernet.\+c}!packet\+Send@{packet\+Send}}
+\index{packet\+Send@{packet\+Send}!Ethernet.\+c@{Ethernet.\+c}}
+\subsubsection{\texorpdfstring{packet\+Send()}{packetSend()}}
+{\footnotesize\ttfamily void packet\+Send (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{len,  }\item[{uint8\+\_\+t $\ast$}]{packet }\end{DoxyParamCaption})}
+
+
+
+Sends a packet of information using the Ethernet module. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em len} & Entire length of the packet \\
+\hline
+\mbox{\tt in}  & {\em packet} & Array containing the data for the packet \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 331 of file Ethernet.\+c.
+
+
+
+References Register\+Write().
+
+
+\begin{DoxyCode}
+332 \{
+333     \textcolor{comment}{// Set the write pointer to start of transmit buffer area}
+334     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(EWRPTL, TXSTART\_INIT & 0xFF);
+335     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(EWRPTH, TXSTART\_INIT >> 8);
+336     
+337     \textcolor{comment}{// Set the TXND pointer to correspond to the packet size given}
+338     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ETXNDL, (TXSTART\_INIT + len) & 0xFF);
+339     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ETXNDH, (TXSTART\_INIT + len) >> 8);
+340     
+341     \textcolor{comment}{// write per-packet control byte (0x00 means use macon3 settings)}
+342     \mbox{\hyperlink{_ethernet_8c_a3b4720ee947ebfc7ef6f78b5bf7f908e}{writeBasic}}(WRITE\_BUF\_MEM, 0, 0x00);   \textcolor{comment}{// 0 for address because 0x7A is already in the first
+       argument}
+343     
+344     \textcolor{comment}{// copy the packet into the transmit buffer}
+345     \mbox{\hyperlink{_ethernet_8c_a1ec20cb477cceb19339d0c85c1ea3f2d}{writeBuffer}}(len, packet);
+346     
+347     \textcolor{comment}{// send the contents of the transmit buffer onto the network}
+348     \mbox{\hyperlink{_ethernet_8c_a3b4720ee947ebfc7ef6f78b5bf7f908e}{writeBasic}}(BIT\_FIELD\_SET, ECON1, ECON1\_TXRTS);
+349     
+350     \textcolor{comment}{// Reset the transmit logic problem. See Rev. B4 Silicon Errata point 12.}
+351     \textcolor{keywordflow}{if}((\mbox{\hyperlink{_ethernet_8c_a2209347bbe1ae9f1c7eb0ebca476c738}{RegisterRead}}(EIR) & EIR\_TXERIF))
+352     \{
+353         \mbox{\hyperlink{_ethernet_8c_a3b4720ee947ebfc7ef6f78b5bf7f908e}{writeBasic}}(BIT\_FIELD\_CLR, ECON1, ECON1\_TXRTS);
+354     \}
+355 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_ethernet_8c_a7ccc6cf3c31ec6e940d59ba624f6475e}\label{_ethernet_8c_a7ccc6cf3c31ec6e940d59ba624f6475e}} 
+\index{Ethernet.\+c@{Ethernet.\+c}!Phy\+Read@{Phy\+Read}}
+\index{Phy\+Read@{Phy\+Read}!Ethernet.\+c@{Ethernet.\+c}}
+\subsubsection{\texorpdfstring{Phy\+Read()}{PhyRead()}}
+{\footnotesize\ttfamily uint16\+\_\+t Phy\+Read (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{address }\end{DoxyParamCaption})}
+
+
+
+Reads from a register location from the P\+HY module within the E\+N\+C28\+J60. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em address} & Name of the register to read from \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+uint16\+\_\+t The value within the specified register 
+\end{DoxyReturn}
+
+
+Definition at line 164 of file Ethernet.\+c.
+
+
+
+References Register\+Write().
+
+
+\begin{DoxyCode}
+165 \{
+166     \textcolor{comment}{// First I need to set the PHY register address}
+167     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(MIREGADR, address);
+168     
+169     \textcolor{comment}{// Now set the MICMD.MIIRD bit}
+170     \mbox{\hyperlink{_ethernet_8c_a3b4720ee947ebfc7ef6f78b5bf7f908e}{writeBasic}}(BIT\_FIELD\_SET, MICMD, MICMD\_MIIRD);
+171     
+172     \textcolor{comment}{// now wait for at least 10.24 us}
+173     \mbox{\hyperlink{_ethernet_8c_abfac85317b9c1522c7b5196d94e471bd}{waitMS}}(15);
+174     
+175     \textcolor{comment}{// Now clear the MIIRD bit}
+176     \mbox{\hyperlink{_ethernet_8c_a3b4720ee947ebfc7ef6f78b5bf7f908e}{writeBasic}}(BIT\_FIELD\_CLR, MICMD, MICMD\_MIIRD);
+177     
+178     uint16\_t data = 0;
+179     data |= \mbox{\hyperlink{_ethernet_8c_a2209347bbe1ae9f1c7eb0ebca476c738}{RegisterRead}}(MIRDL);
+180     data |= (\mbox{\hyperlink{_ethernet_8c_a2209347bbe1ae9f1c7eb0ebca476c738}{RegisterRead}}(MIRDH) << 8);
+181     
+182     \textcolor{keywordflow}{return} data;
+183 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_ethernet_8c_a8d0157635c4899444e7e6e03611338a2}\label{_ethernet_8c_a8d0157635c4899444e7e6e03611338a2}} 
+\index{Ethernet.\+c@{Ethernet.\+c}!Phy\+Write@{Phy\+Write}}
+\index{Phy\+Write@{Phy\+Write}!Ethernet.\+c@{Ethernet.\+c}}
+\subsubsection{\texorpdfstring{Phy\+Write()}{PhyWrite()}}
+{\footnotesize\ttfamily void Phy\+Write (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{address,  }\item[{uint16\+\_\+t}]{data }\end{DoxyParamCaption})}
+
+
+
+Writes to a register location in the P\+HY module within the E\+N\+C28\+J60. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em address} & Name of the register to write to \\
+\hline
+\mbox{\tt in}  & {\em data} & 16 bit value which will be written into the register \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 191 of file Ethernet.\+c.
+
+
+
+References Register\+Write().
+
+
+\begin{DoxyCode}
+192 \{
+193     \textcolor{comment}{// first need to set the PHY register address}
+194     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(MIREGADR, PHLCON);
+195     \textcolor{comment}{// Write the PHY data}
+196     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(MIWRL, data & 0xFF);
+197     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(MIWRH, data >> 8);
+198         
+199     \textcolor{comment}{// now need to wait for 10.24 us, but I will just poll for the end of the waiting time after 1 waiting
+       cycle}
+200     \textcolor{keywordflow}{while}(\mbox{\hyperlink{_ethernet_8c_a2209347bbe1ae9f1c7eb0ebca476c738}{RegisterRead}}(MISTAT) & MISTAT\_BUSY)
+201         \mbox{\hyperlink{_ethernet_8c_abfac85317b9c1522c7b5196d94e471bd}{waitMS}}(15);
+202     
+203 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_ethernet_8c_a572c72b2a5d733ffa42948217b88c859}\label{_ethernet_8c_a572c72b2a5d733ffa42948217b88c859}} 
+\index{Ethernet.\+c@{Ethernet.\+c}!read\+Basic@{read\+Basic}}
+\index{read\+Basic@{read\+Basic}!Ethernet.\+c@{Ethernet.\+c}}
+\subsubsection{\texorpdfstring{read\+Basic()}{readBasic()}}
+{\footnotesize\ttfamily uint8\+\_\+t read\+Basic (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{op,  }\item[{uint8\+\_\+t}]{address }\end{DoxyParamCaption})}
+
+
+
+Performs a low level read operation of a register. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em op} & This will be implemented in the function call to be the register read op code \\
+\hline
+\mbox{\tt in}  & {\em address} & This is 5 bits which correspond to the desired register \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+uint8\+\_\+t 
+\end{DoxyReturn}
+
+
+Definition at line 25 of file Ethernet.\+c.
+
+
+\begin{DoxyCode}
+26 \{
+27     CSACTIVE;
+28     \textcolor{comment}{// Now tell the chip that I am trying to read}
+29     SPDR = op | (address & ADDR\_MSK);     \textcolor{comment}{// this will make it so only the last 5 bits are preserved of the
+       address}
+30     waitSPI();                            \textcolor{comment}{// wait for the SPI interrupt flag to be set}
+31     
+32     \textcolor{comment}{// read the data}
+33     SPDR = 0;                            
+34     waitSPI(); 
+35      
+36     \textcolor{comment}{// If the address is a MAC or MII register then the byte which will be picked up by SPRD}
+37     \textcolor{comment}{// will be dummy data}
+38     \textcolor{keywordflow}{if} (address & 0x80)\{
+39         SPDR = 0;
+40         waitSPI();
+41     \}
+42     CSPASSIVE;                           \textcolor{comment}{// raise the CS line}
+43     \textcolor{keywordflow}{return} SPDR;
+44 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_ethernet_8c_ad70790336fc77ed46bb37335070ab701}\label{_ethernet_8c_ad70790336fc77ed46bb37335070ab701}} 
+\index{Ethernet.\+c@{Ethernet.\+c}!read\+Buffer@{read\+Buffer}}
+\index{read\+Buffer@{read\+Buffer}!Ethernet.\+c@{Ethernet.\+c}}
+\subsubsection{\texorpdfstring{read\+Buffer()}{readBuffer()}}
+{\footnotesize\ttfamily void read\+Buffer (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{len,  }\item[{uint8\+\_\+t $\ast$}]{data }\end{DoxyParamCaption})}
+
+
+
+Reads a specified number of bytes from the buffer and stores them in an array. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em len} & The number of bytes to be read from the buffer \\
+\hline
+\mbox{\tt out}  & {\em data} & pointer to the location data should be written to \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 71 of file Ethernet.\+c.
+
+
+\begin{DoxyCode}
+72 \{
+73     \textcolor{comment}{// First pull the CS line low}
+74     CSACTIVE;
+75     \textcolor{comment}{// Now issue the read buffer memory command}
+76     SPDR = READ\_BUF\_MEM;
+77     waitSPI();                \textcolor{comment}{// Now wait for the message to be sent}
+78     
+79     \textcolor{keywordflow}{while}(len)
+80     \{
+81         len--;
+82         SPDR = 0;            \textcolor{comment}{// Just give the register some data so that it begins the transmission}
+83         waitSPI();
+84         *data = SPDR;
+85         data++;
+86     \}
+87     *data = 0;               \textcolor{comment}{// Conclude the data with a null terminator}
+88     CSPASSIVE;               \textcolor{comment}{// Raise the CS line to stop the transmission  }
+89     
+90 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_ethernet_8c_a42af1f96afdc7493b47219e8d7164356}\label{_ethernet_8c_a42af1f96afdc7493b47219e8d7164356}} 
+\index{Ethernet.\+c@{Ethernet.\+c}!read\+T\+X\+\_\+\+Status\+Vec@{read\+T\+X\+\_\+\+Status\+Vec}}
+\index{read\+T\+X\+\_\+\+Status\+Vec@{read\+T\+X\+\_\+\+Status\+Vec}!Ethernet.\+c@{Ethernet.\+c}}
+\subsubsection{\texorpdfstring{read\+T\+X\+\_\+\+Status\+Vec()}{readTX\_StatusVec()}}
+{\footnotesize\ttfamily void read\+T\+X\+\_\+\+Status\+Vec (\begin{DoxyParamCaption}\item[{uint8\+\_\+t $\ast$}]{Status }\end{DoxyParamCaption})}
+
+
+
+Reads the transmit status vector from the address which is the end of the transmit buffer + 1. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt out}  & {\em Status} & Array by which to copy the 7 bytes of the status vector \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 462 of file Ethernet.\+c.
+
+
+
+References Register\+Read().
+
+
+\begin{DoxyCode}
+463 \{
+464     \textcolor{comment}{// This will read the 7 bytes which are located at ETXND+1}
+465     \textcolor{comment}{// First need to save the location of the read pointer}
+466     uint16\_t savePointer = \mbox{\hyperlink{_ethernet_8c_a2209347bbe1ae9f1c7eb0ebca476c738}{RegisterRead}}(ERDPTL);
+467     savePointer |= \mbox{\hyperlink{_ethernet_8c_a2209347bbe1ae9f1c7eb0ebca476c738}{RegisterRead}}(ERDPTH) << 8;
+468     
+469     \textcolor{comment}{// Now get the current value of ETXND}
+470     uint16\_t curTX\_end = \mbox{\hyperlink{_ethernet_8c_a2209347bbe1ae9f1c7eb0ebca476c738}{RegisterRead}}(ETXNDL);
+471     curTX\_end |= \mbox{\hyperlink{_ethernet_8c_a2209347bbe1ae9f1c7eb0ebca476c738}{RegisterRead}}(ETXNDH) << 8;
+472     curTX\_end++;
+473     
+474     \textcolor{comment}{// Now set the read pointer}
+475     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ERDPTL, curTX\_end & 0xFF);
+476     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ERDPTH, curTX\_end >> 8);
+477     
+478     \textcolor{comment}{// Now read the buffer 7 times}
+479     \mbox{\hyperlink{_ethernet_8c_ad70790336fc77ed46bb37335070ab701}{readBuffer}}(7, Status);
+480     
+481     \textcolor{comment}{// Now put the read pointer back}
+482     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ERDPTL, savePointer & 0xFF);
+483     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ERDPTH, savePointer >> 8);
+484     
+485 
+486 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_ethernet_8c_a2209347bbe1ae9f1c7eb0ebca476c738}\label{_ethernet_8c_a2209347bbe1ae9f1c7eb0ebca476c738}} 
+\index{Ethernet.\+c@{Ethernet.\+c}!Register\+Read@{Register\+Read}}
+\index{Register\+Read@{Register\+Read}!Ethernet.\+c@{Ethernet.\+c}}
+\subsubsection{\texorpdfstring{Register\+Read()}{RegisterRead()}}
+{\footnotesize\ttfamily uint8\+\_\+t Register\+Read (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{address }\end{DoxyParamCaption})}
+
+
+
+Reads the value for a specified register in memory for the E\+N\+C28\+J60. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em address} & the memory register by which to do the read operation \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+uint8\+\_\+t The value within the specified register 
+\end{DoxyReturn}
+
+
+Definition at line 137 of file Ethernet.\+c.
+
+
+
+References read\+Basic(), and set\+Bank().
+
+
+\begin{DoxyCode}
+138 \{
+139     \textcolor{comment}{// first set the bank}
+140     \mbox{\hyperlink{_ethernet_8c_abc02bef712b1833f950bb0d0f6d8cfbb}{setBank}}(address);
+141     \textcolor{comment}{// Now read the data from the register}
+142     \textcolor{keywordflow}{return} \mbox{\hyperlink{_ethernet_8c_a572c72b2a5d733ffa42948217b88c859}{readBasic}}(READ\_CONTROL\_REG, address);
+143 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}\label{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}} 
+\index{Ethernet.\+c@{Ethernet.\+c}!Register\+Write@{Register\+Write}}
+\index{Register\+Write@{Register\+Write}!Ethernet.\+c@{Ethernet.\+c}}
+\subsubsection{\texorpdfstring{Register\+Write()}{RegisterWrite()}}
+{\footnotesize\ttfamily void Register\+Write (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{address,  }\item[{uint8\+\_\+t}]{data }\end{DoxyParamCaption})}
+
+
+
+Writes a byte of data to a specified register location for the E\+N\+C28\+J60. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em op} & \\
+\hline
+\mbox{\tt in}  & {\em address} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 151 of file Ethernet.\+c.
+
+
+
+References set\+Bank(), and write\+Basic().
+
+
+\begin{DoxyCode}
+152 \{
+153     \textcolor{comment}{// First set the bank}
+154     \mbox{\hyperlink{_ethernet_8c_abc02bef712b1833f950bb0d0f6d8cfbb}{setBank}}(address);
+155     \textcolor{comment}{// now write the data to the register}
+156     \mbox{\hyperlink{_ethernet_8c_a3b4720ee947ebfc7ef6f78b5bf7f908e}{writeBasic}}(WRITE\_CONTROL\_REG, address, data);
+157 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_ethernet_8c_abc02bef712b1833f950bb0d0f6d8cfbb}\label{_ethernet_8c_abc02bef712b1833f950bb0d0f6d8cfbb}} 
+\index{Ethernet.\+c@{Ethernet.\+c}!set\+Bank@{set\+Bank}}
+\index{set\+Bank@{set\+Bank}!Ethernet.\+c@{Ethernet.\+c}}
+\subsubsection{\texorpdfstring{set\+Bank()}{setBank()}}
+{\footnotesize\ttfamily void set\+Bank (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{address }\end{DoxyParamCaption})}
+
+
+
+Set the current bank to that which corresponds to that of a specified register for the E\+N\+C28\+J60. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em address} & Name of the register by which to change the bank to \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 121 of file Ethernet.\+c.
+
+
+\begin{DoxyCode}
+122 \{
+123     \textcolor{comment}{// This will set the bank to whichever bank *address* is in}
+124     \textcolor{keywordflow}{if} (((address & BANK\_MASK) >> 5) != bankNumber)\{
+125         \mbox{\hyperlink{_ethernet_8c_a3b4720ee947ebfc7ef6f78b5bf7f908e}{writeBasic}}(BIT\_FIELD\_CLR, ECON1, (ECON1\_BSEL0 | ECON1\_BSEL1));     \textcolor{comment}{// First clear the
+       bank from the relevant register}
+126         \mbox{\hyperlink{_ethernet_8c_a3b4720ee947ebfc7ef6f78b5bf7f908e}{writeBasic}}(BIT\_FIELD\_SET, ECON1, (address & BANK\_MASK) >> 5);      \textcolor{comment}{// Get the 2 bits by
+       themselves and then shift to have it read the correct number}
+127         bankNumber = (address & BANK\_MASK) >> 5;                           \textcolor{comment}{// Save the bank number for
+       future comparison}
+128     \}
+129     
+130 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_ethernet_8c_a8f98d3be0e5169ea19d39b9cfc093f34}\label{_ethernet_8c_a8f98d3be0e5169ea19d39b9cfc093f34}} 
+\index{Ethernet.\+c@{Ethernet.\+c}!transmit\+Header@{transmit\+Header}}
+\index{transmit\+Header@{transmit\+Header}!Ethernet.\+c@{Ethernet.\+c}}
+\subsubsection{\texorpdfstring{transmit\+Header()}{transmitHeader()}}
+{\footnotesize\ttfamily void transmit\+Header (\begin{DoxyParamCaption}\item[{uint8\+\_\+t $\ast$}]{buffer }\end{DoxyParamCaption})}
+
+
+
+Place the proper header bytes to the beginning of the array which will hold the message. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em buffer} & Array of where to place the header bytes \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 418 of file Ethernet.\+c.
+
+
+\begin{DoxyCode}
+419 \{
+420     uint8\_t i=0;
+421 
+422     \textcolor{comment}{//copy the destination mac from the source and fill my mac into src}
+423     \textcolor{keywordflow}{while}(i < 6)
+424     \{
+425         buffer[DEST\_MAC + i] = ECU\_mac[SRC\_MAC + i];
+426         buffer[SRC\_MAC + i] = ESB\_mac[i];
+427         i++;
+428     \}
+429 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_ethernet_8c_abfac85317b9c1522c7b5196d94e471bd}\label{_ethernet_8c_abfac85317b9c1522c7b5196d94e471bd}} 
+\index{Ethernet.\+c@{Ethernet.\+c}!wait\+MS@{wait\+MS}}
+\index{wait\+MS@{wait\+MS}!Ethernet.\+c@{Ethernet.\+c}}
+\subsubsection{\texorpdfstring{wait\+M\+S()}{waitMS()}}
+{\footnotesize\ttfamily void wait\+MS (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{msec }\end{DoxyParamCaption})}
+
+
+
+Delay loop for a desired amount of milliseconds. 
+
+Waits for a designated number of milliseconds.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em msec} & Number of milliseconds that are desired to be delayed for \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 238 of file Ethernet.\+c.
+
+
+
+References assign\+\_\+bit(), and bit\+\_\+is\+\_\+clear.
+
+
+\begin{DoxyCode}
+239 \{
+240     \textcolor{comment}{// This function utilizes timer 0 and a sequence of delay loops to delay for the desired time}
+241     TCNT0 = 5;
+242     \textcolor{comment}{// begin the timer}
+243     TCCR0B |= (1 << CS01) | (1 << CS00);       \textcolor{comment}{// this will start the timer with a prescalar of 64}
+244     \textcolor{keywordflow}{for} (uint16\_t i = 0; i < msec; i++)\{
+245         \textcolor{keywordflow}{while}(\mbox{\hyperlink{_e_s_b__funcs_8h_ad188fb0fbfd923bdb01294072367d024}{bit\_is\_clear}}(TIFR0, TOV0));
+246         TIFR0 |= (1 << TOV0);                  \textcolor{comment}{// Clear the overflow flag by writing a 1 to it}
+247     \}
+248     \mbox{\hyperlink{_e_s_b__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}{assign\_bit}}(&TCCR0B, CS01, 0);
+249     \mbox{\hyperlink{_e_s_b__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}{assign\_bit}}(&TCCR0B, CS00, 0);              \textcolor{comment}{// Turn off the timer}
+250 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_ethernet_8c_a3b4720ee947ebfc7ef6f78b5bf7f908e}\label{_ethernet_8c_a3b4720ee947ebfc7ef6f78b5bf7f908e}} 
+\index{Ethernet.\+c@{Ethernet.\+c}!write\+Basic@{write\+Basic}}
+\index{write\+Basic@{write\+Basic}!Ethernet.\+c@{Ethernet.\+c}}
+\subsubsection{\texorpdfstring{write\+Basic()}{writeBasic()}}
+{\footnotesize\ttfamily void write\+Basic (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{op,  }\item[{uint8\+\_\+t}]{address,  }\item[{uint8\+\_\+t}]{data }\end{DoxyParamCaption})}
+
+
+
+Performs a low level write operation of a register. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em op} & This would be implemented in the function call to be the register write op code \\
+\hline
+\mbox{\tt in}  & {\em address} & This is the 5 bits which correspond to the desired register \\
+\hline
+\mbox{\tt in}  & {\em data} & This is the byte of data to be written to the register \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 53 of file Ethernet.\+c.
+
+
+\begin{DoxyCode}
+54 \{
+55     CSACTIVE;
+56     SPDR = op | (address & ADDR\_MSK);    \textcolor{comment}{// this will tell the Ethernet chip where to write the data}
+57     waitSPI();
+58     
+59     \textcolor{comment}{// write the data}
+60     SPDR = data;
+61     waitSPI();
+62     CSPASSIVE;
+63 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_ethernet_8c_a1ec20cb477cceb19339d0c85c1ea3f2d}\label{_ethernet_8c_a1ec20cb477cceb19339d0c85c1ea3f2d}} 
+\index{Ethernet.\+c@{Ethernet.\+c}!write\+Buffer@{write\+Buffer}}
+\index{write\+Buffer@{write\+Buffer}!Ethernet.\+c@{Ethernet.\+c}}
+\subsubsection{\texorpdfstring{write\+Buffer()}{writeBuffer()}}
+{\footnotesize\ttfamily void write\+Buffer (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{len,  }\item[{uint8\+\_\+t $\ast$}]{data }\end{DoxyParamCaption})}
+
+
+
+Writes a specified number of bytes into the buffer memory. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em len} & Number of bytes to be written into the buffer memory \\
+\hline
+\mbox{\tt in}  & {\em data} & Array of the data to write into the buffer \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 98 of file Ethernet.\+c.
+
+
+\begin{DoxyCode}
+99 \{
+100     CSACTIVE;                 \textcolor{comment}{// First pull the CS line low}
+101     SPDR = WRITE\_BUF\_MEM;     \textcolor{comment}{// Issue the write buffer command}
+102     waitSPI();
+103     
+104     \textcolor{keywordflow}{while} (len)
+105     \{
+106         len--;
+107         SPDR = *data;         \textcolor{comment}{// Send the current byte of data}
+108         waitSPI();
+109         data++;
+110         
+111     \}
+112     CSPASSIVE;                \textcolor{comment}{// Raise the CS line to stop the transmission }
+113     
+114 \}
+\end{DoxyCode}

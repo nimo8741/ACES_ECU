@@ -18,7 +18,7 @@ int main(void)
 	Initial();
 	while (1) 
     {
-		if (!connected){
+		if (!connected_ESB){
 			ESB_Connect();
 		}
 
@@ -32,7 +32,7 @@ int main(void)
 		
 		if (connected_ESB){
 			packageMessage();
-			sendToESB(flowData);           // Send the flow data to the ESB
+			sendToESB(normalData);           // Send the flow data to the ESB
 		}
 		if (connected_GUI && doTransmit == 1){
 			sendToLaptop();

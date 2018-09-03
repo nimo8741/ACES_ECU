@@ -1,0 +1,423 @@
+\hypertarget{_communication_8c}{}\section{C\+:/\+Users/nickm/\+Documents/\+Git\+Hub/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+A\+C\+E\+S\+\_\+\+E\+S\+B/\+Communication.c File Reference}
+\label{_communication_8c}\index{C\+:/\+Users/nickm/\+Documents/\+Git\+Hub/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+A\+C\+E\+S\+\_\+\+E\+S\+B/\+Communication.\+c@{C\+:/\+Users/nickm/\+Documents/\+Git\+Hub/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+A\+C\+E\+S\+\_\+\+E\+S\+B/\+Communication.\+c}}
+
+
+Function implementation for managing the data sent and received from the E\+N\+C28\+J60 Ethernet Module.  
+
+
+{\ttfamily \#include $<$avr/io.\+h$>$}\newline
+{\ttfamily \#include $<$avr/interrupt.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}E\+S\+B\+\_\+funcs.\+h\char`\"{}}\newline
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{_communication_8c_a4ecf85c13d47309a0b3b3a39721432ae}{I\+SR}} (T\+I\+M\+E\+R5\+\_\+\+O\+V\+F\+\_\+vect)
+\begin{DoxyCompactList}\small\item\em If this I\+SR is invoked then too much time has elapsed from the last message sent from the E\+CU. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_communication_8c_adeadb2e1fc786ce91bfbd2c1c4ac4513}{package\+\_\+message}} (void)
+\begin{DoxyCompactList}\small\item\em Packages the message to later be sent to the E\+CU. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{_communication_8c_a084f0a9cf05b1877bd8a71a90dae7ff8}{I\+SR}} (U\+S\+A\+R\+T0\+\_\+\+R\+X\+\_\+vect)
+\begin{DoxyCompactList}\small\item\em I\+SR for the reception of data from the E\+CU. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_communication_8c_a5f55e4fd918cddf02226290d77ac2044}{send\+To\+E\+CU}} (uint8\+\_\+t len)
+\begin{DoxyCompactList}\small\item\em Routine to send a number of bytes to the E\+CU over R\+S232. \end{DoxyCompactList}\item 
+uint8\+\_\+t \mbox{\hyperlink{_communication_8c_a90b932ca406d71217e71949d18161eba}{calculate\+Parity}} (uint8\+\_\+t message\mbox{[}$\,$\mbox{]}, uint8\+\_\+t start\+\_\+index)
+\begin{DoxyCompactList}\small\item\em Calculates the parity bytes for a set of 6 bytes. \end{DoxyCompactList}\item 
+unsigned char \mbox{\hyperlink{_communication_8c_adb2fefa1023fbf227e5102e1ea3c9d4b}{count\+Ones}} (unsigned char byte)
+\begin{DoxyCompactList}\small\item\em Counts the number of high bits in a given byte. \end{DoxyCompactList}\item 
+uint8\+\_\+t \mbox{\hyperlink{_communication_8c_af9fb91c429d399f97b97f61cf8df4d70}{check\+Parity}} (void)
+\begin{DoxyCompactList}\small\item\em This function checks that the parity bytes sent by the E\+CU match what the E\+SB generates. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Function implementation for managing the data sent and received from the E\+N\+C28\+J60 Ethernet Module. 
+
+\begin{DoxyAuthor}{Author}
+Nick Moore 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+March 22, 2018 
+\end{DoxyDate}
+\begin{DoxyRefDesc}{Bug}
+\item[\mbox{\hyperlink{bug__bug000001}{Bug}}]Sometimes when using the debugger the E\+CU will not accept the return string \char`\"{}\+D\+A\+L\+E\char`\"{}. This is confirmed by logic analyzer \end{DoxyRefDesc}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{_communication_8c_a90b932ca406d71217e71949d18161eba}\label{_communication_8c_a90b932ca406d71217e71949d18161eba}} 
+\index{Communication.\+c@{Communication.\+c}!calculate\+Parity@{calculate\+Parity}}
+\index{calculate\+Parity@{calculate\+Parity}!Communication.\+c@{Communication.\+c}}
+\subsubsection{\texorpdfstring{calculate\+Parity()}{calculateParity()}}
+{\footnotesize\ttfamily uint8\+\_\+t calculate\+Parity (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{message\mbox{[}$\,$\mbox{]},  }\item[{uint8\+\_\+t}]{start\+\_\+index }\end{DoxyParamCaption})}
+
+
+
+Calculates the parity bytes for a set of 6 bytes. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em message} & Array of bytes which contains all the data to be sent to the E\+CU \\
+\hline
+\mbox{\tt in}  & {\em start\+\_\+index} & Starting index for the six bytes by which to calculate the parity byte \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+uint8\+\_\+t 
+\end{DoxyReturn}
+
+
+Definition at line 176 of file Communication.\+c.
+
+
+
+References count\+Ones().
+
+
+\begin{DoxyCode}
+177 \{
+178     \textcolor{comment}{// This will return the parity byte for a message made up of 6 sequential bytes, starting with
+       start\_index}
+179     uint8\_t parity = 0;
+180     
+181     \textcolor{comment}{// first need to get the number of high bits in the first three bytes in the set}
+182     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{unsigned} \textcolor{keyword}{set} = 0; \textcolor{keyword}{set} < 2; \textcolor{keyword}{set}++)\{
+183         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} count = 0;
+184         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} i = 0; i < 3; i++)\{
+185             count += \mbox{\hyperlink{_communication_8c_adb2fefa1023fbf227e5102e1ea3c9d4b}{countOnes}}(message[start\_index + \textcolor{keyword}{set}*3 + i]);
+186         \}
+187         \textcolor{comment}{// now that I have the count for this set, I need to take the modulo}
+188         count = count % 16;   \textcolor{comment}{// Modulo with 16 because I have 4 bits to play with}
+189         
+190         \textcolor{comment}{// now add this into the parity byte}
+191         parity |= count << (4 * \textcolor{keyword}{set});   \textcolor{comment}{// this will make it so that bytes 0-2 will take up the LSB of the
+       parity byte}
+192     \}
+193     \textcolor{comment}{// now copy this byte into memory}
+194     \textcolor{keywordflow}{return} parity;
+195 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_communication_8c_af9fb91c429d399f97b97f61cf8df4d70}\label{_communication_8c_af9fb91c429d399f97b97f61cf8df4d70}} 
+\index{Communication.\+c@{Communication.\+c}!check\+Parity@{check\+Parity}}
+\index{check\+Parity@{check\+Parity}!Communication.\+c@{Communication.\+c}}
+\subsubsection{\texorpdfstring{check\+Parity()}{checkParity()}}
+{\footnotesize\ttfamily uint8\+\_\+t check\+Parity (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+This function checks that the parity bytes sent by the E\+CU match what the E\+SB generates. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+unsigned char 
+\end{DoxyReturn}
+
+
+Definition at line 220 of file Communication.\+c.
+
+
+
+References calculate\+Parity(), and E\+C\+Ureceive.
+
+
+\begin{DoxyCode}
+221 \{
+222     uint8\_t result = 0;
+223     uint8\_t parity1 = \mbox{\hyperlink{_communication_8c_a90b932ca406d71217e71949d18161eba}{calculateParity}}(\mbox{\hyperlink{_e_s_b__funcs_8h_a1919835a3ae3fbb06144a6d93c2e75b9}{ECUreceive}}, 0);
+224     uint8\_t parity2 = \mbox{\hyperlink{_communication_8c_a90b932ca406d71217e71949d18161eba}{calculateParity}}(\mbox{\hyperlink{_e_s_b__funcs_8h_a1919835a3ae3fbb06144a6d93c2e75b9}{ECUreceive}}, 3);
+225     
+226     \textcolor{keywordflow}{if} (parity1 == \mbox{\hyperlink{_e_s_b__funcs_8h_a1919835a3ae3fbb06144a6d93c2e75b9}{ECUreceive}}[9] && parity2 == \mbox{\hyperlink{_e_s_b__funcs_8h_a1919835a3ae3fbb06144a6d93c2e75b9}{ECUreceive}}[10])\{
+227         result = 1;
+228     \}
+229     \textcolor{keywordflow}{return} result;
+230 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_communication_8c_adb2fefa1023fbf227e5102e1ea3c9d4b}\label{_communication_8c_adb2fefa1023fbf227e5102e1ea3c9d4b}} 
+\index{Communication.\+c@{Communication.\+c}!count\+Ones@{count\+Ones}}
+\index{count\+Ones@{count\+Ones}!Communication.\+c@{Communication.\+c}}
+\subsubsection{\texorpdfstring{count\+Ones()}{countOnes()}}
+{\footnotesize\ttfamily unsigned char count\+Ones (\begin{DoxyParamCaption}\item[{unsigned char}]{byte }\end{DoxyParamCaption})}
+
+
+
+Counts the number of high bits in a given byte. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em byte} & The byte in question to perform the calculation on \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+unsigned char 
+\end{DoxyReturn}
+
+
+Definition at line 202 of file Communication.\+c.
+
+
+\begin{DoxyCode}
+203 \{
+204     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} count = 0;
+205     \textcolor{keywordflow}{while} (byte)
+206     \{
+207         count += byte & 1;    \textcolor{comment}{// this was essentially lifted from geeksforgeeks.com}
+208         byte >>= 1;
+209     \}
+210     \textcolor{keywordflow}{return} count;
+211 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_communication_8c_a4ecf85c13d47309a0b3b3a39721432ae}\label{_communication_8c_a4ecf85c13d47309a0b3b3a39721432ae}} 
+\index{Communication.\+c@{Communication.\+c}!I\+SR@{I\+SR}}
+\index{I\+SR@{I\+SR}!Communication.\+c@{Communication.\+c}}
+\subsubsection{\texorpdfstring{I\+S\+R()}{ISR()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily I\+SR (\begin{DoxyParamCaption}\item[{T\+I\+M\+E\+R5\+\_\+\+O\+V\+F\+\_\+vect}]{ }\end{DoxyParamCaption})}
+
+
+
+If this I\+SR is invoked then too much time has elapsed from the last message sent from the E\+CU. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 19 of file Communication.\+c.
+
+
+
+References assign\+\_\+bit(), connected, and shutdown().
+
+
+\begin{DoxyCode}
+20 \{
+21     \textcolor{comment}{// If it makes it in here then it is assumed that the ECU and ESB have gotten disconnected}
+22     \mbox{\hyperlink{_e_s_b__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}{assign\_bit}}(&TCCR5B, CS52, 0);    \textcolor{comment}{// turn off the timer for now}
+23     \mbox{\hyperlink{_e_s_b__funcs_8h_a91553b72c9b4759ddb48feffd7f2ffb1}{connected}} = 0;
+24     \mbox{\hyperlink{_engine__funcs_8c_a1c9d5e29ad8899afe0c34571ddee18f9}{shutdown}}();     \textcolor{comment}{// shutdown the engine    don't want to do this for now until the timers are
+       flushed out}
+25 
+26 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_communication_8c_a084f0a9cf05b1877bd8a71a90dae7ff8}\label{_communication_8c_a084f0a9cf05b1877bd8a71a90dae7ff8}} 
+\index{Communication.\+c@{Communication.\+c}!I\+SR@{I\+SR}}
+\index{I\+SR@{I\+SR}!Communication.\+c@{Communication.\+c}}
+\subsubsection{\texorpdfstring{I\+S\+R()}{ISR()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily I\+SR (\begin{DoxyParamCaption}\item[{U\+S\+A\+R\+T0\+\_\+\+R\+X\+\_\+vect}]{ }\end{DoxyParamCaption})}
+
+
+
+I\+SR for the reception of data from the E\+CU. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 59 of file Communication.\+c.
+
+
+
+References command\+Code, connected, E\+C\+Ureceive, E\+C\+Ureceive\+Count, E\+C\+Utransmit, has\+Interrupted, send\+To\+E\+C\+U(), and startup().
+
+
+\begin{DoxyCode}
+60 \{
+61     uint8\_t data = UDR0;
+62     \mbox{\hyperlink{_e_s_b__funcs_8h_ac8b367a3ec51bcbf0a598e54edda7610}{hasInterrupted}} = 1;            \textcolor{comment}{// set this flag so other functions will know if they have
+       been interrupted}
+63     \textcolor{keywordflow}{if} (!\mbox{\hyperlink{_e_s_b__funcs_8h_aba273f85164d91be7ba0341e7339bd29}{commandCode}})
+64     \{
+65         
+66         \textcolor{keywordflow}{if} (data == \textcolor{charliteral}{'S'} && \mbox{\hyperlink{_e_s_b__funcs_8h_a91553b72c9b4759ddb48feffd7f2ffb1}{connected}})\{          \textcolor{comment}{// Handles if the ECU wants a shutdown}
+67             \textcolor{comment}{//shutdown();}
+68             \mbox{\hyperlink{_e_s_b__funcs_8h_a031e4aaa8e149fcb07d8c1ed044dd16a}{ECUtransmit}}[0] = \textcolor{charliteral}{'K'};
+69             \mbox{\hyperlink{_communication_8c_a5f55e4fd918cddf02226290d77ac2044}{sendToECU}}(1);
+70         \}
+71         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (data == \textcolor{charliteral}{'r'} && \mbox{\hyperlink{_e_s_b__funcs_8h_a91553b72c9b4759ddb48feffd7f2ffb1}{connected}})\{     \textcolor{comment}{// Handles if the ECU wants an engine startup}
+72             \mbox{\hyperlink{_engine__funcs_8c_ab0c801cf89f8b3058ff2460c666154c3}{startup}}();
+73             \mbox{\hyperlink{_e_s_b__funcs_8h_a031e4aaa8e149fcb07d8c1ed044dd16a}{ECUtransmit}}[0] = \textcolor{charliteral}{'K'};
+74             \mbox{\hyperlink{_communication_8c_a5f55e4fd918cddf02226290d77ac2044}{sendToECU}}(1);
+75         \}
+76         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (data == \textcolor{charliteral}{'t'} && \mbox{\hyperlink{_e_s_b__funcs_8h_a91553b72c9b4759ddb48feffd7f2ffb1}{connected}})\{     \textcolor{comment}{// Handles if the ECU wants a specific throttle}
+77             \mbox{\hyperlink{_e_s_b__funcs_8h_aba273f85164d91be7ba0341e7339bd29}{commandCode}} = 1;
+78         \}
+79         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (data == \textcolor{charliteral}{'N'} && \mbox{\hyperlink{_e_s_b__funcs_8h_a91553b72c9b4759ddb48feffd7f2ffb1}{connected}})\{     \textcolor{comment}{// Handles if the ECU is sending the normal data}
+80             \mbox{\hyperlink{_e_s_b__funcs_8h_aba273f85164d91be7ba0341e7339bd29}{commandCode}} = 2;
+81             \mbox{\hyperlink{_e_s_b__funcs_8h_a1919835a3ae3fbb06144a6d93c2e75b9}{ECUreceive}}[0] = data;
+82             \mbox{\hyperlink{_e_s_b__funcs_8h_a1919a262301a8b185641dbb16a48a6d2}{ECUreceiveCount}} = 1;
+83             TCNT5 = ECU\_timer\_val;              \textcolor{comment}{// phew, made it before the timer overflow}
+84         \}
+85         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (data == \textcolor{charliteral}{'A'})\{     \textcolor{comment}{// Handles if the ECU wants to connect with the ESB}
+86             \mbox{\hyperlink{_e_s_b__funcs_8h_aba273f85164d91be7ba0341e7339bd29}{commandCode}} = 3;
+87         \}   
+88     \}
+89     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\mbox{\hyperlink{_e_s_b__funcs_8h_aba273f85164d91be7ba0341e7339bd29}{commandCode}} == 1)\{
+90         \mbox{\hyperlink{_e_s_b__funcs_8h_a715738e95d6e1917be2e5d209d416ff2}{throttle\_val}} = data;
+91         \mbox{\hyperlink{_e_s_b__funcs_8h_a031e4aaa8e149fcb07d8c1ed044dd16a}{ECUtransmit}}[0] = \textcolor{charliteral}{'K'};
+92         \mbox{\hyperlink{_communication_8c_a5f55e4fd918cddf02226290d77ac2044}{sendToECU}}(1);
+93         \mbox{\hyperlink{_e_s_b__funcs_8h_aba273f85164d91be7ba0341e7339bd29}{commandCode}} = 0;
+94     \}
+95     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\mbox{\hyperlink{_e_s_b__funcs_8h_aba273f85164d91be7ba0341e7339bd29}{commandCode}} == 2)\{              \textcolor{comment}{// This means the ESB is receiving the normal data
+       from the ECU}
+96         \textcolor{keywordflow}{if} (\mbox{\hyperlink{_e_s_b__funcs_8h_a1919a262301a8b185641dbb16a48a6d2}{ECUreceiveCount}} < normalDataIn)\{
+97             \mbox{\hyperlink{_e_s_b__funcs_8h_a1919835a3ae3fbb06144a6d93c2e75b9}{ECUreceive}}[\mbox{\hyperlink{_e_s_b__funcs_8h_a1919a262301a8b185641dbb16a48a6d2}{ECUreceiveCount}}] = data;
+98         \}
+99         \mbox{\hyperlink{_e_s_b__funcs_8h_a1919a262301a8b185641dbb16a48a6d2}{ECUreceiveCount}}++;
+100         \textcolor{keywordflow}{if} (\mbox{\hyperlink{_e_s_b__funcs_8h_a1919a262301a8b185641dbb16a48a6d2}{ECUreceiveCount}} == normalDataIn)\{    \textcolor{comment}{// This means that the end of the message
+       has been reached}
+101             \mbox{\hyperlink{_e_s_b__funcs_8h_a1919a262301a8b185641dbb16a48a6d2}{ECUreceiveCount}} = 0;
+102             \mbox{\hyperlink{_e_s_b__funcs_8h_aba273f85164d91be7ba0341e7339bd29}{commandCode}} = 0;
+103             \textcolor{keywordflow}{if} (!\mbox{\hyperlink{_communication_8c_af9fb91c429d399f97b97f61cf8df4d70}{checkParity}}())\{   \textcolor{comment}{// If the result of this is 0 then it is false and the parity
+       check has failed}
+104                 \mbox{\hyperlink{_e_s_b__funcs_8h_a07a924cfb101a7d1ce3489f00b9da976}{opMode}} = 11;
+105             \}
+106         \}
+107     \}
+108     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\mbox{\hyperlink{_e_s_b__funcs_8h_aba273f85164d91be7ba0341e7339bd29}{commandCode}} == 3)\{         \textcolor{comment}{// This means that the ECU is trying to connect with the
+       ESB}
+109         \mbox{\hyperlink{_e_s_b__funcs_8h_a1919a262301a8b185641dbb16a48a6d2}{ECUreceiveCount}}++;
+110         \textcolor{keywordflow}{switch} (\mbox{\hyperlink{_e_s_b__funcs_8h_a1919a262301a8b185641dbb16a48a6d2}{ECUreceiveCount}})
+111         \{
+112             \textcolor{keywordflow}{case} 1:
+113                 \textcolor{keywordflow}{if} (data != \textcolor{charliteral}{'C'})\{                \textcolor{comment}{// Second letter of the connection string}
+114                     \mbox{\hyperlink{_e_s_b__funcs_8h_aba273f85164d91be7ba0341e7339bd29}{commandCode}} = 0;
+115                     \mbox{\hyperlink{_e_s_b__funcs_8h_a91553b72c9b4759ddb48feffd7f2ffb1}{connected}} = 0;
+116                     \mbox{\hyperlink{_e_s_b__funcs_8h_a1919a262301a8b185641dbb16a48a6d2}{ECUreceiveCount}} = 0;
+117                 \}
+118                 \textcolor{keywordflow}{break};
+119                 
+120             \textcolor{keywordflow}{case} 2:
+121                 \textcolor{keywordflow}{if} (data != \textcolor{charliteral}{'E'})\{              \textcolor{comment}{// Third letter of the connection string}
+122                     \mbox{\hyperlink{_e_s_b__funcs_8h_aba273f85164d91be7ba0341e7339bd29}{commandCode}} = 0;
+123                     \mbox{\hyperlink{_e_s_b__funcs_8h_a91553b72c9b4759ddb48feffd7f2ffb1}{connected}} = 0;
+124                     \mbox{\hyperlink{_e_s_b__funcs_8h_a1919a262301a8b185641dbb16a48a6d2}{ECUreceiveCount}} = 0;
+125                 \}
+126                 \textcolor{keywordflow}{break};
+127                 
+128             \textcolor{keywordflow}{case} 3:
+129                 \textcolor{keywordflow}{if} (data == \textcolor{charliteral}{'S'})\{              \textcolor{comment}{// Final letter of the connection string}
+130                     \mbox{\hyperlink{_e_s_b__funcs_8h_a91553b72c9b4759ddb48feffd7f2ffb1}{connected}} = 1;
+131                     \mbox{\hyperlink{_e_s_b__funcs_8h_a07a924cfb101a7d1ce3489f00b9da976}{opMode}} = 6;                \textcolor{comment}{// Indicate that the engine is sitting there doing
+       nothing}
+132                     \mbox{\hyperlink{_e_s_b__funcs_8h_a031e4aaa8e149fcb07d8c1ed044dd16a}{ECUtransmit}}[0] = \textcolor{charliteral}{'D'};
+133                     \mbox{\hyperlink{_e_s_b__funcs_8h_a031e4aaa8e149fcb07d8c1ed044dd16a}{ECUtransmit}}[1] = \textcolor{charliteral}{'A'};
+134                     \mbox{\hyperlink{_e_s_b__funcs_8h_a031e4aaa8e149fcb07d8c1ed044dd16a}{ECUtransmit}}[2] = \textcolor{charliteral}{'L'};
+135                     \mbox{\hyperlink{_e_s_b__funcs_8h_a031e4aaa8e149fcb07d8c1ed044dd16a}{ECUtransmit}}[3] = \textcolor{charliteral}{'E'};
+136                     \mbox{\hyperlink{_communication_8c_a5f55e4fd918cddf02226290d77ac2044}{sendToECU}}(4);
+137                     TCNT4 = HallTime * 11;    \textcolor{comment}{// This will put the comm lines on off phases, the multiplier
+       was found experimentally}
+138                     TCCR5B = (1 << CS52);    \textcolor{comment}{// This will start timer 5 with a prescalar of 256, makes 1
+       second timer}
+139                     \textcolor{comment}{// This will set a maximum time limit until another message is received from the ECU
+       before assuming a disconnect}
+140                     
+141                 \}
+142                 \textcolor{keywordflow}{else}\{
+143                     \mbox{\hyperlink{_e_s_b__funcs_8h_a91553b72c9b4759ddb48feffd7f2ffb1}{connected}} = 0;           \textcolor{comment}{// Handles extraneous cases, will assume that the
+       devices have been disconnected}
+144                 \}
+145                 \mbox{\hyperlink{_e_s_b__funcs_8h_aba273f85164d91be7ba0341e7339bd29}{commandCode}} = 0;
+146                 \mbox{\hyperlink{_e_s_b__funcs_8h_a1919a262301a8b185641dbb16a48a6d2}{ECUreceiveCount}} = 0;
+147                 \textcolor{keywordflow}{break};
+148         \}
+149     \}
+150 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_communication_8c_adeadb2e1fc786ce91bfbd2c1c4ac4513}\label{_communication_8c_adeadb2e1fc786ce91bfbd2c1c4ac4513}} 
+\index{Communication.\+c@{Communication.\+c}!package\+\_\+message@{package\+\_\+message}}
+\index{package\+\_\+message@{package\+\_\+message}!Communication.\+c@{Communication.\+c}}
+\subsubsection{\texorpdfstring{package\+\_\+message()}{package\_message()}}
+{\footnotesize\ttfamily void package\+\_\+message (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Packages the message to later be sent to the E\+CU. 
+
+This function loads the message into the array and then calculates the corresponding parity bytes to append to the end of the array.
+
+
+\begin{DoxyParams}{Parameters}
+{\em void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 36 of file Communication.\+c.
+
+
+
+References calculate\+Parity(), E\+C\+Utransmit, E\+GT, glow\+Plug, hall\+Done, hall\+Effect, op\+Mode, and ref\+\_\+temp.
+
+
+\begin{DoxyCode}
+37 \{
+38     \mbox{\hyperlink{_e_s_b__funcs_8h_aa477a3c8d0b96834b0291a9be67f1e77}{hallEffect}} = 34567;
+39     \mbox{\hyperlink{_e_s_b__funcs_8h_a34c104e39ff60265f33e3325bf865ab5}{EGT}} = 12345;
+40     \mbox{\hyperlink{_e_s_b__funcs_8h_aa4fe19cf3f989d0dc2f1d829fa2ef74d}{glowPlug}} = 1;
+41     \mbox{\hyperlink{_e_s_b__funcs_8h_a8b77a5034593409ad5dbd4586fab93ca}{ref\_temp}} = 23456;
+42     
+43     \mbox{\hyperlink{_e_s_b__funcs_8h_a031e4aaa8e149fcb07d8c1ed044dd16a}{ECUtransmit}}[0] = \mbox{\hyperlink{_e_s_b__funcs_8h_a07a924cfb101a7d1ce3489f00b9da976}{opMode}};
+44     memcpy(\mbox{\hyperlink{_e_s_b__funcs_8h_a031e4aaa8e149fcb07d8c1ed044dd16a}{ECUtransmit}} + 1, &\mbox{\hyperlink{_e_s_b__funcs_8h_aa477a3c8d0b96834b0291a9be67f1e77}{hallEffect}}, \textcolor{keyword}{sizeof}(uint16\_t));
+45     memcpy(\mbox{\hyperlink{_e_s_b__funcs_8h_a031e4aaa8e149fcb07d8c1ed044dd16a}{ECUtransmit}} + 3, &\mbox{\hyperlink{_e_s_b__funcs_8h_a34c104e39ff60265f33e3325bf865ab5}{EGT}}, \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}));
+46     memcpy(\mbox{\hyperlink{_e_s_b__funcs_8h_a031e4aaa8e149fcb07d8c1ed044dd16a}{ECUtransmit}} + 7, &\mbox{\hyperlink{_e_s_b__funcs_8h_aa4fe19cf3f989d0dc2f1d829fa2ef74d}{glowPlug}}, \textcolor{keyword}{sizeof}(uint8\_t));
+47     memcpy(\mbox{\hyperlink{_e_s_b__funcs_8h_a031e4aaa8e149fcb07d8c1ed044dd16a}{ECUtransmit}} + 8, &\mbox{\hyperlink{_e_s_b__funcs_8h_a8b77a5034593409ad5dbd4586fab93ca}{ref\_temp}}, \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float}));
+48     \mbox{\hyperlink{_e_s_b__funcs_8h_a031e4aaa8e149fcb07d8c1ed044dd16a}{ECUtransmit}}[12] = \mbox{\hyperlink{_communication_8c_a90b932ca406d71217e71949d18161eba}{calculateParity}}(\mbox{\hyperlink{_e_s_b__funcs_8h_a031e4aaa8e149fcb07d8c1ed044dd16a}{ECUtransmit}}, 0);
+49     \mbox{\hyperlink{_e_s_b__funcs_8h_a031e4aaa8e149fcb07d8c1ed044dd16a}{ECUtransmit}}[13] = \mbox{\hyperlink{_communication_8c_a90b932ca406d71217e71949d18161eba}{calculateParity}}(\mbox{\hyperlink{_e_s_b__funcs_8h_a031e4aaa8e149fcb07d8c1ed044dd16a}{ECUtransmit}}, 6);
+50     
+51     \mbox{\hyperlink{_e_s_b__funcs_8h_ac3715e08cbd719300a7d01c9633cb3c2}{hallDone}} = 0;                          \textcolor{comment}{// reset this we have already used the new data}
+52 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_communication_8c_a5f55e4fd918cddf02226290d77ac2044}\label{_communication_8c_a5f55e4fd918cddf02226290d77ac2044}} 
+\index{Communication.\+c@{Communication.\+c}!send\+To\+E\+CU@{send\+To\+E\+CU}}
+\index{send\+To\+E\+CU@{send\+To\+E\+CU}!Communication.\+c@{Communication.\+c}}
+\subsubsection{\texorpdfstring{send\+To\+E\+C\+U()}{sendToECU()}}
+{\footnotesize\ttfamily void send\+To\+E\+CU (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{len }\end{DoxyParamCaption})}
+
+
+
+Routine to send a number of bytes to the E\+CU over R\+S232. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em len} & The number of bytes from E\+C\+Utransmit to send to the E\+CU \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 157 of file Communication.\+c.
+
+
+
+References E\+C\+Utransmit.
+
+
+\begin{DoxyCode}
+158 \{
+159     \textcolor{comment}{// this will send the number of character in ESBmessage up to len}
+160     cli();
+161     \textcolor{keywordflow}{for}(uint8\_t i = 0; i < len; i++)
+162     \{
+163         \textcolor{keywordflow}{while} ( !( UCSR0A & (1<<UDRE0)) );
+164         \textcolor{comment}{/* Put data into buffer, sends the data */}
+165         UDR0 = \mbox{\hyperlink{_e_s_b__funcs_8h_a031e4aaa8e149fcb07d8c1ed044dd16a}{ECUtransmit}}[i];
+166     \}
+167     sei();
+168 \}
+\end{DoxyCode}

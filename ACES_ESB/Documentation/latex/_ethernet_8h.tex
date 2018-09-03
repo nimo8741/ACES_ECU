@@ -1,0 +1,1527 @@
+\hypertarget{_ethernet_8h}{}\section{C\+:/\+Users/nickm/\+Documents/\+Git\+Hub/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+A\+C\+E\+S\+\_\+\+E\+S\+B/\+Ethernet.h File Reference}
+\label{_ethernet_8h}\index{C\+:/\+Users/nickm/\+Documents/\+Git\+Hub/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+A\+C\+E\+S\+\_\+\+E\+S\+B/\+Ethernet.\+h@{C\+:/\+Users/nickm/\+Documents/\+Git\+Hub/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+A\+C\+E\+S\+\_\+\+E\+S\+B/\+Ethernet.\+h}}
+
+
+Control register definitions and function prototypes for the E\+N\+C28\+J60 Ethernet controller.  
+
+
+{\ttfamily \#include $<$avr/sfr\+\_\+defs.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}E\+S\+B\+\_\+funcs.\+h\char`\"{}}\newline
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a9bd1743c247533dd148131440f059175}\label{_ethernet_8h_a9bd1743c247533dd148131440f059175}} 
+\#define {\bfseries A\+D\+D\+R\+\_\+\+M\+SK}~0x1F
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a3ffd28945de70d42e88ba739277b8134}\label{_ethernet_8h_a3ffd28945de70d42e88ba739277b8134}} 
+\#define {\bfseries C\+S\+A\+C\+T\+I\+VE}~\mbox{\hyperlink{_e_s_b__funcs_8h_aba7fa75d6dd6ebcdc6225282a798fcd2}{assign\+\_\+bit}}(\&S\+P\+I\+\_\+\+P\+O\+RT, Ethernet\+\_\+\+SS, 0)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_adf1112b42b6a400e4c4b88792eaae1bd}\label{_ethernet_8h_adf1112b42b6a400e4c4b88792eaae1bd}} 
+\#define {\bfseries C\+S\+P\+A\+S\+S\+I\+VE}~\mbox{\hyperlink{_e_s_b__funcs_8h_aba7fa75d6dd6ebcdc6225282a798fcd2}{assign\+\_\+bit}}(\&S\+P\+I\+\_\+\+P\+O\+RT, Ethernet\+\_\+\+SS, 1)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a97ef23f31bae309af1d512dc365e898f}\label{_ethernet_8h_a97ef23f31bae309af1d512dc365e898f}} 
+\#define {\bfseries wait\+S\+PI}()~while(!(S\+P\+SR \& (1$<$$<$S\+P\+IF)))
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a1063829023ce1be4929cf4aab713384d}\label{_ethernet_8h_a1063829023ce1be4929cf4aab713384d}} 
+\#define {\bfseries L\+E\+D\+\_\+on}~0x0880
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a2752aae8bd3788a6c331b5eab61086cd}\label{_ethernet_8h_a2752aae8bd3788a6c331b5eab61086cd}} 
+\#define {\bfseries L\+E\+D\+\_\+off}~0x0990
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a8e0b9cfb5dc85d2356c913347358ad93}\label{_ethernet_8h_a8e0b9cfb5dc85d2356c913347358ad93}} 
+\#define {\bfseries L\+E\+D\+\_\+normal}~0x0476
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a7b4b1845641011ad311b33085beea887}\label{_ethernet_8h_a7b4b1845641011ad311b33085beea887}} 
+\#define {\bfseries half\+\_\+sec\+\_\+wait}~34285
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a06b36bf0de19c79093ff4a692bdfe58f}\label{_ethernet_8h_a06b36bf0de19c79093ff4a692bdfe58f}} 
+\#define {\bfseries D\+E\+S\+T\+\_\+\+M\+AC}~0
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a46c67ac746a13111038fdc00e699f6e2}\label{_ethernet_8h_a46c67ac746a13111038fdc00e699f6e2}} 
+\#define {\bfseries S\+R\+C\+\_\+\+M\+AC}~6
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a1d9070edd66c93564ff4feda9987aa1c}\label{_ethernet_8h_a1d9070edd66c93564ff4feda9987aa1c}} 
+\#define {\bfseries L\+E\+N\+\_\+\+I\+N\+D\+EX}~12
+\item 
+\mbox{\Hypertarget{_ethernet_8h_aaac0359d0c9a688fc1b967806ece4083}\label{_ethernet_8h_aaac0359d0c9a688fc1b967806ece4083}} 
+\#define {\bfseries R\+E\+A\+D\+\_\+\+C\+O\+N\+T\+R\+O\+L\+\_\+\+R\+EG}~0x00
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a77b0c5764ff32500b2eaa95151ad75fe}\label{_ethernet_8h_a77b0c5764ff32500b2eaa95151ad75fe}} 
+\#define {\bfseries R\+E\+A\+D\+\_\+\+B\+U\+F\+\_\+\+M\+EM}~0x3A
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a1776cd91c1cf44bc0b0be01f7687d0b5}\label{_ethernet_8h_a1776cd91c1cf44bc0b0be01f7687d0b5}} 
+\#define {\bfseries W\+R\+I\+T\+E\+\_\+\+C\+O\+N\+T\+R\+O\+L\+\_\+\+R\+EG}~0x40
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a2f68a569bbc3dfa73c96ea9c57df4fcb}\label{_ethernet_8h_a2f68a569bbc3dfa73c96ea9c57df4fcb}} 
+\#define {\bfseries W\+R\+I\+T\+E\+\_\+\+B\+U\+F\+\_\+\+M\+EM}~0x7A
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a70dc124ec853075e596799eb11b17829}\label{_ethernet_8h_a70dc124ec853075e596799eb11b17829}} 
+\#define {\bfseries B\+I\+T\+\_\+\+F\+I\+E\+L\+D\+\_\+\+S\+ET}~0x80
+\item 
+\mbox{\Hypertarget{_ethernet_8h_af03f0972ab1c1ca31340ae84d0fcb114}\label{_ethernet_8h_af03f0972ab1c1ca31340ae84d0fcb114}} 
+\#define {\bfseries B\+I\+T\+\_\+\+F\+I\+E\+L\+D\+\_\+\+C\+LR}~0x\+A0
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a74625341a79e3484830c401d8947443c}\label{_ethernet_8h_a74625341a79e3484830c401d8947443c}} 
+\#define {\bfseries S\+O\+F\+T\+\_\+\+R\+E\+S\+ET}~0x\+FF
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a15b16c1073c60f0be255caf0a60251be}\label{_ethernet_8h_a15b16c1073c60f0be255caf0a60251be}} 
+\#define {\bfseries A\+D\+D\+R\+\_\+\+M\+A\+SK}~0x1F
+\item 
+\mbox{\Hypertarget{_ethernet_8h_ac60597badc76e6f2c5ce64d862746c67}\label{_ethernet_8h_ac60597badc76e6f2c5ce64d862746c67}} 
+\#define {\bfseries B\+A\+N\+K\+\_\+\+M\+A\+SK}~0x60
+\item 
+\mbox{\Hypertarget{_ethernet_8h_af95ee1390b9678f34abf0c4e19bfb051}\label{_ethernet_8h_af95ee1390b9678f34abf0c4e19bfb051}} 
+\#define {\bfseries S\+P\+R\+D\+\_\+\+M\+A\+SK}~0x80
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a72ac42db94893a565a52821f5ae95856}\label{_ethernet_8h_a72ac42db94893a565a52821f5ae95856}} 
+\#define {\bfseries E\+IE}~0x1B
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a303aba585a8da3f8dc80315dc94cb0e5}\label{_ethernet_8h_a303aba585a8da3f8dc80315dc94cb0e5}} 
+\#define {\bfseries E\+IR}~0x1C
+\item 
+\mbox{\Hypertarget{_ethernet_8h_ad05043a04b51b3953259c24040e2e99f}\label{_ethernet_8h_ad05043a04b51b3953259c24040e2e99f}} 
+\#define {\bfseries E\+S\+T\+AT}~0x1D
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a86d77e305cc8d23f335fb733870a873c}\label{_ethernet_8h_a86d77e305cc8d23f335fb733870a873c}} 
+\#define {\bfseries E\+C\+O\+N2}~0x1E
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a461b29cd8a06dc2f331f664eb0f9165a}\label{_ethernet_8h_a461b29cd8a06dc2f331f664eb0f9165a}} 
+\#define {\bfseries E\+C\+O\+N1}~0x1F
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a04e5f3a270ebf2b1a1121b38fef2a62e}\label{_ethernet_8h_a04e5f3a270ebf2b1a1121b38fef2a62e}} 
+\#define {\bfseries E\+R\+D\+P\+TL}~(0x00$\vert$0x00)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a63011487c82b6f6d1fcc749b55e5511e}\label{_ethernet_8h_a63011487c82b6f6d1fcc749b55e5511e}} 
+\#define {\bfseries E\+R\+D\+P\+TH}~(0x01$\vert$0x00)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a684dfa8cb9097ee131a2c9d2ee65d573}\label{_ethernet_8h_a684dfa8cb9097ee131a2c9d2ee65d573}} 
+\#define {\bfseries E\+W\+R\+P\+TL}~(0x02$\vert$0x00)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a7bda37d486623efbe3ac2055198d356a}\label{_ethernet_8h_a7bda37d486623efbe3ac2055198d356a}} 
+\#define {\bfseries E\+W\+R\+P\+TH}~(0x03$\vert$0x00)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a45a38712c4d618bb5cb013e3d781db46}\label{_ethernet_8h_a45a38712c4d618bb5cb013e3d781db46}} 
+\#define {\bfseries E\+T\+X\+S\+TL}~(0x04$\vert$0x00)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_adfc695618aa5a32160cc9e2b0234c714}\label{_ethernet_8h_adfc695618aa5a32160cc9e2b0234c714}} 
+\#define {\bfseries E\+T\+X\+S\+TH}~(0x05$\vert$0x00)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_ad79a19cc60b7dc19cec9df691e658714}\label{_ethernet_8h_ad79a19cc60b7dc19cec9df691e658714}} 
+\#define {\bfseries E\+T\+X\+N\+DL}~(0x06$\vert$0x00)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a24597e8d914818adae20bf39c4ac7d0e}\label{_ethernet_8h_a24597e8d914818adae20bf39c4ac7d0e}} 
+\#define {\bfseries E\+T\+X\+N\+DH}~(0x07$\vert$0x00)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a387e1ac675539e1c0c7f158f59eafd51}\label{_ethernet_8h_a387e1ac675539e1c0c7f158f59eafd51}} 
+\#define {\bfseries E\+R\+X\+S\+TL}~(0x08$\vert$0x00)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_ad4c2a40d74ded1e155f7eb18effb76ba}\label{_ethernet_8h_ad4c2a40d74ded1e155f7eb18effb76ba}} 
+\#define {\bfseries E\+R\+X\+S\+TH}~(0x09$\vert$0x00)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a9fa6592ccdfa66aa5a1854dd95b6329c}\label{_ethernet_8h_a9fa6592ccdfa66aa5a1854dd95b6329c}} 
+\#define {\bfseries E\+R\+X\+N\+DL}~(0x0\+A$\vert$0x00)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a19ee05a22525dcd9e4124734a3aec1b0}\label{_ethernet_8h_a19ee05a22525dcd9e4124734a3aec1b0}} 
+\#define {\bfseries E\+R\+X\+N\+DH}~(0x0\+B$\vert$0x00)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a0e4345b59cc531bd8daee2cd8c8e906b}\label{_ethernet_8h_a0e4345b59cc531bd8daee2cd8c8e906b}} 
+\#define {\bfseries E\+R\+X\+R\+D\+P\+TL}~(0x0\+C$\vert$0x00)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a1668b845f0bc37dbb515c2358357a690}\label{_ethernet_8h_a1668b845f0bc37dbb515c2358357a690}} 
+\#define {\bfseries E\+R\+X\+R\+D\+P\+TH}~(0x0\+D$\vert$0x00)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a7d78e648da085c6fdf006d75b3c99a7a}\label{_ethernet_8h_a7d78e648da085c6fdf006d75b3c99a7a}} 
+\#define {\bfseries E\+R\+X\+W\+R\+P\+TL}~(0x0\+E$\vert$0x00)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a9c9ff6952a5cb0c0b420bc6a405d726c}\label{_ethernet_8h_a9c9ff6952a5cb0c0b420bc6a405d726c}} 
+\#define {\bfseries E\+R\+X\+W\+R\+P\+TH}~(0x0\+F$\vert$0x00)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_ae7f7aba80e78f4086dc761608c2da2c4}\label{_ethernet_8h_ae7f7aba80e78f4086dc761608c2da2c4}} 
+\#define {\bfseries E\+D\+M\+A\+S\+TL}~(0x10$\vert$0x00)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a0b279b45e0cfbc32896ec3b68694cf71}\label{_ethernet_8h_a0b279b45e0cfbc32896ec3b68694cf71}} 
+\#define {\bfseries E\+D\+M\+A\+S\+TH}~(0x11$\vert$0x00)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a2138d173a354731c15f3ae6ce5d02b56}\label{_ethernet_8h_a2138d173a354731c15f3ae6ce5d02b56}} 
+\#define {\bfseries E\+D\+M\+A\+N\+DL}~(0x12$\vert$0x00)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_ac8866e9f637f6349bb28c6d9152ad658}\label{_ethernet_8h_ac8866e9f637f6349bb28c6d9152ad658}} 
+\#define {\bfseries E\+D\+M\+A\+N\+DH}~(0x13$\vert$0x00)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a6959cbf10d897b0eac13a15928f87cac}\label{_ethernet_8h_a6959cbf10d897b0eac13a15928f87cac}} 
+\#define {\bfseries E\+D\+M\+A\+D\+S\+TL}~(0x14$\vert$0x00)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_ab24279deee959774407b010264cb700a}\label{_ethernet_8h_ab24279deee959774407b010264cb700a}} 
+\#define {\bfseries E\+D\+M\+A\+D\+S\+TH}~(0x15$\vert$0x00)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a9008ca9117933ffaed4f71a0c467ae07}\label{_ethernet_8h_a9008ca9117933ffaed4f71a0c467ae07}} 
+\#define {\bfseries E\+D\+M\+A\+C\+SL}~(0x16$\vert$0x00)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a8db6aa7fd9a0f04a045c04f67523621d}\label{_ethernet_8h_a8db6aa7fd9a0f04a045c04f67523621d}} 
+\#define {\bfseries E\+D\+M\+A\+C\+SH}~(0x17$\vert$0x00)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_ad1d8a24d50000168964dc660074bf044}\label{_ethernet_8h_ad1d8a24d50000168964dc660074bf044}} 
+\#define {\bfseries E\+H\+T0}~(0x00$\vert$0x20)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_acf17605d4551244f07220b4fdf778b38}\label{_ethernet_8h_acf17605d4551244f07220b4fdf778b38}} 
+\#define {\bfseries E\+H\+T1}~(0x01$\vert$0x20)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a2e1a60e1a93a4e6f288d89c825ff1f26}\label{_ethernet_8h_a2e1a60e1a93a4e6f288d89c825ff1f26}} 
+\#define {\bfseries E\+H\+T2}~(0x02$\vert$0x20)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a1644d7f0cca924f726f81a03423eded6}\label{_ethernet_8h_a1644d7f0cca924f726f81a03423eded6}} 
+\#define {\bfseries E\+H\+T3}~(0x03$\vert$0x20)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_ad983f328c5a5606195cdf5ace8768335}\label{_ethernet_8h_ad983f328c5a5606195cdf5ace8768335}} 
+\#define {\bfseries E\+H\+T4}~(0x04$\vert$0x20)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a2788e2e180096007012a6eb7cf6ec951}\label{_ethernet_8h_a2788e2e180096007012a6eb7cf6ec951}} 
+\#define {\bfseries E\+H\+T5}~(0x05$\vert$0x20)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a4eb1b56144bc6cf300486b8e6da871d3}\label{_ethernet_8h_a4eb1b56144bc6cf300486b8e6da871d3}} 
+\#define {\bfseries E\+H\+T6}~(0x06$\vert$0x20)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a469059ed79caab2c9733f6044a318d3f}\label{_ethernet_8h_a469059ed79caab2c9733f6044a318d3f}} 
+\#define {\bfseries E\+H\+T7}~(0x07$\vert$0x20)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a7231ae8160a585d71a3e96d93358970c}\label{_ethernet_8h_a7231ae8160a585d71a3e96d93358970c}} 
+\#define {\bfseries E\+P\+M\+M0}~(0x08$\vert$0x20)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a1a0b4ba274784466f2094833facc6792}\label{_ethernet_8h_a1a0b4ba274784466f2094833facc6792}} 
+\#define {\bfseries E\+P\+M\+M1}~(0x09$\vert$0x20)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a045c306adf0b93289ad90721439ff811}\label{_ethernet_8h_a045c306adf0b93289ad90721439ff811}} 
+\#define {\bfseries E\+P\+M\+M2}~(0x0\+A$\vert$0x20)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_af60e219282fed81ae6e08fb65aad48dc}\label{_ethernet_8h_af60e219282fed81ae6e08fb65aad48dc}} 
+\#define {\bfseries E\+P\+M\+M3}~(0x0\+B$\vert$0x20)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_acc1614ff436a3aee2b85320db84d28ba}\label{_ethernet_8h_acc1614ff436a3aee2b85320db84d28ba}} 
+\#define {\bfseries E\+P\+M\+M4}~(0x0\+C$\vert$0x20)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_ad2c168fc15ba3b06d8ebbf0713ed9e6b}\label{_ethernet_8h_ad2c168fc15ba3b06d8ebbf0713ed9e6b}} 
+\#define {\bfseries E\+P\+M\+M5}~(0x0\+D$\vert$0x20)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a8300c5c4aa4c2296ea27686c149006d6}\label{_ethernet_8h_a8300c5c4aa4c2296ea27686c149006d6}} 
+\#define {\bfseries E\+P\+M\+M6}~(0x0\+E$\vert$0x20)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_aabe6953f6fb64613948c418b1764dc20}\label{_ethernet_8h_aabe6953f6fb64613948c418b1764dc20}} 
+\#define {\bfseries E\+P\+M\+M7}~(0x0\+F$\vert$0x20)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a63e21e6d3b5926b59207f79ff66f977d}\label{_ethernet_8h_a63e21e6d3b5926b59207f79ff66f977d}} 
+\#define {\bfseries E\+P\+M\+C\+SL}~(0x10$\vert$0x20)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_aea835cc109c3eb4cfedc6f3ad4d7c410}\label{_ethernet_8h_aea835cc109c3eb4cfedc6f3ad4d7c410}} 
+\#define {\bfseries E\+P\+M\+C\+SH}~(0x11$\vert$0x20)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_aef01aecd2f0097fc30bf29fe24ab1d05}\label{_ethernet_8h_aef01aecd2f0097fc30bf29fe24ab1d05}} 
+\#define {\bfseries E\+P\+M\+OL}~(0x14$\vert$0x20)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a432a59eb0f0ccd8d231c82b039dc113d}\label{_ethernet_8h_a432a59eb0f0ccd8d231c82b039dc113d}} 
+\#define {\bfseries E\+P\+M\+OH}~(0x15$\vert$0x20)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_ab7da9e76b01d840f66c49ae0cdcb91f9}\label{_ethernet_8h_ab7da9e76b01d840f66c49ae0cdcb91f9}} 
+\#define {\bfseries E\+W\+O\+L\+IE}~(0x16$\vert$0x20)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a2e40c6ad151e1b77b892b538ff3ea98f}\label{_ethernet_8h_a2e40c6ad151e1b77b892b538ff3ea98f}} 
+\#define {\bfseries E\+W\+O\+L\+IR}~(0x17$\vert$0x20)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_ac5ff36d9b43977e5dd6548170ec93ddc}\label{_ethernet_8h_ac5ff36d9b43977e5dd6548170ec93ddc}} 
+\#define {\bfseries E\+R\+X\+F\+C\+ON}~(0x18$\vert$0x20)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a029f8b5f05e4e5182aa9a73e31c4a4f0}\label{_ethernet_8h_a029f8b5f05e4e5182aa9a73e31c4a4f0}} 
+\#define {\bfseries E\+P\+K\+T\+C\+NT}~(0x19$\vert$0x20)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_ab64add14e73a7308bd32343c45caf79d}\label{_ethernet_8h_ab64add14e73a7308bd32343c45caf79d}} 
+\#define {\bfseries M\+A\+C\+O\+N1}~(0x00$\vert$0x40$\vert$0x80)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a01501b400de6174cd44cd52cf9da0950}\label{_ethernet_8h_a01501b400de6174cd44cd52cf9da0950}} 
+\#define {\bfseries M\+A\+C\+O\+N2}~(0x01$\vert$0x40$\vert$0x80)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a37e80f66673c39e7db383e0b11a159ea}\label{_ethernet_8h_a37e80f66673c39e7db383e0b11a159ea}} 
+\#define {\bfseries M\+A\+C\+O\+N3}~(0x02$\vert$0x40$\vert$0x80)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a53c0d8f74a3ba17d1337e297ef749a22}\label{_ethernet_8h_a53c0d8f74a3ba17d1337e297ef749a22}} 
+\#define {\bfseries M\+A\+C\+O\+N4}~(0x03$\vert$0x40$\vert$0x80)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a0aa3bb65f69bc921f3b4020410f7efc2}\label{_ethernet_8h_a0aa3bb65f69bc921f3b4020410f7efc2}} 
+\#define {\bfseries M\+A\+B\+B\+I\+PG}~(0x04$\vert$0x40$\vert$0x80)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a8daa7f7ef529828ef4cc3d90a48ff730}\label{_ethernet_8h_a8daa7f7ef529828ef4cc3d90a48ff730}} 
+\#define {\bfseries M\+A\+I\+P\+GL}~(0x06$\vert$0x40$\vert$0x80)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a70b21ea01d623429bf3bd1abf583c80f}\label{_ethernet_8h_a70b21ea01d623429bf3bd1abf583c80f}} 
+\#define {\bfseries M\+A\+I\+P\+GH}~(0x07$\vert$0x40$\vert$0x80)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_af78bae411a3ae7fe363ad63e93a2e618}\label{_ethernet_8h_af78bae411a3ae7fe363ad63e93a2e618}} 
+\#define {\bfseries M\+A\+C\+L\+C\+O\+N1}~(0x08$\vert$0x40$\vert$0x80)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_acf3356546b7e518a4cf8b368d48a2710}\label{_ethernet_8h_acf3356546b7e518a4cf8b368d48a2710}} 
+\#define {\bfseries M\+A\+C\+L\+C\+O\+N2}~(0x09$\vert$0x40$\vert$0x80)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a4ed708903a040c0ea4fc071707863ffc}\label{_ethernet_8h_a4ed708903a040c0ea4fc071707863ffc}} 
+\#define {\bfseries M\+A\+M\+X\+F\+LL}~(0x0\+A$\vert$0x40$\vert$0x80)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a294e961d04adc72cbc8b866bb6506e8d}\label{_ethernet_8h_a294e961d04adc72cbc8b866bb6506e8d}} 
+\#define {\bfseries M\+A\+M\+X\+F\+LH}~(0x0\+B$\vert$0x40$\vert$0x80)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a816b343221c59f459624c8195e148f7a}\label{_ethernet_8h_a816b343221c59f459624c8195e148f7a}} 
+\#define {\bfseries M\+A\+P\+H\+S\+UP}~(0x0\+D$\vert$0x40$\vert$0x80)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a6106a2077dfc25ff781bdb7af193168a}\label{_ethernet_8h_a6106a2077dfc25ff781bdb7af193168a}} 
+\#define {\bfseries M\+I\+C\+ON}~(0x11$\vert$0x40$\vert$0x80)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a6ca2ed513306c83432028d8ad3d49354}\label{_ethernet_8h_a6ca2ed513306c83432028d8ad3d49354}} 
+\#define {\bfseries M\+I\+C\+MD}~(0x12$\vert$0x40$\vert$0x80)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a01fb4e4ea7a7b71cbf2b341b0ebd77a3}\label{_ethernet_8h_a01fb4e4ea7a7b71cbf2b341b0ebd77a3}} 
+\#define {\bfseries M\+I\+R\+E\+G\+A\+DR}~(0x14$\vert$0x40$\vert$0x80)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a18aba35be6189e6150a9b4e2c2c29b69}\label{_ethernet_8h_a18aba35be6189e6150a9b4e2c2c29b69}} 
+\#define {\bfseries M\+I\+W\+RL}~(0x16$\vert$0x40$\vert$0x80)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_af5d129bad4e0df51b5a2f9f7ee0f2da4}\label{_ethernet_8h_af5d129bad4e0df51b5a2f9f7ee0f2da4}} 
+\#define {\bfseries M\+I\+W\+RH}~(0x17$\vert$0x40$\vert$0x80)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_adc002e2f058cbc1cf556b4a33d0c401c}\label{_ethernet_8h_adc002e2f058cbc1cf556b4a33d0c401c}} 
+\#define {\bfseries M\+I\+R\+DL}~(0x18$\vert$0x40$\vert$0x80)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_ab2316c2a713dc20c6d0f892faa5c618b}\label{_ethernet_8h_ab2316c2a713dc20c6d0f892faa5c618b}} 
+\#define {\bfseries M\+I\+R\+DH}~(0x19$\vert$0x40$\vert$0x80)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_ae90f98e596cd117bc03ec08e12303948}\label{_ethernet_8h_ae90f98e596cd117bc03ec08e12303948}} 
+\#define {\bfseries M\+A\+A\+D\+R1}~(0x00$\vert$0x60$\vert$0x80)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a120bccb0df5d68a311c7030cfb96cb60}\label{_ethernet_8h_a120bccb0df5d68a311c7030cfb96cb60}} 
+\#define {\bfseries M\+A\+A\+D\+R0}~(0x01$\vert$0x60$\vert$0x80)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_adab05794c311d260abaaec301a942be5}\label{_ethernet_8h_adab05794c311d260abaaec301a942be5}} 
+\#define {\bfseries M\+A\+A\+D\+R3}~(0x02$\vert$0x60$\vert$0x80)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a12821080889b4c07b4d6592fbcb67aca}\label{_ethernet_8h_a12821080889b4c07b4d6592fbcb67aca}} 
+\#define {\bfseries M\+A\+A\+D\+R2}~(0x03$\vert$0x60$\vert$0x80)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_ab09dce1b21cca7564099bf5c2977027d}\label{_ethernet_8h_ab09dce1b21cca7564099bf5c2977027d}} 
+\#define {\bfseries M\+A\+A\+D\+R5}~(0x04$\vert$0x60$\vert$0x80)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_ab5bd94627c03b8c599997934df7f0091}\label{_ethernet_8h_ab5bd94627c03b8c599997934df7f0091}} 
+\#define {\bfseries M\+A\+A\+D\+R4}~(0x05$\vert$0x60$\vert$0x80)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a03d42560946d9312f090c168ed035988}\label{_ethernet_8h_a03d42560946d9312f090c168ed035988}} 
+\#define {\bfseries E\+B\+S\+T\+SD}~(0x06$\vert$0x60)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a9adab6368f16f6fe28aa65834b2ede72}\label{_ethernet_8h_a9adab6368f16f6fe28aa65834b2ede72}} 
+\#define {\bfseries E\+B\+S\+T\+C\+ON}~(0x07$\vert$0x60)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_ad49243d78eaf5150289b582582b2f2ff}\label{_ethernet_8h_ad49243d78eaf5150289b582582b2f2ff}} 
+\#define {\bfseries E\+B\+S\+T\+C\+SL}~(0x08$\vert$0x60)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a04c27a74b64291202f84be89dfe48cb3}\label{_ethernet_8h_a04c27a74b64291202f84be89dfe48cb3}} 
+\#define {\bfseries E\+B\+S\+T\+C\+SH}~(0x09$\vert$0x60)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_abd6aab564bb58e789243684804aff335}\label{_ethernet_8h_abd6aab564bb58e789243684804aff335}} 
+\#define {\bfseries M\+I\+S\+T\+AT}~(0x0\+A$\vert$0x60$\vert$0x80)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a5eec0cbe196f0a26a9b2f30a74e70c60}\label{_ethernet_8h_a5eec0cbe196f0a26a9b2f30a74e70c60}} 
+\#define {\bfseries E\+R\+E\+V\+ID}~(0x12$\vert$0x60)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a023f4ef8ad02a85b4dcfae743368eb87}\label{_ethernet_8h_a023f4ef8ad02a85b4dcfae743368eb87}} 
+\#define {\bfseries E\+C\+O\+C\+ON}~(0x15$\vert$0x60)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_abfa8c1ae2adec73924517bf2b1aad124}\label{_ethernet_8h_abfa8c1ae2adec73924517bf2b1aad124}} 
+\#define {\bfseries E\+F\+L\+O\+C\+ON}~(0x17$\vert$0x60)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_ac1388dff78c23a31ec55335d727207e9}\label{_ethernet_8h_ac1388dff78c23a31ec55335d727207e9}} 
+\#define {\bfseries E\+P\+A\+U\+SL}~(0x18$\vert$0x60)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a3fc2cb9d4e34c421421abe509fc25424}\label{_ethernet_8h_a3fc2cb9d4e34c421421abe509fc25424}} 
+\#define {\bfseries E\+P\+A\+U\+SH}~(0x19$\vert$0x60)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a03e10f035e4f21f0d422a10037bd484c}\label{_ethernet_8h_a03e10f035e4f21f0d422a10037bd484c}} 
+\#define {\bfseries P\+H\+C\+O\+N1}~0x00
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a050305807ece6fe1683464afecf06e6e}\label{_ethernet_8h_a050305807ece6fe1683464afecf06e6e}} 
+\#define {\bfseries P\+H\+S\+T\+A\+T1}~0x01
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a2bf519ac94423619c5aa5ee1e16e5b19}\label{_ethernet_8h_a2bf519ac94423619c5aa5ee1e16e5b19}} 
+\#define {\bfseries P\+H\+H\+I\+D1}~0x02
+\item 
+\mbox{\Hypertarget{_ethernet_8h_aff08147128718490f111dbe35a6b9ac3}\label{_ethernet_8h_aff08147128718490f111dbe35a6b9ac3}} 
+\#define {\bfseries P\+H\+H\+I\+D2}~0x03
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a9cf7f25d840eaf2d2101797ee0e2e29e}\label{_ethernet_8h_a9cf7f25d840eaf2d2101797ee0e2e29e}} 
+\#define {\bfseries P\+H\+C\+O\+N2}~0x10
+\item 
+\mbox{\Hypertarget{_ethernet_8h_aec37b8c76a880a3c2b8205920f8b911d}\label{_ethernet_8h_aec37b8c76a880a3c2b8205920f8b911d}} 
+\#define {\bfseries P\+H\+S\+T\+A\+T2}~0x11
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a1f3e93fc5cdb723f0d77d9f7303cbf9a}\label{_ethernet_8h_a1f3e93fc5cdb723f0d77d9f7303cbf9a}} 
+\#define {\bfseries P\+H\+IE}~0x12
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a62760190e719a54dd75a66d8b0a24aa2}\label{_ethernet_8h_a62760190e719a54dd75a66d8b0a24aa2}} 
+\#define {\bfseries P\+H\+IR}~0x13
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a311d5ecccdeb773484bf84f33f0f0b37}\label{_ethernet_8h_a311d5ecccdeb773484bf84f33f0f0b37}} 
+\#define {\bfseries P\+H\+L\+C\+ON}~0x14
+\item 
+\mbox{\Hypertarget{_ethernet_8h_af22d9ed047710a75f3226e12945e7014}\label{_ethernet_8h_af22d9ed047710a75f3226e12945e7014}} 
+\#define {\bfseries E\+R\+X\+F\+C\+O\+N\+\_\+\+U\+C\+EN}~0x80
+\item 
+\mbox{\Hypertarget{_ethernet_8h_ade909f7a8faf56ad7d5f13515d942ab6}\label{_ethernet_8h_ade909f7a8faf56ad7d5f13515d942ab6}} 
+\#define {\bfseries E\+R\+X\+F\+C\+O\+N\+\_\+\+A\+N\+D\+OR}~0x40
+\item 
+\mbox{\Hypertarget{_ethernet_8h_ab24fd0fbd4dd4ef84ee86db0d20f655c}\label{_ethernet_8h_ab24fd0fbd4dd4ef84ee86db0d20f655c}} 
+\#define {\bfseries E\+R\+X\+F\+C\+O\+N\+\_\+\+C\+R\+C\+EN}~0x20
+\item 
+\mbox{\Hypertarget{_ethernet_8h_ac491e02aff4b227289f14f7b98c0ab35}\label{_ethernet_8h_ac491e02aff4b227289f14f7b98c0ab35}} 
+\#define {\bfseries E\+R\+X\+F\+C\+O\+N\+\_\+\+P\+M\+EN}~0x10
+\item 
+\mbox{\Hypertarget{_ethernet_8h_abfabdd6a69abafb9834baceca99c73d1}\label{_ethernet_8h_abfabdd6a69abafb9834baceca99c73d1}} 
+\#define {\bfseries E\+R\+X\+F\+C\+O\+N\+\_\+\+M\+P\+EN}~0x08
+\item 
+\mbox{\Hypertarget{_ethernet_8h_adcc185e8904cddc96ace6ee23660db6c}\label{_ethernet_8h_adcc185e8904cddc96ace6ee23660db6c}} 
+\#define {\bfseries E\+R\+X\+F\+C\+O\+N\+\_\+\+H\+T\+EN}~0x04
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a7fc4dde73df1ef59ece808277e2bc2c2}\label{_ethernet_8h_a7fc4dde73df1ef59ece808277e2bc2c2}} 
+\#define {\bfseries E\+R\+X\+F\+C\+O\+N\+\_\+\+M\+C\+EN}~0x02
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a1b56128234d0790b0d7253f4357d2adb}\label{_ethernet_8h_a1b56128234d0790b0d7253f4357d2adb}} 
+\#define {\bfseries E\+R\+X\+F\+C\+O\+N\+\_\+\+B\+C\+EN}~0x01
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a6e7ec3932ab30e65b5ea60440053a4bc}\label{_ethernet_8h_a6e7ec3932ab30e65b5ea60440053a4bc}} 
+\#define {\bfseries E\+I\+E\+\_\+\+I\+N\+T\+IE}~0x80
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a1171f52b3a35649112ce502a26834bdd}\label{_ethernet_8h_a1171f52b3a35649112ce502a26834bdd}} 
+\#define {\bfseries E\+I\+E\+\_\+\+P\+K\+T\+IE}~0x40
+\item 
+\mbox{\Hypertarget{_ethernet_8h_aa20955e6134203e7784e16fbfb137eb1}\label{_ethernet_8h_aa20955e6134203e7784e16fbfb137eb1}} 
+\#define {\bfseries E\+I\+E\+\_\+\+D\+M\+A\+IE}~0x20
+\item 
+\mbox{\Hypertarget{_ethernet_8h_aad07156c0f73a7ec41d0c385f2c091b1}\label{_ethernet_8h_aad07156c0f73a7ec41d0c385f2c091b1}} 
+\#define {\bfseries E\+I\+E\+\_\+\+L\+I\+N\+K\+IE}~0x10
+\item 
+\mbox{\Hypertarget{_ethernet_8h_aa2c4d9a05314661d9b5ba5c106097d0f}\label{_ethernet_8h_aa2c4d9a05314661d9b5ba5c106097d0f}} 
+\#define {\bfseries E\+I\+E\+\_\+\+T\+X\+IE}~0x08
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a0ac64e1af64188179c8ebe57cb882fff}\label{_ethernet_8h_a0ac64e1af64188179c8ebe57cb882fff}} 
+\#define {\bfseries E\+I\+E\+\_\+\+W\+O\+L\+IE}~0x04
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a31359eb0905b74f9d0b6f398181deb34}\label{_ethernet_8h_a31359eb0905b74f9d0b6f398181deb34}} 
+\#define {\bfseries E\+I\+E\+\_\+\+T\+X\+E\+R\+IE}~0x02
+\item 
+\mbox{\Hypertarget{_ethernet_8h_aab0e5983ac209ba5afae4769ebf3d237}\label{_ethernet_8h_aab0e5983ac209ba5afae4769ebf3d237}} 
+\#define {\bfseries E\+I\+E\+\_\+\+R\+X\+E\+R\+IE}~0x01
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a11fcfa608a5040c26cc8f2c2d314ba80}\label{_ethernet_8h_a11fcfa608a5040c26cc8f2c2d314ba80}} 
+\#define {\bfseries E\+I\+R\+\_\+\+P\+K\+T\+IF}~0x40
+\item 
+\mbox{\Hypertarget{_ethernet_8h_af394e55c2679301d7e5eac148dfaddea}\label{_ethernet_8h_af394e55c2679301d7e5eac148dfaddea}} 
+\#define {\bfseries E\+I\+R\+\_\+\+D\+M\+A\+IF}~0x20
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a9fe92c2717bcd98bb324409ed2d84210}\label{_ethernet_8h_a9fe92c2717bcd98bb324409ed2d84210}} 
+\#define {\bfseries E\+I\+R\+\_\+\+L\+I\+N\+K\+IF}~0x10
+\item 
+\mbox{\Hypertarget{_ethernet_8h_af193c0a7f0208c18b1d49668e68266e0}\label{_ethernet_8h_af193c0a7f0208c18b1d49668e68266e0}} 
+\#define {\bfseries E\+I\+R\+\_\+\+T\+X\+IF}~0x08
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a93413173c7231eb9d949db8f2018608e}\label{_ethernet_8h_a93413173c7231eb9d949db8f2018608e}} 
+\#define {\bfseries E\+I\+R\+\_\+\+W\+O\+L\+IF}~0x04
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a66297d20ff1a92778edc575b8d7a6659}\label{_ethernet_8h_a66297d20ff1a92778edc575b8d7a6659}} 
+\#define {\bfseries E\+I\+R\+\_\+\+T\+X\+E\+R\+IF}~0x02
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a3acd30902b20a2ea68b6968f72ea7058}\label{_ethernet_8h_a3acd30902b20a2ea68b6968f72ea7058}} 
+\#define {\bfseries E\+I\+R\+\_\+\+R\+X\+E\+R\+IF}~0x01
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a8f8c4e7735230256935df041a27c98b1}\label{_ethernet_8h_a8f8c4e7735230256935df041a27c98b1}} 
+\#define {\bfseries E\+S\+T\+A\+T\+\_\+\+I\+NT}~0x80
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a89dac2fdd99e9fbb1e86ae1c9dd050ad}\label{_ethernet_8h_a89dac2fdd99e9fbb1e86ae1c9dd050ad}} 
+\#define {\bfseries E\+S\+T\+A\+T\+\_\+\+L\+A\+T\+E\+C\+OL}~0x10
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a38177751cfa630916f0f7232bc54c02b}\label{_ethernet_8h_a38177751cfa630916f0f7232bc54c02b}} 
+\#define {\bfseries E\+S\+T\+A\+T\+\_\+\+R\+X\+B\+U\+SY}~0x04
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a987290afbd4ab0dfd3c58d359e6d0dd5}\label{_ethernet_8h_a987290afbd4ab0dfd3c58d359e6d0dd5}} 
+\#define {\bfseries E\+S\+T\+A\+T\+\_\+\+T\+X\+A\+B\+RT}~0x02
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a4283378a63dc5913f07e96ea96cf8cdb}\label{_ethernet_8h_a4283378a63dc5913f07e96ea96cf8cdb}} 
+\#define {\bfseries E\+S\+T\+A\+T\+\_\+\+C\+L\+K\+R\+DY}~0x01
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a8c7bbdb91c6bccb7e7180efa7b158f8e}\label{_ethernet_8h_a8c7bbdb91c6bccb7e7180efa7b158f8e}} 
+\#define {\bfseries E\+C\+O\+N2\+\_\+\+A\+U\+T\+O\+I\+NC}~0x80
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a1fab919c4d16b2e96072b0479fc4b617}\label{_ethernet_8h_a1fab919c4d16b2e96072b0479fc4b617}} 
+\#define {\bfseries E\+C\+O\+N2\+\_\+\+P\+K\+T\+D\+EC}~0x40
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a51ca94c72bbf275190842da7206a4c5a}\label{_ethernet_8h_a51ca94c72bbf275190842da7206a4c5a}} 
+\#define {\bfseries E\+C\+O\+N2\+\_\+\+P\+W\+R\+SV}~0x20
+\item 
+\mbox{\Hypertarget{_ethernet_8h_ae1512105aac7756db740d0bf681ec372}\label{_ethernet_8h_ae1512105aac7756db740d0bf681ec372}} 
+\#define {\bfseries E\+C\+O\+N2\+\_\+\+V\+R\+PS}~0x08
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a671b1bccaaf1d135073b3604c85a8ff2}\label{_ethernet_8h_a671b1bccaaf1d135073b3604c85a8ff2}} 
+\#define {\bfseries E\+C\+O\+N1\+\_\+\+T\+X\+R\+ST}~0x80
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a09d71773e064dba125290e6de263d808}\label{_ethernet_8h_a09d71773e064dba125290e6de263d808}} 
+\#define {\bfseries E\+C\+O\+N1\+\_\+\+R\+X\+R\+ST}~0x40
+\item 
+\mbox{\Hypertarget{_ethernet_8h_af55696d9c836e2e41b61537cca6263da}\label{_ethernet_8h_af55696d9c836e2e41b61537cca6263da}} 
+\#define {\bfseries E\+C\+O\+N1\+\_\+\+D\+M\+A\+ST}~0x20
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a2f4ee7ff91ad9469954ac054b43abfd0}\label{_ethernet_8h_a2f4ee7ff91ad9469954ac054b43abfd0}} 
+\#define {\bfseries E\+C\+O\+N1\+\_\+\+C\+S\+U\+M\+EN}~0x10
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a3a2e731dca9ed10137c429b3d2db006f}\label{_ethernet_8h_a3a2e731dca9ed10137c429b3d2db006f}} 
+\#define {\bfseries E\+C\+O\+N1\+\_\+\+T\+X\+R\+TS}~0x08
+\item 
+\mbox{\Hypertarget{_ethernet_8h_ace8508fae6ed0c6d29e8879194de5fbc}\label{_ethernet_8h_ace8508fae6ed0c6d29e8879194de5fbc}} 
+\#define {\bfseries E\+C\+O\+N1\+\_\+\+R\+X\+EN}~0x04
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a81c320643a8fcfb3c91f4e059a14c2c0}\label{_ethernet_8h_a81c320643a8fcfb3c91f4e059a14c2c0}} 
+\#define {\bfseries E\+C\+O\+N1\+\_\+\+B\+S\+E\+L1}~0x02
+\item 
+\mbox{\Hypertarget{_ethernet_8h_ac05b5a98cc41d8736c62a6a96c248940}\label{_ethernet_8h_ac05b5a98cc41d8736c62a6a96c248940}} 
+\#define {\bfseries E\+C\+O\+N1\+\_\+\+B\+S\+E\+L0}~0x01
+\item 
+\mbox{\Hypertarget{_ethernet_8h_aff579e2fb0f716bcd4e17a5358b20844}\label{_ethernet_8h_aff579e2fb0f716bcd4e17a5358b20844}} 
+\#define {\bfseries M\+A\+C\+O\+N1\+\_\+\+L\+O\+O\+P\+BK}~0x10
+\item 
+\mbox{\Hypertarget{_ethernet_8h_adad2d7dff2675636ec7625e5e3661da1}\label{_ethernet_8h_adad2d7dff2675636ec7625e5e3661da1}} 
+\#define {\bfseries M\+A\+C\+O\+N1\+\_\+\+T\+X\+P\+A\+US}~0x08
+\item 
+\mbox{\Hypertarget{_ethernet_8h_af2966ecb11b3dccc4a6eead5321b268d}\label{_ethernet_8h_af2966ecb11b3dccc4a6eead5321b268d}} 
+\#define {\bfseries M\+A\+C\+O\+N1\+\_\+\+R\+X\+P\+A\+US}~0x04
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a199167559a9fd81e2aeac5ae0d03a004}\label{_ethernet_8h_a199167559a9fd81e2aeac5ae0d03a004}} 
+\#define {\bfseries M\+A\+C\+O\+N1\+\_\+\+P\+A\+S\+S\+A\+LL}~0x02
+\item 
+\mbox{\Hypertarget{_ethernet_8h_acca2bd606f4beb5ecf4051879d3f8484}\label{_ethernet_8h_acca2bd606f4beb5ecf4051879d3f8484}} 
+\#define {\bfseries M\+A\+C\+O\+N1\+\_\+\+M\+A\+R\+X\+EN}~0x01
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a81a72130c83ba86915410008f20eddbe}\label{_ethernet_8h_a81a72130c83ba86915410008f20eddbe}} 
+\#define {\bfseries M\+A\+C\+O\+N2\+\_\+\+M\+A\+R\+ST}~0x80
+\item 
+\mbox{\Hypertarget{_ethernet_8h_ab20f2abe3961106b97c36ede5d77bfb9}\label{_ethernet_8h_ab20f2abe3961106b97c36ede5d77bfb9}} 
+\#define {\bfseries M\+A\+C\+O\+N2\+\_\+\+R\+N\+D\+R\+ST}~0x40
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a55d9baf2d11828fc3a193a002be9bd22}\label{_ethernet_8h_a55d9baf2d11828fc3a193a002be9bd22}} 
+\#define {\bfseries M\+A\+C\+O\+N2\+\_\+\+M\+A\+R\+X\+R\+ST}~0x08
+\item 
+\mbox{\Hypertarget{_ethernet_8h_ad372899ae444839145245c8756508c31}\label{_ethernet_8h_ad372899ae444839145245c8756508c31}} 
+\#define {\bfseries M\+A\+C\+O\+N2\+\_\+\+R\+F\+U\+N\+R\+ST}~0x04
+\item 
+\mbox{\Hypertarget{_ethernet_8h_ad1fbc29800b40b168368037ed9a85cb6}\label{_ethernet_8h_ad1fbc29800b40b168368037ed9a85cb6}} 
+\#define {\bfseries M\+A\+C\+O\+N2\+\_\+\+M\+A\+T\+X\+R\+ST}~0x02
+\item 
+\mbox{\Hypertarget{_ethernet_8h_ab07287e8a5f4d4a531343f6a5c8fc368}\label{_ethernet_8h_ab07287e8a5f4d4a531343f6a5c8fc368}} 
+\#define {\bfseries M\+A\+C\+O\+N2\+\_\+\+T\+F\+U\+N\+R\+ST}~0x01
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a2a908483af906e4a8da7b2f7679b0b5f}\label{_ethernet_8h_a2a908483af906e4a8da7b2f7679b0b5f}} 
+\#define {\bfseries M\+A\+C\+O\+N3\+\_\+\+P\+A\+D\+C\+F\+G2}~0x80
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a4efd0fbdf0ec4268228deacfebfa64b7}\label{_ethernet_8h_a4efd0fbdf0ec4268228deacfebfa64b7}} 
+\#define {\bfseries M\+A\+C\+O\+N3\+\_\+\+P\+A\+D\+C\+F\+G1}~0x40
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a92092773c7b76344f6c318f416007f5c}\label{_ethernet_8h_a92092773c7b76344f6c318f416007f5c}} 
+\#define {\bfseries M\+A\+C\+O\+N3\+\_\+\+P\+A\+D\+C\+F\+G0}~0x20
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a73e8f004b429cdbc2161d418b8e2e4c2}\label{_ethernet_8h_a73e8f004b429cdbc2161d418b8e2e4c2}} 
+\#define {\bfseries M\+A\+C\+O\+N3\+\_\+\+T\+X\+C\+R\+C\+EN}~0x10
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a33f45bb110bc5e1fff872d418a010371}\label{_ethernet_8h_a33f45bb110bc5e1fff872d418a010371}} 
+\#define {\bfseries M\+A\+C\+O\+N3\+\_\+\+P\+H\+D\+R\+L\+EN}~0x08
+\item 
+\mbox{\Hypertarget{_ethernet_8h_af32c059302221a9c8209e4483cfac422}\label{_ethernet_8h_af32c059302221a9c8209e4483cfac422}} 
+\#define {\bfseries M\+A\+C\+O\+N3\+\_\+\+H\+F\+R\+M\+L\+EN}~0x04
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a9cbf4c5171f6d945f142b8150aaf9c0e}\label{_ethernet_8h_a9cbf4c5171f6d945f142b8150aaf9c0e}} 
+\#define {\bfseries M\+A\+C\+O\+N3\+\_\+\+F\+R\+M\+L\+N\+EN}~0x02
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a4b3d2fc8f8ce15be89f1ba918fb03311}\label{_ethernet_8h_a4b3d2fc8f8ce15be89f1ba918fb03311}} 
+\#define {\bfseries M\+A\+C\+O\+N3\+\_\+\+F\+U\+L\+D\+PX}~0x01
+\item 
+\mbox{\Hypertarget{_ethernet_8h_ad4d797b2622ac7d03417e7d1cdf2cf6e}\label{_ethernet_8h_ad4d797b2622ac7d03417e7d1cdf2cf6e}} 
+\#define {\bfseries M\+I\+C\+M\+D\+\_\+\+M\+I\+I\+S\+C\+AN}~0x02
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a5c468f805202bfc0737c024cbd1be32c}\label{_ethernet_8h_a5c468f805202bfc0737c024cbd1be32c}} 
+\#define {\bfseries M\+I\+C\+M\+D\+\_\+\+M\+I\+I\+RD}~0x01
+\item 
+\mbox{\Hypertarget{_ethernet_8h_ad647dd76e4085dbcd7fd9fb0a9302c3d}\label{_ethernet_8h_ad647dd76e4085dbcd7fd9fb0a9302c3d}} 
+\#define {\bfseries M\+I\+S\+T\+A\+T\+\_\+\+N\+V\+A\+L\+ID}~0x04
+\item 
+\mbox{\Hypertarget{_ethernet_8h_afb43454dd912607f90782c6d18df8c12}\label{_ethernet_8h_afb43454dd912607f90782c6d18df8c12}} 
+\#define {\bfseries M\+I\+S\+T\+A\+T\+\_\+\+S\+C\+AN}~0x02
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a22b9a31e2a6d031cd672eed1ad883ba8}\label{_ethernet_8h_a22b9a31e2a6d031cd672eed1ad883ba8}} 
+\#define {\bfseries M\+I\+S\+T\+A\+T\+\_\+\+B\+U\+SY}~0x01
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a3b13c70f7318bbdfec1c49d048f7610a}\label{_ethernet_8h_a3b13c70f7318bbdfec1c49d048f7610a}} 
+\#define {\bfseries P\+H\+C\+O\+N1\+\_\+\+P\+R\+ST}~0x8000
+\item 
+\mbox{\Hypertarget{_ethernet_8h_acbef2d9e9f4e233a149730bbdb2c0009}\label{_ethernet_8h_acbef2d9e9f4e233a149730bbdb2c0009}} 
+\#define {\bfseries P\+H\+C\+O\+N1\+\_\+\+P\+L\+O\+O\+P\+BK}~0x4000
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a5165842cfe6a2246596b6e2ddc48b8c3}\label{_ethernet_8h_a5165842cfe6a2246596b6e2ddc48b8c3}} 
+\#define {\bfseries P\+H\+C\+O\+N1\+\_\+\+P\+P\+W\+R\+SV}~0x0800
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a8b09db143b4e790b8c19205ecdd5bec3}\label{_ethernet_8h_a8b09db143b4e790b8c19205ecdd5bec3}} 
+\#define {\bfseries P\+H\+C\+O\+N1\+\_\+\+P\+D\+P\+X\+MD}~0x0100
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a983d1ada3e9b2ab49806cccd18c82abd}\label{_ethernet_8h_a983d1ada3e9b2ab49806cccd18c82abd}} 
+\#define {\bfseries P\+H\+S\+T\+A\+T1\+\_\+\+P\+F\+D\+PX}~0x1000
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a8c8b01b101b4804e449c1cac5cdfe536}\label{_ethernet_8h_a8c8b01b101b4804e449c1cac5cdfe536}} 
+\#define {\bfseries P\+H\+S\+T\+A\+T1\+\_\+\+P\+H\+D\+PX}~0x0800
+\item 
+\mbox{\Hypertarget{_ethernet_8h_adb7600331cca33cdaae68bb171dcf161}\label{_ethernet_8h_adb7600331cca33cdaae68bb171dcf161}} 
+\#define {\bfseries P\+H\+S\+T\+A\+T1\+\_\+\+L\+L\+S\+T\+AT}~0x0004
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a02146c30f24ea1db705628beadbfdc2f}\label{_ethernet_8h_a02146c30f24ea1db705628beadbfdc2f}} 
+\#define {\bfseries P\+H\+S\+T\+A\+T1\+\_\+\+J\+B\+S\+T\+AT}~0x0002
+\item 
+\mbox{\Hypertarget{_ethernet_8h_ab34b4f3c597576748622faa7fda75961}\label{_ethernet_8h_ab34b4f3c597576748622faa7fda75961}} 
+\#define {\bfseries P\+H\+C\+O\+N2\+\_\+\+F\+R\+C\+L\+I\+NK}~0x4000
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a3b6de47ed62173b51a17ef84f05cdacc}\label{_ethernet_8h_a3b6de47ed62173b51a17ef84f05cdacc}} 
+\#define {\bfseries P\+H\+C\+O\+N2\+\_\+\+T\+X\+D\+IS}~0x2000
+\item 
+\mbox{\Hypertarget{_ethernet_8h_ad90179b1e67d14d774755d0ab1b74151}\label{_ethernet_8h_ad90179b1e67d14d774755d0ab1b74151}} 
+\#define {\bfseries P\+H\+C\+O\+N2\+\_\+\+J\+A\+B\+B\+ER}~0x0400
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a67f4baba49a56729548246a2c4cf60c4}\label{_ethernet_8h_a67f4baba49a56729548246a2c4cf60c4}} 
+\#define {\bfseries P\+H\+C\+O\+N2\+\_\+\+H\+D\+L\+D\+IS}~0x0100
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a7ab72c3f8b20559aa6d295c2f8bb2f98}\label{_ethernet_8h_a7ab72c3f8b20559aa6d295c2f8bb2f98}} 
+\#define {\bfseries P\+K\+T\+C\+T\+R\+L\+\_\+\+P\+H\+U\+G\+E\+EN}~0x08
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a23c013afe30162229cb35cf2d51da591}\label{_ethernet_8h_a23c013afe30162229cb35cf2d51da591}} 
+\#define {\bfseries P\+K\+T\+C\+T\+R\+L\+\_\+\+P\+P\+A\+D\+EN}~0x04
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a8da16ac32f1b7a508017903bd5dc78d1}\label{_ethernet_8h_a8da16ac32f1b7a508017903bd5dc78d1}} 
+\#define {\bfseries P\+K\+T\+C\+T\+R\+L\+\_\+\+P\+C\+R\+C\+EN}~0x02
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a3f9c6a5e29f732210f35bb8a8126445d}\label{_ethernet_8h_a3f9c6a5e29f732210f35bb8a8126445d}} 
+\#define {\bfseries P\+K\+T\+C\+T\+R\+L\+\_\+\+P\+O\+V\+E\+R\+R\+I\+DE}~0x01
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a30fc7709c1cdffc38bd8949480456470}\label{_ethernet_8h_a30fc7709c1cdffc38bd8949480456470}} 
+\#define {\bfseries R\+X\+S\+T\+A\+R\+T\+\_\+\+I\+N\+IT}~0x0
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a410181bf68959f297703e3afdf73454b}\label{_ethernet_8h_a410181bf68959f297703e3afdf73454b}} 
+\#define {\bfseries R\+X\+S\+T\+O\+P\+\_\+\+I\+N\+IT}~(0x1\+F\+F\+F-\/0x0600-\/1)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_aa9108e0c4b3004b06668c1f213cbfbad}\label{_ethernet_8h_aa9108e0c4b3004b06668c1f213cbfbad}} 
+\#define {\bfseries T\+X\+S\+T\+A\+R\+T\+\_\+\+I\+N\+IT}~(0x1\+F\+F\+F-\/0x0600)
+\item 
+\mbox{\Hypertarget{_ethernet_8h_ac199471e69f679cbf9e5e69c1d34bcef}\label{_ethernet_8h_ac199471e69f679cbf9e5e69c1d34bcef}} 
+\#define {\bfseries T\+X\+S\+T\+O\+P\+\_\+\+I\+N\+IT}~0x1\+F\+FF
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a685a78b7765b2e4683a6e156cb08f553}\label{_ethernet_8h_a685a78b7765b2e4683a6e156cb08f553}} 
+\#define {\bfseries M\+A\+X\+\_\+\+F\+R\+A\+M\+E\+L\+EN}~1500
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{_ethernet_8h_a572c72b2a5d733ffa42948217b88c859}{read\+Basic}} (uint8\+\_\+t op, uint8\+\_\+t address)
+\begin{DoxyCompactList}\small\item\em Performs a low level read operation of a register. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_ethernet_8h_a3b4720ee947ebfc7ef6f78b5bf7f908e}{write\+Basic}} (uint8\+\_\+t op, uint8\+\_\+t address, uint8\+\_\+t data)
+\begin{DoxyCompactList}\small\item\em Performs a low level write operation of a register. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_ethernet_8h_ad70790336fc77ed46bb37335070ab701}{read\+Buffer}} (uint8\+\_\+t len, uint8\+\_\+t $\ast$data)
+\begin{DoxyCompactList}\small\item\em Reads a specified number of bytes from the buffer and stores them in an array. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_ethernet_8h_a1ec20cb477cceb19339d0c85c1ea3f2d}{write\+Buffer}} (uint8\+\_\+t len, uint8\+\_\+t $\ast$data)
+\begin{DoxyCompactList}\small\item\em Writes a specified number of bytes into the buffer memory. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_ethernet_8h_abc02bef712b1833f950bb0d0f6d8cfbb}{set\+Bank}} (uint8\+\_\+t address)
+\begin{DoxyCompactList}\small\item\em Set the current bank to that which corresponds to that of a specified register for the E\+N\+C28\+J60. \end{DoxyCompactList}\item 
+uint8\+\_\+t \mbox{\hyperlink{_ethernet_8h_a2209347bbe1ae9f1c7eb0ebca476c738}{Register\+Read}} (uint8\+\_\+t address)
+\begin{DoxyCompactList}\small\item\em Reads the value for a specified register in memory for the E\+N\+C28\+J60. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_ethernet_8h_abea2558cf4cce4894ce8c10e4bad336e}{Register\+Write}} (uint8\+\_\+t address, uint8\+\_\+t data)
+\begin{DoxyCompactList}\small\item\em Writes a byte of data to a specified register location for the E\+N\+C28\+J60. \end{DoxyCompactList}\item 
+uint16\+\_\+t \mbox{\hyperlink{_ethernet_8h_a7ccc6cf3c31ec6e940d59ba624f6475e}{Phy\+Read}} (uint8\+\_\+t address)
+\begin{DoxyCompactList}\small\item\em Reads from a register location from the P\+HY module within the E\+N\+C28\+J60. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_ethernet_8h_a8d0157635c4899444e7e6e03611338a2}{Phy\+Write}} (uint8\+\_\+t address, uint16\+\_\+t data)
+\begin{DoxyCompactList}\small\item\em Writes to a register location in the P\+HY module within the E\+N\+C28\+J60. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_ethernet_8h_adc041443ef6fa5494279d2c71caea464}{Init\+Phy}} (void)
+\begin{DoxyCompactList}\small\item\em Initialization routine for using the P\+HY module of the E\+N\+C18\+J60, mostly sets L\+ED blink patterns. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_ethernet_8h_a8babb527fd3779d20aa43951ffc6e475}{Init\+Ethernet}} (void)
+\begin{DoxyCompactList}\small\item\em Initialization routine for use of the E\+N\+C28\+J60 in this project. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_ethernet_8h_abfac85317b9c1522c7b5196d94e471bd}{wait\+MS}} (uint16\+\_\+t msec)
+\begin{DoxyCompactList}\small\item\em Waits for a designated number of milliseconds. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_ethernet_8h_aa2b63dd88471c29c579eccd9c7aab493}{packet\+Send}} (uint8\+\_\+t len, uint8\+\_\+t $\ast$packet)
+\begin{DoxyCompactList}\small\item\em Sends a packet of information using the Ethernet module. \end{DoxyCompactList}\item 
+uint16\+\_\+t \mbox{\hyperlink{_ethernet_8h_a5bd649237943093785e9102edb256a56}{packet\+Recieve}} (uint8\+\_\+t max\+\_\+length, uint8\+\_\+t $\ast$packets)
+\begin{DoxyCompactList}\small\item\em Receives packet of information which is waiting in the buffer. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_ethernet_8h_a8f98d3be0e5169ea19d39b9cfc093f34}{transmit\+Header}} (uint8\+\_\+t $\ast$buffer)
+\begin{DoxyCompactList}\small\item\em Place the proper header bytes to the beginning of the array which will hold the message. \end{DoxyCompactList}\item 
+uint8\+\_\+t \mbox{\hyperlink{_ethernet_8h_a5d16624bda4278d3e38b5a2748cae427}{load\+Data}} (uint8\+\_\+t $\ast$full\+Message, uint8\+\_\+t $\ast$message, uint8\+\_\+t len)
+\begin{DoxyCompactList}\small\item\em Places data from temporary string into the final array which will be sent to the E\+N\+C28\+J60. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_ethernet_8h_a42af1f96afdc7493b47219e8d7164356}{read\+T\+X\+\_\+\+Status\+Vec}} (uint8\+\_\+t $\ast$Status)
+\begin{DoxyCompactList}\small\item\em Reads the transmit status vector from the address which is the end of the transmit buffer + 1. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a0528e4c8755445bd216a821e2fe1c018}\label{_ethernet_8h_a0528e4c8755445bd216a821e2fe1c018}} 
+uint8\+\_\+t {\bfseries bank\+Number}
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a3d18e45781562703b86e6f04d7602c44}\label{_ethernet_8h_a3d18e45781562703b86e6f04d7602c44}} 
+uint16\+\_\+t {\bfseries next\+Packet\+Ptr}
+\item 
+\mbox{\Hypertarget{_ethernet_8h_a7ae5a3779019849adfd88733922dd299}\label{_ethernet_8h_a7ae5a3779019849adfd88733922dd299}} 
+uint8\+\_\+t {\bfseries trash}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Control register definitions and function prototypes for the E\+N\+C28\+J60 Ethernet controller. 
+
+\begin{DoxyAuthor}{Author}
+Nick Moore 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+June 21, 2018 
+\end{DoxyDate}
+\begin{DoxyRefDesc}{Bug}
+\item[\mbox{\hyperlink{bug__bug000006}{Bug}}]No known bugs \end{DoxyRefDesc}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{_ethernet_8h_a8babb527fd3779d20aa43951ffc6e475}\label{_ethernet_8h_a8babb527fd3779d20aa43951ffc6e475}} 
+\index{Ethernet.\+h@{Ethernet.\+h}!Init\+Ethernet@{Init\+Ethernet}}
+\index{Init\+Ethernet@{Init\+Ethernet}!Ethernet.\+h@{Ethernet.\+h}}
+\subsubsection{\texorpdfstring{Init\+Ethernet()}{InitEthernet()}}
+{\footnotesize\ttfamily void Init\+Ethernet (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Initialization routine for use of the E\+N\+C28\+J60 in this project. 
+
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 256 of file Ethernet.\+c.
+
+
+
+References read\+Basic().
+
+
+\begin{DoxyCode}
+257 \{
+258     \textcolor{comment}{// First perform a system reset.  This will ensure register start with their expected values}
+259     \mbox{\hyperlink{_ethernet_8c_a572c72b2a5d733ffa42948217b88c859}{readBasic}}(SOFT\_RESET,SOFT\_RESET);        \textcolor{comment}{// normally read returns something but this will
+       serve as a write with fewer operations}
+260     \mbox{\hyperlink{_ethernet_8c_abfac85317b9c1522c7b5196d94e471bd}{waitMS}}(50);                              \textcolor{comment}{// give the chip time to restart}
+261     
+263     nextPacketPtr = RXSTART\_INIT;
+264     
+265     \textcolor{comment}{// Rx start}
+266     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ERXSTL, RXSTART\_INIT);        \textcolor{comment}{// Low byte first and then high byte}
+267     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ERXSTH, RXSTART\_INIT >> 8);
+268     
+269     \textcolor{comment}{// Now set the current receive pointer address}
+270     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ERDPTL, RXSTART\_INIT);
+271     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ERDPTH, RXSTART\_INIT >> 8);   \textcolor{comment}{// Again, low byte first}
+272     
+273     \textcolor{comment}{// RX end}
+274     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ERXNDL, RXSTOP\_INIT & 0xFF);    \textcolor{comment}{// doing the 0xFF will trim off the higher
+       byte}
+275     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ERXNDH, RXSTOP\_INIT >> 8);
+276     
+277     \textcolor{comment}{// TX Start}
+278     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ETXSTL, TXSTART\_INIT & 0xFF);
+279     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ETXSTH, TXSTART\_INIT >> 8);
+280     
+281     \textcolor{comment}{// TX end}
+282     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ETXNDL, TXSTOP\_INIT & 0xFF);
+283     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ETXNDH, TXSTOP\_INIT >> 8);
+284     
+285     \textcolor{comment}{// Now configure the packet filters}
+286     \textcolor{comment}{// Everything will be filtered with Unicast}
+287     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ERXFCON, ERXFCON\_ANDOR);      \textcolor{comment}{// have no filters for now}
+288     \textcolor{comment}{//RegisterWrite(ERXFCON, ERXFCON\_UCEN | ERXFCON\_ANDOR);}
+289     \textcolor{comment}{// The above line will ignore all packets which don't have the destination address}
+290     \textcolor{comment}{// matching this device's MAC address}
+291     
+292     \textcolor{comment}{// Now enable the MAC and other features}
+293     \textcolor{comment}{// This will enable the MAC to receive packets}
+294     \textcolor{comment}{// allow MAC to transmit pause control frame}
+295     \textcolor{comment}{// and inhibit transmission when pause control frames are received}
+296     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(MACON1, MACON1\_MARXEN | MACON1\_TXPAUS | MACON1\_RXPAUS);
+297     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(MACON2, 0);     \textcolor{comment}{// this will cause the MAC to enter "normal operation" as
+       per the data sheet p61}
+298     \textcolor{comment}{//writeBasic(BIT\_FIELD\_SET, MACON3,MACON3\_FRMLNEN);     // This will check to make sure that the frame
+       length is what it said it was going to be and not impact the others}
+299     
+300     \textcolor{comment}{// Now do Inter-Packet gap (not back-to-back)}
+301     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(MAIPGL, 0x12);      \textcolor{comment}{// This was what the data sheet recommended (p34)}
+302     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(MAIPGH, 0x0C);      \textcolor{comment}{// Also what the data sheet recommended}
+303     
+304     \textcolor{comment}{// Now write the MAC Address to the device}
+305     \textcolor{comment}{// Note, the ENC28J60 is byte backwards, at least that is the consensus on the Internet}
+306     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(MAADR5, ESB\_mac[0]);
+307     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(MAADR4, ESB\_mac[1]);
+308     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(MAADR3, ESB\_mac[2]);
+309     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(MAADR2, ESB\_mac[3]);
+310     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(MAADR1, ESB\_mac[4]);
+311     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(MAADR0, ESB\_mac[5]);
+312     
+313     \textcolor{comment}{// Now prevent loop back of transmitted frames}
+314     \mbox{\hyperlink{_ethernet_8c_a8d0157635c4899444e7e6e03611338a2}{PhyWrite}}(PHCON2, PHCON2\_HDLDIS | PHCON2\_FRCLINK);
+315     
+316     \textcolor{comment}{// enable packet reception}
+317     \mbox{\hyperlink{_ethernet_8c_a3b4720ee947ebfc7ef6f78b5bf7f908e}{writeBasic}}(BIT\_FIELD\_SET, ECON1, ECON1\_RXEN);
+318     
+319     \textcolor{comment}{// now enable the interrupt flags}
+320     \mbox{\hyperlink{_ethernet_8c_a3b4720ee947ebfc7ef6f78b5bf7f908e}{writeBasic}}(BIT\_FIELD\_SET, EIE, EIE\_PKTIE | EIE\_TXIE | EIE\_TXERIE | EIE\_RXERIE);
+321     \textcolor{comment}{// The above line will enable the interrupt flags for Receive Packet Pending, Transmit, Transmit error,
+       and receive packet error}
+322     
+323 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_ethernet_8h_adc041443ef6fa5494279d2c71caea464}\label{_ethernet_8h_adc041443ef6fa5494279d2c71caea464}} 
+\index{Ethernet.\+h@{Ethernet.\+h}!Init\+Phy@{Init\+Phy}}
+\index{Init\+Phy@{Init\+Phy}!Ethernet.\+h@{Ethernet.\+h}}
+\subsubsection{\texorpdfstring{Init\+Phy()}{InitPhy()}}
+{\footnotesize\ttfamily void Init\+Phy (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Initialization routine for using the P\+HY module of the E\+N\+C18\+J60, mostly sets L\+ED blink patterns. 
+
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 209 of file Ethernet.\+c.
+
+
+
+References Phy\+Write().
+
+
+\begin{DoxyCode}
+210 \{
+211     \textcolor{comment}{// Turn the LEDs on}
+212     \mbox{\hyperlink{_ethernet_8c_a8d0157635c4899444e7e6e03611338a2}{PhyWrite}}(PHLCON, LED\_on);             \textcolor{comment}{// Turn both LEDs on}
+213     \mbox{\hyperlink{_ethernet_8c_abfac85317b9c1522c7b5196d94e471bd}{waitMS}}(500);
+214     \textcolor{comment}{// Turn the LEDs off}
+215     \mbox{\hyperlink{_ethernet_8c_a8d0157635c4899444e7e6e03611338a2}{PhyWrite}}(PHLCON, LED\_off);
+216     \mbox{\hyperlink{_ethernet_8c_abfac85317b9c1522c7b5196d94e471bd}{waitMS}}(500);
+217     
+218     \textcolor{comment}{// Turn the LEDs back on}
+219     \mbox{\hyperlink{_ethernet_8c_a8d0157635c4899444e7e6e03611338a2}{PhyWrite}}(PHLCON, LED\_on);
+220     \mbox{\hyperlink{_ethernet_8c_abfac85317b9c1522c7b5196d94e471bd}{waitMS}}(500);
+221     
+222     \textcolor{comment}{// Turn LEDs off again}
+223     \mbox{\hyperlink{_ethernet_8c_a8d0157635c4899444e7e6e03611338a2}{PhyWrite}}(PHLCON, LED\_off);
+224     \mbox{\hyperlink{_ethernet_8c_abfac85317b9c1522c7b5196d94e471bd}{waitMS}}(500);
+225     
+226     \textcolor{comment}{// Set the LEDs for normal operation}
+227     \textcolor{comment}{// This means that LEDA (green) will correspond to link status}
+228     \textcolor{comment}{// And LEDB (yellow) will correspond to receive/transmit}
+229     \mbox{\hyperlink{_ethernet_8c_a8d0157635c4899444e7e6e03611338a2}{PhyWrite}}(PHLCON, LED\_normal);
+230     \mbox{\hyperlink{_ethernet_8c_abfac85317b9c1522c7b5196d94e471bd}{waitMS}}(100);                     \textcolor{comment}{// The example code has this in here, don't know if I really
+       need it}
+231 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_ethernet_8h_a5d16624bda4278d3e38b5a2748cae427}\label{_ethernet_8h_a5d16624bda4278d3e38b5a2748cae427}} 
+\index{Ethernet.\+h@{Ethernet.\+h}!load\+Data@{load\+Data}}
+\index{load\+Data@{load\+Data}!Ethernet.\+h@{Ethernet.\+h}}
+\subsubsection{\texorpdfstring{load\+Data()}{loadData()}}
+{\footnotesize\ttfamily uint8\+\_\+t load\+Data (\begin{DoxyParamCaption}\item[{uint8\+\_\+t $\ast$}]{full\+Message,  }\item[{uint8\+\_\+t $\ast$}]{message,  }\item[{uint8\+\_\+t}]{len }\end{DoxyParamCaption})}
+
+
+
+Places data from temporary string into the final array which will be sent to the E\+N\+C28\+J60. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em full\+Message} & Final array which will be sent to the E\+N\+C28\+J60 \\
+\hline
+\mbox{\tt in}  & {\em message} & Original and temporary array containing the user\textquotesingle{}s message to sent \\
+\hline
+\mbox{\tt in}  & {\em len} & The length of the sub array of message that is wanting to be sent \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 438 of file Ethernet.\+c.
+
+
+\begin{DoxyCode}
+439 \{
+440     uint8\_t i = 0;
+441     
+442     \textcolor{comment}{// First load the length of the message}
+443     fullMessage[LEN\_INDEX] = len + 14;
+444     fullMessage[LEN\_INDEX + 1] = 0;    \textcolor{comment}{// Since I know the length will be much less than 256}
+445     
+446     \textcolor{comment}{// Next load the MAC Addresses into the full message}
+447     \mbox{\hyperlink{_ethernet_8c_a8f98d3be0e5169ea19d39b9cfc093f34}{transmitHeader}}(fullMessage);
+448     
+449     \textcolor{comment}{// Now load the data from the message into the full message}
+450     \textcolor{keywordflow}{while} (i < len)
+451     \{
+452         fullMessage[LEN\_INDEX + 2 + i] = message[i];
+453         i++;
+454     \}
+455     \textcolor{keywordflow}{return} (14 + len);
+456 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_ethernet_8h_a5bd649237943093785e9102edb256a56}\label{_ethernet_8h_a5bd649237943093785e9102edb256a56}} 
+\index{Ethernet.\+h@{Ethernet.\+h}!packet\+Recieve@{packet\+Recieve}}
+\index{packet\+Recieve@{packet\+Recieve}!Ethernet.\+h@{Ethernet.\+h}}
+\subsubsection{\texorpdfstring{packet\+Recieve()}{packetRecieve()}}
+{\footnotesize\ttfamily uint16\+\_\+t packet\+Recieve (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{max\+\_\+length,  }\item[{uint8\+\_\+t $\ast$}]{packets }\end{DoxyParamCaption})}
+
+
+
+Receives packet of information which is waiting in the buffer. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em max\+\_\+length} & The maximum length (in bytes) that will be read \\
+\hline
+\mbox{\tt out}  & {\em packets} & Array for where to place the data which is sitting in the buffer \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 363 of file Ethernet.\+c.
+
+
+
+References Register\+Read().
+
+
+\begin{DoxyCode}
+364 \{
+365     uint16\_t rxstat;
+366     uint16\_t len;
+367     
+368     \textcolor{comment}{// Check to see if a packet has been received, if not, then return}
+369     \textcolor{keywordflow}{if} (!\mbox{\hyperlink{_ethernet_8c_a2209347bbe1ae9f1c7eb0ebca476c738}{RegisterRead}}(EPKTCNT))
+370         \textcolor{keywordflow}{return}(0);
+371         
+372     \textcolor{comment}{// Set the read pointer to the start of the received packet}
+373     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ERDPTL, nextPacketPtr);
+374     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ERDPTH, nextPacketPtr >> 8);
+375     
+376     \textcolor{comment}{// Read the next packet pointer (see page 43 in data sheet)}
+377     nextPacketPtr = \mbox{\hyperlink{_ethernet_8c_a572c72b2a5d733ffa42948217b88c859}{readBasic}}(READ\_BUF\_MEM, 0);
+378     nextPacketPtr |= \mbox{\hyperlink{_ethernet_8c_a572c72b2a5d733ffa42948217b88c859}{readBasic}}(READ\_BUF\_MEM, 0) << 8;
+379     \textcolor{comment}{// Reading from the memory buffer automatically increments to the next byte}
+380     
+381     \textcolor{comment}{// read the packet length}
+382     len = \mbox{\hyperlink{_ethernet_8c_a572c72b2a5d733ffa42948217b88c859}{readBasic}}(READ\_BUF\_MEM, 0);
+383     len |= \mbox{\hyperlink{_ethernet_8c_a572c72b2a5d733ffa42948217b88c859}{readBasic}}(READ\_BUF\_MEM, 0) << 8;
+384     \textcolor{comment}{// in the example, 4 is subtracted from this but I don't have CRC checking implemented since I don't
+       think it is necessary}
+385     
+386     \textcolor{comment}{// read the receive status}
+387     rxstat = \mbox{\hyperlink{_ethernet_8c_a572c72b2a5d733ffa42948217b88c859}{readBasic}}(READ\_BUF\_MEM, 0);
+388     rxstat |= \mbox{\hyperlink{_ethernet_8c_a572c72b2a5d733ffa42948217b88c859}{readBasic}}(READ\_BUF\_MEM, 0) << 8;
+389     
+390     \textcolor{comment}{// limit the receive length}
+391     \textcolor{keywordflow}{if} (len > max\_length)
+392         len = max\_length;
+393         
+394     \textcolor{comment}{// check for symbol errors}
+395     \textcolor{keywordflow}{if} (!(rxstat & 0x80))\{
+396         \textcolor{comment}{// this is an invalid packet}
+397         len = 0;
+398     \}
+399     \textcolor{keywordflow}{else}\{
+400         \mbox{\hyperlink{_ethernet_8c_ad70790336fc77ed46bb37335070ab701}{readBuffer}}(len, packets);
+401     \}
+402     
+403     \textcolor{comment}{// move the RX pointer to the start of the next received packet}
+404     \textcolor{comment}{// This frees the memory we just read out}
+405     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ERXRDPTL, nextPacketPtr);
+406     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ERXRDPTH, nextPacketPtr >> 8);
+407         
+408     \textcolor{comment}{// decrement the packet counter indicate we are done with this packet}
+409     \mbox{\hyperlink{_ethernet_8c_a3b4720ee947ebfc7ef6f78b5bf7f908e}{writeBasic}}(BIT\_FIELD\_SET, ECON2, ECON2\_PKTDEC);
+410     \textcolor{keywordflow}{return}(len);
+411 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_ethernet_8h_aa2b63dd88471c29c579eccd9c7aab493}\label{_ethernet_8h_aa2b63dd88471c29c579eccd9c7aab493}} 
+\index{Ethernet.\+h@{Ethernet.\+h}!packet\+Send@{packet\+Send}}
+\index{packet\+Send@{packet\+Send}!Ethernet.\+h@{Ethernet.\+h}}
+\subsubsection{\texorpdfstring{packet\+Send()}{packetSend()}}
+{\footnotesize\ttfamily void packet\+Send (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{len,  }\item[{uint8\+\_\+t $\ast$}]{packet }\end{DoxyParamCaption})}
+
+
+
+Sends a packet of information using the Ethernet module. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em len} & Entire length of the packet \\
+\hline
+\mbox{\tt in}  & {\em packet} & Array containing the data for the packet \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 331 of file Ethernet.\+c.
+
+
+
+References Register\+Write().
+
+
+\begin{DoxyCode}
+332 \{
+333     \textcolor{comment}{// Set the write pointer to start of transmit buffer area}
+334     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(EWRPTL, TXSTART\_INIT & 0xFF);
+335     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(EWRPTH, TXSTART\_INIT >> 8);
+336     
+337     \textcolor{comment}{// Set the TXND pointer to correspond to the packet size given}
+338     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ETXNDL, (TXSTART\_INIT + len) & 0xFF);
+339     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ETXNDH, (TXSTART\_INIT + len) >> 8);
+340     
+341     \textcolor{comment}{// write per-packet control byte (0x00 means use macon3 settings)}
+342     \mbox{\hyperlink{_ethernet_8c_a3b4720ee947ebfc7ef6f78b5bf7f908e}{writeBasic}}(WRITE\_BUF\_MEM, 0, 0x00);   \textcolor{comment}{// 0 for address because 0x7A is already in the first
+       argument}
+343     
+344     \textcolor{comment}{// copy the packet into the transmit buffer}
+345     \mbox{\hyperlink{_ethernet_8c_a1ec20cb477cceb19339d0c85c1ea3f2d}{writeBuffer}}(len, packet);
+346     
+347     \textcolor{comment}{// send the contents of the transmit buffer onto the network}
+348     \mbox{\hyperlink{_ethernet_8c_a3b4720ee947ebfc7ef6f78b5bf7f908e}{writeBasic}}(BIT\_FIELD\_SET, ECON1, ECON1\_TXRTS);
+349     
+350     \textcolor{comment}{// Reset the transmit logic problem. See Rev. B4 Silicon Errata point 12.}
+351     \textcolor{keywordflow}{if}((\mbox{\hyperlink{_ethernet_8c_a2209347bbe1ae9f1c7eb0ebca476c738}{RegisterRead}}(EIR) & EIR\_TXERIF))
+352     \{
+353         \mbox{\hyperlink{_ethernet_8c_a3b4720ee947ebfc7ef6f78b5bf7f908e}{writeBasic}}(BIT\_FIELD\_CLR, ECON1, ECON1\_TXRTS);
+354     \}
+355 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_ethernet_8h_a7ccc6cf3c31ec6e940d59ba624f6475e}\label{_ethernet_8h_a7ccc6cf3c31ec6e940d59ba624f6475e}} 
+\index{Ethernet.\+h@{Ethernet.\+h}!Phy\+Read@{Phy\+Read}}
+\index{Phy\+Read@{Phy\+Read}!Ethernet.\+h@{Ethernet.\+h}}
+\subsubsection{\texorpdfstring{Phy\+Read()}{PhyRead()}}
+{\footnotesize\ttfamily uint16\+\_\+t Phy\+Read (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{address }\end{DoxyParamCaption})}
+
+
+
+Reads from a register location from the P\+HY module within the E\+N\+C28\+J60. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em address} & Name of the register to read from \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+uint16\+\_\+t The value within the specified register 
+\end{DoxyReturn}
+
+
+Definition at line 164 of file Ethernet.\+c.
+
+
+
+References Register\+Write().
+
+
+\begin{DoxyCode}
+165 \{
+166     \textcolor{comment}{// First I need to set the PHY register address}
+167     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(MIREGADR, address);
+168     
+169     \textcolor{comment}{// Now set the MICMD.MIIRD bit}
+170     \mbox{\hyperlink{_ethernet_8c_a3b4720ee947ebfc7ef6f78b5bf7f908e}{writeBasic}}(BIT\_FIELD\_SET, MICMD, MICMD\_MIIRD);
+171     
+172     \textcolor{comment}{// now wait for at least 10.24 us}
+173     \mbox{\hyperlink{_ethernet_8c_abfac85317b9c1522c7b5196d94e471bd}{waitMS}}(15);
+174     
+175     \textcolor{comment}{// Now clear the MIIRD bit}
+176     \mbox{\hyperlink{_ethernet_8c_a3b4720ee947ebfc7ef6f78b5bf7f908e}{writeBasic}}(BIT\_FIELD\_CLR, MICMD, MICMD\_MIIRD);
+177     
+178     uint16\_t data = 0;
+179     data |= \mbox{\hyperlink{_ethernet_8c_a2209347bbe1ae9f1c7eb0ebca476c738}{RegisterRead}}(MIRDL);
+180     data |= (\mbox{\hyperlink{_ethernet_8c_a2209347bbe1ae9f1c7eb0ebca476c738}{RegisterRead}}(MIRDH) << 8);
+181     
+182     \textcolor{keywordflow}{return} data;
+183 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_ethernet_8h_a8d0157635c4899444e7e6e03611338a2}\label{_ethernet_8h_a8d0157635c4899444e7e6e03611338a2}} 
+\index{Ethernet.\+h@{Ethernet.\+h}!Phy\+Write@{Phy\+Write}}
+\index{Phy\+Write@{Phy\+Write}!Ethernet.\+h@{Ethernet.\+h}}
+\subsubsection{\texorpdfstring{Phy\+Write()}{PhyWrite()}}
+{\footnotesize\ttfamily void Phy\+Write (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{address,  }\item[{uint16\+\_\+t}]{data }\end{DoxyParamCaption})}
+
+
+
+Writes to a register location in the P\+HY module within the E\+N\+C28\+J60. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em address} & Name of the register to write to \\
+\hline
+\mbox{\tt in}  & {\em data} & 16 bit value which will be written into the register \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 191 of file Ethernet.\+c.
+
+
+
+References Register\+Write().
+
+
+\begin{DoxyCode}
+192 \{
+193     \textcolor{comment}{// first need to set the PHY register address}
+194     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(MIREGADR, PHLCON);
+195     \textcolor{comment}{// Write the PHY data}
+196     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(MIWRL, data & 0xFF);
+197     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(MIWRH, data >> 8);
+198         
+199     \textcolor{comment}{// now need to wait for 10.24 us, but I will just poll for the end of the waiting time after 1 waiting
+       cycle}
+200     \textcolor{keywordflow}{while}(\mbox{\hyperlink{_ethernet_8c_a2209347bbe1ae9f1c7eb0ebca476c738}{RegisterRead}}(MISTAT) & MISTAT\_BUSY)
+201         \mbox{\hyperlink{_ethernet_8c_abfac85317b9c1522c7b5196d94e471bd}{waitMS}}(15);
+202     
+203 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_ethernet_8h_a572c72b2a5d733ffa42948217b88c859}\label{_ethernet_8h_a572c72b2a5d733ffa42948217b88c859}} 
+\index{Ethernet.\+h@{Ethernet.\+h}!read\+Basic@{read\+Basic}}
+\index{read\+Basic@{read\+Basic}!Ethernet.\+h@{Ethernet.\+h}}
+\subsubsection{\texorpdfstring{read\+Basic()}{readBasic()}}
+{\footnotesize\ttfamily uint8\+\_\+t read\+Basic (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{op,  }\item[{uint8\+\_\+t}]{address }\end{DoxyParamCaption})}
+
+
+
+Performs a low level read operation of a register. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em op} & This will be implemented in the function call to be the register read op code \\
+\hline
+\mbox{\tt in}  & {\em address} & This is 5 bits which correspond to the desired register \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+uint8\+\_\+t 
+\end{DoxyReturn}
+
+
+Definition at line 25 of file Ethernet.\+c.
+
+
+\begin{DoxyCode}
+26 \{
+27     CSACTIVE;
+28     \textcolor{comment}{// Now tell the chip that I am trying to read}
+29     SPDR = op | (address & ADDR\_MSK);     \textcolor{comment}{// this will make it so only the last 5 bits are preserved of the
+       address}
+30     waitSPI();                            \textcolor{comment}{// wait for the SPI interrupt flag to be set}
+31     
+32     \textcolor{comment}{// read the data}
+33     SPDR = 0;                            
+34     waitSPI(); 
+35      
+36     \textcolor{comment}{// If the address is a MAC or MII register then the byte which will be picked up by SPRD}
+37     \textcolor{comment}{// will be dummy data}
+38     \textcolor{keywordflow}{if} (address & 0x80)\{
+39         SPDR = 0;
+40         waitSPI();
+41     \}
+42     CSPASSIVE;                           \textcolor{comment}{// raise the CS line}
+43     \textcolor{keywordflow}{return} SPDR;
+44 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_ethernet_8h_ad70790336fc77ed46bb37335070ab701}\label{_ethernet_8h_ad70790336fc77ed46bb37335070ab701}} 
+\index{Ethernet.\+h@{Ethernet.\+h}!read\+Buffer@{read\+Buffer}}
+\index{read\+Buffer@{read\+Buffer}!Ethernet.\+h@{Ethernet.\+h}}
+\subsubsection{\texorpdfstring{read\+Buffer()}{readBuffer()}}
+{\footnotesize\ttfamily void read\+Buffer (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{len,  }\item[{uint8\+\_\+t $\ast$}]{data }\end{DoxyParamCaption})}
+
+
+
+Reads a specified number of bytes from the buffer and stores them in an array. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em len} & The number of bytes to be read from the buffer \\
+\hline
+\mbox{\tt out}  & {\em data} & pointer to the location data should be written to \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 71 of file Ethernet.\+c.
+
+
+\begin{DoxyCode}
+72 \{
+73     \textcolor{comment}{// First pull the CS line low}
+74     CSACTIVE;
+75     \textcolor{comment}{// Now issue the read buffer memory command}
+76     SPDR = READ\_BUF\_MEM;
+77     waitSPI();                \textcolor{comment}{// Now wait for the message to be sent}
+78     
+79     \textcolor{keywordflow}{while}(len)
+80     \{
+81         len--;
+82         SPDR = 0;            \textcolor{comment}{// Just give the register some data so that it begins the transmission}
+83         waitSPI();
+84         *data = SPDR;
+85         data++;
+86     \}
+87     *data = 0;               \textcolor{comment}{// Conclude the data with a null terminator}
+88     CSPASSIVE;               \textcolor{comment}{// Raise the CS line to stop the transmission  }
+89     
+90 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_ethernet_8h_a42af1f96afdc7493b47219e8d7164356}\label{_ethernet_8h_a42af1f96afdc7493b47219e8d7164356}} 
+\index{Ethernet.\+h@{Ethernet.\+h}!read\+T\+X\+\_\+\+Status\+Vec@{read\+T\+X\+\_\+\+Status\+Vec}}
+\index{read\+T\+X\+\_\+\+Status\+Vec@{read\+T\+X\+\_\+\+Status\+Vec}!Ethernet.\+h@{Ethernet.\+h}}
+\subsubsection{\texorpdfstring{read\+T\+X\+\_\+\+Status\+Vec()}{readTX\_StatusVec()}}
+{\footnotesize\ttfamily void read\+T\+X\+\_\+\+Status\+Vec (\begin{DoxyParamCaption}\item[{uint8\+\_\+t $\ast$}]{Status }\end{DoxyParamCaption})}
+
+
+
+Reads the transmit status vector from the address which is the end of the transmit buffer + 1. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt out}  & {\em Status} & Array by which to copy the 7 bytes of the status vector \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 462 of file Ethernet.\+c.
+
+
+
+References Register\+Read().
+
+
+\begin{DoxyCode}
+463 \{
+464     \textcolor{comment}{// This will read the 7 bytes which are located at ETXND+1}
+465     \textcolor{comment}{// First need to save the location of the read pointer}
+466     uint16\_t savePointer = \mbox{\hyperlink{_ethernet_8c_a2209347bbe1ae9f1c7eb0ebca476c738}{RegisterRead}}(ERDPTL);
+467     savePointer |= \mbox{\hyperlink{_ethernet_8c_a2209347bbe1ae9f1c7eb0ebca476c738}{RegisterRead}}(ERDPTH) << 8;
+468     
+469     \textcolor{comment}{// Now get the current value of ETXND}
+470     uint16\_t curTX\_end = \mbox{\hyperlink{_ethernet_8c_a2209347bbe1ae9f1c7eb0ebca476c738}{RegisterRead}}(ETXNDL);
+471     curTX\_end |= \mbox{\hyperlink{_ethernet_8c_a2209347bbe1ae9f1c7eb0ebca476c738}{RegisterRead}}(ETXNDH) << 8;
+472     curTX\_end++;
+473     
+474     \textcolor{comment}{// Now set the read pointer}
+475     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ERDPTL, curTX\_end & 0xFF);
+476     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ERDPTH, curTX\_end >> 8);
+477     
+478     \textcolor{comment}{// Now read the buffer 7 times}
+479     \mbox{\hyperlink{_ethernet_8c_ad70790336fc77ed46bb37335070ab701}{readBuffer}}(7, Status);
+480     
+481     \textcolor{comment}{// Now put the read pointer back}
+482     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ERDPTL, savePointer & 0xFF);
+483     \mbox{\hyperlink{_ethernet_8c_abea2558cf4cce4894ce8c10e4bad336e}{RegisterWrite}}(ERDPTH, savePointer >> 8);
+484     
+485 
+486 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_ethernet_8h_a2209347bbe1ae9f1c7eb0ebca476c738}\label{_ethernet_8h_a2209347bbe1ae9f1c7eb0ebca476c738}} 
+\index{Ethernet.\+h@{Ethernet.\+h}!Register\+Read@{Register\+Read}}
+\index{Register\+Read@{Register\+Read}!Ethernet.\+h@{Ethernet.\+h}}
+\subsubsection{\texorpdfstring{Register\+Read()}{RegisterRead()}}
+{\footnotesize\ttfamily uint8\+\_\+t Register\+Read (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{address }\end{DoxyParamCaption})}
+
+
+
+Reads the value for a specified register in memory for the E\+N\+C28\+J60. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em address} & the memory register by which to do the read operation \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+uint8\+\_\+t The value within the specified register 
+\end{DoxyReturn}
+
+
+Definition at line 137 of file Ethernet.\+c.
+
+
+
+References read\+Basic(), and set\+Bank().
+
+
+\begin{DoxyCode}
+138 \{
+139     \textcolor{comment}{// first set the bank}
+140     \mbox{\hyperlink{_ethernet_8c_abc02bef712b1833f950bb0d0f6d8cfbb}{setBank}}(address);
+141     \textcolor{comment}{// Now read the data from the register}
+142     \textcolor{keywordflow}{return} \mbox{\hyperlink{_ethernet_8c_a572c72b2a5d733ffa42948217b88c859}{readBasic}}(READ\_CONTROL\_REG, address);
+143 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_ethernet_8h_abea2558cf4cce4894ce8c10e4bad336e}\label{_ethernet_8h_abea2558cf4cce4894ce8c10e4bad336e}} 
+\index{Ethernet.\+h@{Ethernet.\+h}!Register\+Write@{Register\+Write}}
+\index{Register\+Write@{Register\+Write}!Ethernet.\+h@{Ethernet.\+h}}
+\subsubsection{\texorpdfstring{Register\+Write()}{RegisterWrite()}}
+{\footnotesize\ttfamily void Register\+Write (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{address,  }\item[{uint8\+\_\+t}]{data }\end{DoxyParamCaption})}
+
+
+
+Writes a byte of data to a specified register location for the E\+N\+C28\+J60. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em op} & \\
+\hline
+\mbox{\tt in}  & {\em address} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 151 of file Ethernet.\+c.
+
+
+
+References set\+Bank(), and write\+Basic().
+
+
+\begin{DoxyCode}
+152 \{
+153     \textcolor{comment}{// First set the bank}
+154     \mbox{\hyperlink{_ethernet_8c_abc02bef712b1833f950bb0d0f6d8cfbb}{setBank}}(address);
+155     \textcolor{comment}{// now write the data to the register}
+156     \mbox{\hyperlink{_ethernet_8c_a3b4720ee947ebfc7ef6f78b5bf7f908e}{writeBasic}}(WRITE\_CONTROL\_REG, address, data);
+157 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_ethernet_8h_abc02bef712b1833f950bb0d0f6d8cfbb}\label{_ethernet_8h_abc02bef712b1833f950bb0d0f6d8cfbb}} 
+\index{Ethernet.\+h@{Ethernet.\+h}!set\+Bank@{set\+Bank}}
+\index{set\+Bank@{set\+Bank}!Ethernet.\+h@{Ethernet.\+h}}
+\subsubsection{\texorpdfstring{set\+Bank()}{setBank()}}
+{\footnotesize\ttfamily void set\+Bank (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{address }\end{DoxyParamCaption})}
+
+
+
+Set the current bank to that which corresponds to that of a specified register for the E\+N\+C28\+J60. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em address} & Name of the register by which to change the bank to \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 121 of file Ethernet.\+c.
+
+
+\begin{DoxyCode}
+122 \{
+123     \textcolor{comment}{// This will set the bank to whichever bank *address* is in}
+124     \textcolor{keywordflow}{if} (((address & BANK\_MASK) >> 5) != bankNumber)\{
+125         \mbox{\hyperlink{_ethernet_8c_a3b4720ee947ebfc7ef6f78b5bf7f908e}{writeBasic}}(BIT\_FIELD\_CLR, ECON1, (ECON1\_BSEL0 | ECON1\_BSEL1));     \textcolor{comment}{// First clear the
+       bank from the relevant register}
+126         \mbox{\hyperlink{_ethernet_8c_a3b4720ee947ebfc7ef6f78b5bf7f908e}{writeBasic}}(BIT\_FIELD\_SET, ECON1, (address & BANK\_MASK) >> 5);      \textcolor{comment}{// Get the 2 bits by
+       themselves and then shift to have it read the correct number}
+127         bankNumber = (address & BANK\_MASK) >> 5;                           \textcolor{comment}{// Save the bank number for
+       future comparison}
+128     \}
+129     
+130 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_ethernet_8h_a8f98d3be0e5169ea19d39b9cfc093f34}\label{_ethernet_8h_a8f98d3be0e5169ea19d39b9cfc093f34}} 
+\index{Ethernet.\+h@{Ethernet.\+h}!transmit\+Header@{transmit\+Header}}
+\index{transmit\+Header@{transmit\+Header}!Ethernet.\+h@{Ethernet.\+h}}
+\subsubsection{\texorpdfstring{transmit\+Header()}{transmitHeader()}}
+{\footnotesize\ttfamily void transmit\+Header (\begin{DoxyParamCaption}\item[{uint8\+\_\+t $\ast$}]{buffer }\end{DoxyParamCaption})}
+
+
+
+Place the proper header bytes to the beginning of the array which will hold the message. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em buffer} & Array of where to place the header bytes \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 418 of file Ethernet.\+c.
+
+
+\begin{DoxyCode}
+419 \{
+420     uint8\_t i=0;
+421 
+422     \textcolor{comment}{//copy the destination mac from the source and fill my mac into src}
+423     \textcolor{keywordflow}{while}(i < 6)
+424     \{
+425         buffer[DEST\_MAC + i] = ECU\_mac[SRC\_MAC + i];
+426         buffer[SRC\_MAC + i] = ESB\_mac[i];
+427         i++;
+428     \}
+429 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_ethernet_8h_abfac85317b9c1522c7b5196d94e471bd}\label{_ethernet_8h_abfac85317b9c1522c7b5196d94e471bd}} 
+\index{Ethernet.\+h@{Ethernet.\+h}!wait\+MS@{wait\+MS}}
+\index{wait\+MS@{wait\+MS}!Ethernet.\+h@{Ethernet.\+h}}
+\subsubsection{\texorpdfstring{wait\+M\+S()}{waitMS()}}
+{\footnotesize\ttfamily void wait\+MS (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{msec }\end{DoxyParamCaption})}
+
+
+
+Waits for a designated number of milliseconds. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em msec} & Value of milliseconds that are wanting to be waited for \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void
+\end{DoxyReturn}
+Waits for a designated number of milliseconds.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em msec} & Number of milliseconds that are desired to be delayed for \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 166 of file E\+S\+B\+\_\+funcs.\+c.
+
+
+
+References assign\+\_\+bit(), and bit\+\_\+is\+\_\+clear.
+
+
+\begin{DoxyCode}
+167 \{
+168     \textcolor{comment}{// This function utilizes timer 0 and a sequence of delay loops to delay for the desired time}
+169     TCNT0 = 5;
+170     \textcolor{comment}{// begin the timer}
+171     TCCR0B |= (1 << CS01) | (1 << CS00);       \textcolor{comment}{// this will start the timer with a prescalar of 64}
+172     \textcolor{keywordflow}{for} (uint16\_t i = 0; i < msec; i++)\{
+173         \textcolor{keywordflow}{while}(\mbox{\hyperlink{_e_s_b__funcs_8h_ad188fb0fbfd923bdb01294072367d024}{bit\_is\_clear}}(TIFR0, TOV0));
+174         TIFR0 |= (1 << TOV0);                  \textcolor{comment}{// Clear the overflow flag by writing a 1 to it}
+175     \}
+176     \mbox{\hyperlink{_e_s_b__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}{assign\_bit}}(&TCCR0B, CS01, 0);
+177     \mbox{\hyperlink{_e_s_b__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}{assign\_bit}}(&TCCR0B, CS00, 0);              \textcolor{comment}{// Turn off the timer}
+178 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_ethernet_8h_a3b4720ee947ebfc7ef6f78b5bf7f908e}\label{_ethernet_8h_a3b4720ee947ebfc7ef6f78b5bf7f908e}} 
+\index{Ethernet.\+h@{Ethernet.\+h}!write\+Basic@{write\+Basic}}
+\index{write\+Basic@{write\+Basic}!Ethernet.\+h@{Ethernet.\+h}}
+\subsubsection{\texorpdfstring{write\+Basic()}{writeBasic()}}
+{\footnotesize\ttfamily void write\+Basic (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{op,  }\item[{uint8\+\_\+t}]{address,  }\item[{uint8\+\_\+t}]{data }\end{DoxyParamCaption})}
+
+
+
+Performs a low level write operation of a register. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em op} & This would be implemented in the function call to be the register write op code \\
+\hline
+\mbox{\tt in}  & {\em address} & This is the 5 bits which correspond to the desired register \\
+\hline
+\mbox{\tt in}  & {\em data} & This is the byte of data to be written to the register \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 53 of file Ethernet.\+c.
+
+
+\begin{DoxyCode}
+54 \{
+55     CSACTIVE;
+56     SPDR = op | (address & ADDR\_MSK);    \textcolor{comment}{// this will tell the Ethernet chip where to write the data}
+57     waitSPI();
+58     
+59     \textcolor{comment}{// write the data}
+60     SPDR = data;
+61     waitSPI();
+62     CSPASSIVE;
+63 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_ethernet_8h_a1ec20cb477cceb19339d0c85c1ea3f2d}\label{_ethernet_8h_a1ec20cb477cceb19339d0c85c1ea3f2d}} 
+\index{Ethernet.\+h@{Ethernet.\+h}!write\+Buffer@{write\+Buffer}}
+\index{write\+Buffer@{write\+Buffer}!Ethernet.\+h@{Ethernet.\+h}}
+\subsubsection{\texorpdfstring{write\+Buffer()}{writeBuffer()}}
+{\footnotesize\ttfamily void write\+Buffer (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{len,  }\item[{uint8\+\_\+t $\ast$}]{data }\end{DoxyParamCaption})}
+
+
+
+Writes a specified number of bytes into the buffer memory. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em len} & Number of bytes to be written into the buffer memory \\
+\hline
+\mbox{\tt in}  & {\em data} & Array of the data to write into the buffer \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 98 of file Ethernet.\+c.
+
+
+\begin{DoxyCode}
+99 \{
+100     CSACTIVE;                 \textcolor{comment}{// First pull the CS line low}
+101     SPDR = WRITE\_BUF\_MEM;     \textcolor{comment}{// Issue the write buffer command}
+102     waitSPI();
+103     
+104     \textcolor{keywordflow}{while} (len)
+105     \{
+106         len--;
+107         SPDR = *data;         \textcolor{comment}{// Send the current byte of data}
+108         waitSPI();
+109         data++;
+110         
+111     \}
+112     CSPASSIVE;                \textcolor{comment}{// Raise the CS line to stop the transmission }
+113     
+114 \}
+\end{DoxyCode}

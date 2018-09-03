@@ -1,0 +1,379 @@
+\hypertarget{_e_s_b__funcs_8c}{}\section{C\+:/\+Users/nickm/\+Documents/\+Git\+Hub/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+A\+C\+E\+S\+\_\+\+E\+S\+B/\+E\+S\+B\+\_\+funcs.c File Reference}
+\label{_e_s_b__funcs_8c}\index{C\+:/\+Users/nickm/\+Documents/\+Git\+Hub/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+A\+C\+E\+S\+\_\+\+E\+S\+B/\+E\+S\+B\+\_\+funcs.\+c@{C\+:/\+Users/nickm/\+Documents/\+Git\+Hub/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+A\+C\+E\+S\+\_\+\+E\+S\+B/\+E\+S\+B\+\_\+funcs.\+c}}
+
+
+Function implementation for most operations of the E\+SB.  
+
+
+{\ttfamily \#include $<$avr/io.\+h$>$}\newline
+{\ttfamily \#include $<$avr/interrupt.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}E\+S\+B\+\_\+funcs.\+h\char`\"{}}\newline
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{_e_s_b__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}{assign\+\_\+bit}} (volatile uint8\+\_\+t $\ast$sfr, uint8\+\_\+t bit, uint8\+\_\+t val)
+\begin{DoxyCompactList}\small\item\em Sets the specified bit to the specified value or does nothing if it already set to that. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_e_s_b__funcs_8c_afa94fbe612c655551cc89eecee4aa8c0}{E\+G\+T\+\_\+collect}} (void)
+\begin{DoxyCompactList}\small\item\em Collects the temperature from the Exhaust Gas Thermocouple and then packages/send data to the E\+CU. \end{DoxyCompactList}\item 
+uint8\+\_\+t \mbox{\hyperlink{_e_s_b__funcs_8c_acc743b5d0a4916b1e4cef66e569811fe}{S\+P\+I\+\_\+\+Receive}} (void)
+\begin{DoxyCompactList}\small\item\em Performs the operations needed to communicate with the C\+JC via S\+PI. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_e_s_b__funcs_8c_aebf54b1b64a7ea55a7c392688cbdbae6}{get\+Temp}} (uint8\+\_\+t $\ast$temp\+String)
+\begin{DoxyCompactList}\small\item\em Converts the bytes received from the C\+JC into a usable temperature. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{_e_s_b__funcs_8c_a30a0ad88a89a84c0161cf09eace108e8}{I\+SR}} (I\+N\+T2\+\_\+vect)
+\begin{DoxyCompactList}\small\item\em Increments the hall effect counter when a pulse is received. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{_e_s_b__funcs_8c_a33c40fdd48fd7bb540f034e5c489a38b}{I\+SR}} (T\+I\+M\+E\+R4\+\_\+\+O\+V\+F\+\_\+vect)
+\begin{DoxyCompactList}\small\item\em Signals that the sampling time for the Hall effect sensor is over. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_e_s_b__funcs_8c_a154a9f374d6a56c8d416a756891cc60e}{set\+P\+WM}} (void)
+\begin{DoxyCompactList}\small\item\em Sets all of the Initializations for the P\+W\+Ms for the Fuel Pump, Solenoids, and Starter Motor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_e_s_b__funcs_8c_abfac85317b9c1522c7b5196d94e471bd}{wait\+MS}} (uint16\+\_\+t msec)
+\begin{DoxyCompactList}\small\item\em Waits for a designated number of milliseconds. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Function implementation for most operations of the E\+SB. 
+
+\begin{DoxyAuthor}{Author}
+Nick Moore 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+March 22, 2018 
+\end{DoxyDate}
+\begin{DoxyRefDesc}{Bug}
+\item[\mbox{\hyperlink{bug__bug000003}{Bug}}]No known bugs \end{DoxyRefDesc}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{_e_s_b__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}\label{_e_s_b__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}} 
+\index{E\+S\+B\+\_\+funcs.\+c@{E\+S\+B\+\_\+funcs.\+c}!assign\+\_\+bit@{assign\+\_\+bit}}
+\index{assign\+\_\+bit@{assign\+\_\+bit}!E\+S\+B\+\_\+funcs.\+c@{E\+S\+B\+\_\+funcs.\+c}}
+\subsubsection{\texorpdfstring{assign\+\_\+bit()}{assign\_bit()}}
+{\footnotesize\ttfamily void assign\+\_\+bit (\begin{DoxyParamCaption}\item[{volatile uint8\+\_\+t $\ast$}]{sfr,  }\item[{uint8\+\_\+t}]{bit,  }\item[{uint8\+\_\+t}]{val }\end{DoxyParamCaption})}
+
+
+
+Sets the specified bit to the specified value or does nothing if it already set to that. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt out}  & {\em sfr} & Pointer to Special Function Register the bit is located in. \\
+\hline
+\mbox{\tt in}  & {\em bit} & Denotes the bit which would like to be changed. \\
+\hline
+\mbox{\tt in}  & {\em val} & The value, either 1 or 0, that the user would like the bit to be after the function call. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 21 of file E\+S\+B\+\_\+funcs.\+c.
+
+
+\begin{DoxyCode}
+22 \{
+23     \textcolor{keywordflow}{if} (val)      \textcolor{comment}{// This is for if I want the value to be a 1}
+24     \{
+25         val = (val << bit);
+26         *sfr |= val;
+27     \}
+28     \textcolor{keywordflow}{else}             \textcolor{comment}{// This is for if I want the value to be a 0}
+29     \{
+30         val = ~(1 << bit);
+31         *sfr &= val;
+32     \}
+33 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_e_s_b__funcs_8c_afa94fbe612c655551cc89eecee4aa8c0}\label{_e_s_b__funcs_8c_afa94fbe612c655551cc89eecee4aa8c0}} 
+\index{E\+S\+B\+\_\+funcs.\+c@{E\+S\+B\+\_\+funcs.\+c}!E\+G\+T\+\_\+collect@{E\+G\+T\+\_\+collect}}
+\index{E\+G\+T\+\_\+collect@{E\+G\+T\+\_\+collect}!E\+S\+B\+\_\+funcs.\+c@{E\+S\+B\+\_\+funcs.\+c}}
+\subsubsection{\texorpdfstring{E\+G\+T\+\_\+collect()}{EGT\_collect()}}
+{\footnotesize\ttfamily void E\+G\+T\+\_\+collect (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Collects the temperature from the Exhaust Gas Thermocouple and then packages/send data to the E\+CU. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 40 of file E\+S\+B\+\_\+funcs.\+c.
+
+
+\begin{DoxyCode}
+41 \{
+42     \textcolor{comment}{// Now loop through 4 bytes for the receive message}
+43     uint8\_t tempString[2];
+44     SSACTIVE;       \textcolor{comment}{// drop the SS line for the CJC}
+45     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < 2; i++)\{
+46         tempString[i] = \mbox{\hyperlink{_e_s_b__funcs_8c_acc743b5d0a4916b1e4cef66e569811fe}{SPI\_Receive}}();
+47     \}
+48     SSPASSIVE;       \textcolor{comment}{// raise the SS line again since we are done}
+49     
+50     \textcolor{comment}{// Now interpret this data string into an actual temperature}
+51 
+52     \mbox{\hyperlink{_e_s_b__funcs_8c_aebf54b1b64a7ea55a7c392688cbdbae6}{getTemp}}(tempString);
+53             
+54     \textcolor{comment}{// Now package the message}
+55     \mbox{\hyperlink{_communication_8c_adeadb2e1fc786ce91bfbd2c1c4ac4513}{package\_message}}();
+56 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_e_s_b__funcs_8c_aebf54b1b64a7ea55a7c392688cbdbae6}\label{_e_s_b__funcs_8c_aebf54b1b64a7ea55a7c392688cbdbae6}} 
+\index{E\+S\+B\+\_\+funcs.\+c@{E\+S\+B\+\_\+funcs.\+c}!get\+Temp@{get\+Temp}}
+\index{get\+Temp@{get\+Temp}!E\+S\+B\+\_\+funcs.\+c@{E\+S\+B\+\_\+funcs.\+c}}
+\subsubsection{\texorpdfstring{get\+Temp()}{getTemp()}}
+{\footnotesize\ttfamily void get\+Temp (\begin{DoxyParamCaption}\item[{uint8\+\_\+t $\ast$}]{temp\+String }\end{DoxyParamCaption})}
+
+
+
+Converts the bytes received from the C\+JC into a usable temperature. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em temp\+String} & Array of chars which contains all the data received by the C\+JC \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 84 of file E\+S\+B\+\_\+funcs.\+c.
+
+
+
+References E\+GT, and ref\+\_\+temp.
+
+
+\begin{DoxyCode}
+85 \{
+86     \textcolor{comment}{// First check to see if there is a fault}
+87     \textcolor{keywordflow}{if} (tempString[1] & 0x04)
+88         \mbox{\hyperlink{_e_s_b__funcs_8h_a34c104e39ff60265f33e3325bf865ab5}{EGT}} = 0;               \textcolor{comment}{// This means that the Thermocouple is open, check connection}
+89     \textcolor{keywordflow}{else} \{                     \textcolor{comment}{// If it makes it to here then there are no faults}
+90         \textcolor{keywordtype}{int} val = (tempString[0] << 5) | (tempString[1] >> 3);
+91         \textcolor{keywordflow}{if} (!val)
+92             val = 1;   \textcolor{comment}{// set the value to this for anything that is less than 3}
+93         \mbox{\hyperlink{_e_s_b__funcs_8h_a34c104e39ff60265f33e3325bf865ab5}{EGT}} = ((float) val / 4095.0) * 1023.75;        \textcolor{comment}{// Since the temperature is on the scale of
+       0->1023.75 and it has 12 bit resolution}
+94         \mbox{\hyperlink{_e_s_b__funcs_8h_a8b77a5034593409ad5dbd4586fab93ca}{ref\_temp}} = 0;                                  \textcolor{comment}{// This is unimplemented at this time as the
+       MAX6675 does not transmit the reference temperature}
+95         
+96     \}
+97 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_e_s_b__funcs_8c_a30a0ad88a89a84c0161cf09eace108e8}\label{_e_s_b__funcs_8c_a30a0ad88a89a84c0161cf09eace108e8}} 
+\index{E\+S\+B\+\_\+funcs.\+c@{E\+S\+B\+\_\+funcs.\+c}!I\+SR@{I\+SR}}
+\index{I\+SR@{I\+SR}!E\+S\+B\+\_\+funcs.\+c@{E\+S\+B\+\_\+funcs.\+c}}
+\subsubsection{\texorpdfstring{I\+S\+R()}{ISR()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily I\+SR (\begin{DoxyParamCaption}\item[{I\+N\+T2\+\_\+vect}]{ }\end{DoxyParamCaption})}
+
+
+
+Increments the hall effect counter when a pulse is received. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 104 of file E\+S\+B\+\_\+funcs.\+c.
+
+
+
+References hall\+Count.
+
+
+\begin{DoxyCode}
+105 \{
+106     \mbox{\hyperlink{_e_s_b__funcs_8h_a43cd4ea46756be50f1e3f31077e10444}{hallCount}}++;
+107 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_e_s_b__funcs_8c_a33c40fdd48fd7bb540f034e5c489a38b}\label{_e_s_b__funcs_8c_a33c40fdd48fd7bb540f034e5c489a38b}} 
+\index{E\+S\+B\+\_\+funcs.\+c@{E\+S\+B\+\_\+funcs.\+c}!I\+SR@{I\+SR}}
+\index{I\+SR@{I\+SR}!E\+S\+B\+\_\+funcs.\+c@{E\+S\+B\+\_\+funcs.\+c}}
+\subsubsection{\texorpdfstring{I\+S\+R()}{ISR()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily I\+SR (\begin{DoxyParamCaption}\item[{T\+I\+M\+E\+R4\+\_\+\+O\+V\+F\+\_\+vect}]{ }\end{DoxyParamCaption})}
+
+
+
+Signals that the sampling time for the Hall effect sensor is over. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 114 of file E\+S\+B\+\_\+funcs.\+c.
+
+
+
+References E\+GT, E\+G\+T\+\_\+collect(), hall\+Count, hall\+Done, hall\+Effect, and shutdown().
+
+
+\begin{DoxyCode}
+115 \{
+116     \mbox{\hyperlink{_e_s_b__funcs_8h_aa477a3c8d0b96834b0291a9be67f1e77}{hallEffect}} = \mbox{\hyperlink{_e_s_b__funcs_8h_a43cd4ea46756be50f1e3f31077e10444}{hallCount}} * 120;  \textcolor{comment}{// this gets the number of pulses per 30 seconds}
+117     \mbox{\hyperlink{_e_s_b__funcs_8c_afa94fbe612c655551cc89eecee4aa8c0}{EGT\_collect}}();
+118     
+119     \textcolor{keywordflow}{if} (\mbox{\hyperlink{_e_s_b__funcs_8h_aa477a3c8d0b96834b0291a9be67f1e77}{hallEffect}} > 65000 || \mbox{\hyperlink{_e_s_b__funcs_8h_a34c104e39ff60265f33e3325bf865ab5}{EGT}} > 700) \{ \textcolor{comment}{// if either the engine is too hot or spinning too
+       fast, shut it down}
+120         \mbox{\hyperlink{_engine__funcs_8c_a1c9d5e29ad8899afe0c34571ddee18f9}{shutdown}}();
+121     \}
+122     \mbox{\hyperlink{_e_s_b__funcs_8h_ac3715e08cbd719300a7d01c9633cb3c2}{hallDone}} = 1;
+123     \mbox{\hyperlink{_e_s_b__funcs_8h_a43cd4ea46756be50f1e3f31077e10444}{hallCount}} = 0;                        \textcolor{comment}{// reset the hall effect counter}
+124     
+125     \textcolor{comment}{// reload the new value into the timer register}
+126     TCNT4 = HallTime;
+127 
+128     
+129 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_e_s_b__funcs_8c_a154a9f374d6a56c8d416a756891cc60e}\label{_e_s_b__funcs_8c_a154a9f374d6a56c8d416a756891cc60e}} 
+\index{E\+S\+B\+\_\+funcs.\+c@{E\+S\+B\+\_\+funcs.\+c}!set\+P\+WM@{set\+P\+WM}}
+\index{set\+P\+WM@{set\+P\+WM}!E\+S\+B\+\_\+funcs.\+c@{E\+S\+B\+\_\+funcs.\+c}}
+\subsubsection{\texorpdfstring{set\+P\+W\+M()}{setPWM()}}
+{\footnotesize\ttfamily void set\+P\+WM (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Sets all of the Initializations for the P\+W\+Ms for the Fuel Pump, Solenoids, and Starter Motor. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 136 of file E\+S\+B\+\_\+funcs.\+c.
+
+
+\begin{DoxyCode}
+137 \{
+138     \textcolor{comment}{// First the Fuel pump will be a PWM on Timer 3}
+139     TCCR3A |= (1 << WGM31);    \textcolor{comment}{// set this for mode 14 waveform}
+140     TCCR3B |= (1 << WGM32) | (1 << WGM33);        \textcolor{comment}{// this sets the other 2 bits for the waveform generation}
+141     TCCR3A |= (1 << COM3B1) | (1 << COM3B0);      \textcolor{comment}{// This sets the other two bits for the waveform
+       generation}
+142     ICR3 = 40000;                                 \textcolor{comment}{// With a prescalar of 8, this will have a period of 20
+       ms}
+143     
+144     \textcolor{comment}{// Now the fuel solenoid will be a PWM on Timer 1}
+145     TCCR1A |= (1 << WGM11);
+146     TCCR1B |= (1 << WGM12) | (1 << WGM13);
+147     TCCR1A |= (1 << COM1B1) | (1 << COM1B0);      \textcolor{comment}{// This is the same as for the fuel pump}
+148     ICR1 = 31250;                                 \textcolor{comment}{// With a prescalar of 256, this will have a period of
+       0.5 sec}
+149     
+150     \textcolor{comment}{// Now set up the Starter motor on Timer 0 (this an 8 bit timer instead of 16)}
+151     TCCR0A |= (1 << WGM01) | (1 << WGM00) | (1 << COM0A0) | (1 << COM0A1);   \textcolor{comment}{// This will set it to the
+       Fast PWM}
+152     TCCR0B |= (1 << WGM02);
+153     OCR0A = (uint8\_t) (255 - sMotor * 255.0 / pump\_tot\_V);             \textcolor{comment}{// When combine with a prescalar of
+       1024, this will have a period of 0.016384 seconds}
+154     
+155     \textcolor{comment}{// Now set up the Glow plug on Timer 2 (this is an 8 bit timer instead of 16)}
+156     TCCR2A |= (1 << WGM21) | (1 << WGM20) | (1 << COM2A0) | (1 << COM2A1);    \textcolor{comment}{// This is the same as for
+       starter motor code}
+157     TCCR2B |= (1 << WGM22);
+158     OCR2A = (uint8\_t) (255 - gVolts * 255.0 / pump\_tot\_V);
+159     
+160 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_e_s_b__funcs_8c_acc743b5d0a4916b1e4cef66e569811fe}\label{_e_s_b__funcs_8c_acc743b5d0a4916b1e4cef66e569811fe}} 
+\index{E\+S\+B\+\_\+funcs.\+c@{E\+S\+B\+\_\+funcs.\+c}!S\+P\+I\+\_\+\+Receive@{S\+P\+I\+\_\+\+Receive}}
+\index{S\+P\+I\+\_\+\+Receive@{S\+P\+I\+\_\+\+Receive}!E\+S\+B\+\_\+funcs.\+c@{E\+S\+B\+\_\+funcs.\+c}}
+\subsubsection{\texorpdfstring{S\+P\+I\+\_\+\+Receive()}{SPI\_Receive()}}
+{\footnotesize\ttfamily uint8\+\_\+t S\+P\+I\+\_\+\+Receive (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Performs the operations needed to communicate with the C\+JC via S\+PI. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+uint8\+\_\+t 
+\end{DoxyReturn}
+
+
+Definition at line 63 of file E\+S\+B\+\_\+funcs.\+c.
+
+
+\begin{DoxyCode}
+64 \{
+65     cli();
+66     \textcolor{comment}{/* Put data into buffer and start the transmission */}
+67     SPDR = 0;   \textcolor{comment}{// Since the CJC doesn't receive, we can put anything we want into the buffer}
+68     
+69     \textcolor{comment}{/* Wait for data to be received */}
+70     \textcolor{keywordflow}{while} ( !(SPSR & (1<<SPIF)) );
+71     
+72     \textcolor{comment}{/* Enable interrupts again */}
+73     sei();
+74     
+75     \textcolor{comment}{/* Get and return received data from buffer */}
+76     \textcolor{keywordflow}{return} SPDR;
+77 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_e_s_b__funcs_8c_abfac85317b9c1522c7b5196d94e471bd}\label{_e_s_b__funcs_8c_abfac85317b9c1522c7b5196d94e471bd}} 
+\index{E\+S\+B\+\_\+funcs.\+c@{E\+S\+B\+\_\+funcs.\+c}!wait\+MS@{wait\+MS}}
+\index{wait\+MS@{wait\+MS}!E\+S\+B\+\_\+funcs.\+c@{E\+S\+B\+\_\+funcs.\+c}}
+\subsubsection{\texorpdfstring{wait\+M\+S()}{waitMS()}}
+{\footnotesize\ttfamily void wait\+MS (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{msec }\end{DoxyParamCaption})}
+
+
+
+Waits for a designated number of milliseconds. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em msec} & Value of milliseconds that are wanting to be waited for \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 166 of file E\+S\+B\+\_\+funcs.\+c.
+
+
+\begin{DoxyCode}
+167 \{
+168     \textcolor{comment}{// This function utilizes timer 0 and a sequence of delay loops to delay for the desired time}
+169     TCNT0 = 5;
+170     \textcolor{comment}{// begin the timer}
+171     TCCR0B |= (1 << CS01) | (1 << CS00);       \textcolor{comment}{// this will start the timer with a prescalar of 64}
+172     \textcolor{keywordflow}{for} (uint16\_t i = 0; i < msec; i++)\{
+173         \textcolor{keywordflow}{while}(\mbox{\hyperlink{_e_s_b__funcs_8h_ad188fb0fbfd923bdb01294072367d024}{bit\_is\_clear}}(TIFR0, TOV0));
+174         TIFR0 |= (1 << TOV0);                  \textcolor{comment}{// Clear the overflow flag by writing a 1 to it}
+175     \}
+176     \mbox{\hyperlink{_e_s_b__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}{assign\_bit}}(&TCCR0B, CS01, 0);
+177     \mbox{\hyperlink{_e_s_b__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}{assign\_bit}}(&TCCR0B, CS00, 0);              \textcolor{comment}{// Turn off the timer}
+178 \}
+\end{DoxyCode}

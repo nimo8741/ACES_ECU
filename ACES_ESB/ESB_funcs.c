@@ -1,4 +1,4 @@
-/** @file Ethernet.c
+/** @file ESB_funcs.c
  *  @author Nick Moore
  *  @date March 22, 2018
  *  @brief Function implementation for most operations of the ESB
@@ -87,8 +87,7 @@ void getTemp(uint8_t *tempString)     // This is definitely Wrong but will fix i
 	if (tempString[1] & 0x04)
 		EGT = 0;               // This means that the Thermocouple is open, check connection
 	else {                     // If it makes it to here then there are no faults
-		int val = ((tempString[0] &) << 5) | (tempString[1] >> 3);
-		
+		int val = (tempString[0] << 5) | (tempString[1] >> 3);
 		if (!val)
 			val = 1;   // set the value to this for anything that is less than 3
 		EGT = ((float) val / 4095.0) * 1023.75;        // Since the temperature is on the scale of 0->1023.75 and it has 12 bit resolution
@@ -118,7 +117,7 @@ ISR(TIMER4_OVF_vect)
 	EGT_collect();
 	
 	if (hallEffect > 65000 || EGT > 700) { // if either the engine is too hot or spinning too fast, shut it down
-		//shutdown();
+		shutdown();
 	}
 	hallDone = 1;
 	hallCount = 0;                        // reset the hall effect counter
@@ -160,6 +159,10 @@ void setPWM(void)
 	
 }
 
+/** @brief Waits for a designated number of milliseconds
+ *  @param[in] msec Value of milliseconds that are wanting to be waited for
+ *  @return void
+ */
 void waitMS(uint16_t msec)
 {
 	// This function utilizes timer 0 and a sequence of delay loops to delay for the desired time

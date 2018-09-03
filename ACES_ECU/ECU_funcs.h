@@ -57,7 +57,7 @@
 #define SLA_R 0x3F
 #define dec_MSK 0x0C     // This extracts the decimal numbers from the temperature sensor
 #define SPI_PORT PORTB
-#define flowData 5
+#define normalData 11
 #define ESB_timer_val 3036
 #define FlowTime 3700              // This was found via logic analyzer to have a flow period of exactly 0.25 seconds
 
@@ -100,14 +100,15 @@ void packageMessage(void);
 void waitMS(uint16_t msec);
 void loadESBData(void);
 
-void dummyData(void);
-
 //////////////////////////////////////////////////////////////////////////
 //////////////////////// Global Variables  ///////////////////////////////
 //////////////////////////////////////////////////////////////////////////                    
 
 //! Float which contains the current voltage level on the Lipo battery
-float voltage;
+union {
+	float f;
+	unsigned char c[4];
+} voltage;
 
 //! Char which keeps track of which ADC channel we are on
 char batChannel;
@@ -148,23 +149,34 @@ uint8_t newCommand;
 //! Will keep track of whether or not the message to the ESB has been interrupted by the PC
 uint8_t hasInterrupted;
 
-//! will keep track of whether or not the ECU is connected to the windows GUI
+//! Will keep track of whether or not the ECU is connected to the windows GUI
 uint8_t connected_ESB;
 
+//! Essentially boolean describing if the ECU is connected to the GUI or not 
 uint8_t connected_GUI;
 
-char voltage_s[3];    // this will keep track of the three digits for the battery voltage
+//! Array of data which will be transmitted to the ESB
+char ESBtransmit[11];
 
-char ESBtransmit[7];
-char ESBreceive[14];   // might need to change this number later
+//! Array containing the data received from the ESB
+char ESBreceive[14];   // might need to change this number later depending on the number of temperature sensors
 
+//! Ambient temperature of the ECU
 float ECU_temp;
+
+//! Ambient temperature of the ESB
 float ESB_temp;
 
+//! Counter for index into the connection string (The connection string is ACES)
 uint8_t connect_count;
-uint8_t repeatCount;
+
+//! Flag which describes if the next received command is the beginning of a new command or the continuation of an old command
 uint8_t newCommand_ESB;
+
+//! Counter for the received byte in the current message
 uint8_t ESBreceiveCount;
+
+//! Flag which is used to synchronize when messages are allowed to be sent to the GUI
 int8_t doTransmit;
 
 

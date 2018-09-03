@@ -1,0 +1,142 @@
+\hypertarget{_initial__funcs_8c}{}\section{C\+:/\+Users/nickm/\+Documents/\+Git\+Hub/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+A\+C\+E\+S\+\_\+\+E\+S\+B/\+Initial\+\_\+funcs.c File Reference}
+\label{_initial__funcs_8c}\index{C\+:/\+Users/nickm/\+Documents/\+Git\+Hub/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+A\+C\+E\+S\+\_\+\+E\+S\+B/\+Initial\+\_\+funcs.\+c@{C\+:/\+Users/nickm/\+Documents/\+Git\+Hub/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+A\+C\+E\+S\+\_\+\+E\+S\+B/\+Initial\+\_\+funcs.\+c}}
+
+
+Implementation of initialization routines.  
+
+
+{\ttfamily \#include $<$avr/io.\+h$>$}\newline
+{\ttfamily \#include $<$avr/interrupt.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}E\+S\+B\+\_\+funcs.\+h\char`\"{}}\newline
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{_initial__funcs_8c_a23459ced73501cbafb717ca9cbb10ce7}{Initial}} (void)
+\begin{DoxyCompactList}\small\item\em Initializes the microcontroller for its mainline execution. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Implementation of initialization routines. 
+
+\begin{DoxyAuthor}{Author}
+Nick Moore 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+March 22, 2018 
+\end{DoxyDate}
+\begin{DoxyRefDesc}{Bug}
+\item[\mbox{\hyperlink{bug__bug000007}{Bug}}]No known bugs. \end{DoxyRefDesc}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{_initial__funcs_8c_a23459ced73501cbafb717ca9cbb10ce7}\label{_initial__funcs_8c_a23459ced73501cbafb717ca9cbb10ce7}} 
+\index{Initial\+\_\+funcs.\+c@{Initial\+\_\+funcs.\+c}!Initial@{Initial}}
+\index{Initial@{Initial}!Initial\+\_\+funcs.\+c@{Initial\+\_\+funcs.\+c}}
+\subsubsection{\texorpdfstring{Initial()}{Initial()}}
+{\footnotesize\ttfamily void Initial (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Initializes the microcontroller for its mainline execution. 
+
+This performs the following functions\+:
+
+1) Initializes the P\+O\+RT data directions. 0 for input and 1 for output
+
+2) Initializes the A\+DC for use by E\+GT
+
+3) Initializes the External Interrupt line for use by the Hall effect Sensor
+
+4) Initializes the I2C communication with the on board temperature sensors
+
+5) Initializes the S\+PI communication with the E\+CU
+
+6) Enable a timer for use by the Hall effect sensor
+
+7) Enable a timer to determine if ignition is taking too long
+
+8) Enable global interrupts
+
+
+\begin{DoxyParams}{Parameters}
+{\em void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 37 of file Initial\+\_\+funcs.\+c.
+
+
+\begin{DoxyCode}
+38 \{
+40     \textcolor{comment}{// Now do port directions for the PWM outputs}
+41     DDRB |= (1 << PB4) | (1 << PB5) | (1 << PB7);   \textcolor{comment}{// This sets the output for the pump, starter motor,
+       and solenoids}
+42     DDRE |= (1 << PE4); 
+43     
+44     
+46     \textcolor{comment}{// The next things that need to be set are as follows}
+47     \textcolor{comment}{// 1) Set Enable the correct port directions}
+48     \textcolor{comment}{// 2) Enable SPI, Master operation, and the clock rate}
+49     
+50     DDRB = (1 << MOSI) | (1 << SCK) | (1 << CJC\_SS) | (0 << MISO);
+51     SPCR = (1 << SPE) | (1 << MSTR) | (1 << SPR0);   \textcolor{comment}{// This will enable SPI mode 0 with a clock rate of
+       Fosc/16}
+52     
+53     \textcolor{comment}{// The CJC will be sampled at the end of the Hall Effect Sampling period}
+54 
+55     
+57     \textcolor{comment}{// This will be used with the Hall effect sensor}
+58     \mbox{\hyperlink{_e_s_b__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}{assign\_bit}}(&DDRD, INT2, 0);              \textcolor{comment}{// Configure the PD2 pin as an input so that it can
+       receive the signals}
+59     \mbox{\hyperlink{_e_s_b__funcs_8h_a43cd4ea46756be50f1e3f31077e10444}{hallCount}} = 0;
+60     EICRA = (1 << ISC20) | (1 << ISC21);     \textcolor{comment}{// This will enable rising edge interrupts on INT2, see page
+       110 in datasheet}
+61 
+62     
+64     UBRR0 = 12;     \textcolor{comment}{// With a 16 MHz clock this will make a baud rate of 76800 (error of 0.16%)}
+65 
+66     \textcolor{comment}{// The next things that need to be set are as follows (reference page 220 in datasheet)}
+67     \textcolor{comment}{// 1) Enable receive interrupts}
+68     \textcolor{comment}{// 2) Enable receiver}
+69     \textcolor{comment}{// 3) Enable transmitter}
+70     UCSR0B = (1 << RXCIE0) | (1 << RXEN0) | (1 << TXEN0);
+71 
+72     \textcolor{comment}{// Now set the framing information}
+73     \textcolor{comment}{// I want the following things}
+74     \textcolor{comment}{// 1) Asynchronous USART}
+75     \textcolor{comment}{// 2) No Parity}
+76     \textcolor{comment}{// 3) 1 Stop bit}
+77     \textcolor{comment}{// 4) 8 bit character size}
+78     UCSR0C = (1 << UCSZ01) | (1 << UCSZ00);   \textcolor{comment}{// Now the USART should be ready to receive}
+79 
+80             
+81     
+82     \textcolor{comment}{// Now initialize the timer for both the ECU communication error checking}
+83     TCNT5 = ECU\_timer\_val;
+84     TIMSK5 = (1 << TOIE5);     \textcolor{comment}{// enable overflow interrupts on this mode of timer 5}
+85         
+87     \textcolor{comment}{// This will be set to 0.25 seconds so there is a reasonable sampling period}
+88     TCNT4 = HallTime;
+89     TIMSK4 = (1 << TOIE4);                 \textcolor{comment}{// enable overflow interrupts for the Hall effect sensor timer}
+90     \mbox{\hyperlink{_e_s_b__funcs_8c_abfac85317b9c1522c7b5196d94e471bd}{waitMS}}(195);                           \textcolor{comment}{// wait this portion of time so that the ECU comm and Hall
+       effect interrupts are off phase}
+91     TCCR4B = (1 << CS41) | (1 << CS40);    \textcolor{comment}{// start timer 4 with prescalar of 64}
+92 
+93 
+95     \mbox{\hyperlink{_e_s_b__funcs_8h_a2e65b097da1a73a847fa30bbd88fd97c}{pulse\_flow}} = (1.0 / density) * K\_factor * max\_time / 1000;   \textcolor{comment}{// this is the pulses expected
+       per g/s in 0.25 sec}
+96     \mbox{\hyperlink{_e_s_b__funcs_8h_a4d33ec29c2398728e80d752eeced889e}{V\_per\_pulse}} = pump\_m / \mbox{\hyperlink{_e_s_b__funcs_8h_a2e65b097da1a73a847fa30bbd88fd97c}{pulse\_flow}}; 
+97 
+98     
+100     sei();
+101     
+102     \mbox{\hyperlink{_e_s_b__funcs_8h_ac8b367a3ec51bcbf0a598e54edda7610}{hasInterrupted}} = 0;
+103     \mbox{\hyperlink{_e_s_b__funcs_8h_aba273f85164d91be7ba0341e7339bd29}{commandCode}} = 0;        \textcolor{comment}{// This means that that the next received char is a new command}
+104     \mbox{\hyperlink{_e_s_b__funcs_8h_a1919a262301a8b185641dbb16a48a6d2}{ECUreceiveCount}} = 0;
+105     
+106 \}
+\end{DoxyCode}

@@ -1,0 +1,488 @@
+\hypertarget{_engine__funcs_8c}{}\section{C\+:/\+Users/nickm/\+Documents/\+Git\+Hub/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+A\+C\+E\+S\+\_\+\+E\+S\+B/\+Engine\+\_\+funcs.c File Reference}
+\label{_engine__funcs_8c}\index{C\+:/\+Users/nickm/\+Documents/\+Git\+Hub/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+A\+C\+E\+S\+\_\+\+E\+S\+B/\+Engine\+\_\+funcs.\+c@{C\+:/\+Users/nickm/\+Documents/\+Git\+Hub/\+A\+C\+E\+S\+\_\+\+E\+C\+U/\+A\+C\+E\+S\+\_\+\+E\+S\+B/\+Engine\+\_\+funcs.\+c}}
+
+
+Function implementation functions which are more directly related to the operation of the jet engine.  
+
+
+{\ttfamily \#include $<$avr/io.\+h$>$}\newline
+{\ttfamily \#include $<$avr/interrupt.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}E\+S\+B\+\_\+funcs.\+h\char`\"{}}\newline
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{_engine__funcs_8c_a1c9d5e29ad8899afe0c34571ddee18f9}{shutdown}} (void)
+\begin{DoxyCompactList}\small\item\em Forces an engine shutdown and closes all output ports which could actuate the engine. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_engine__funcs_8c_ab0c801cf89f8b3058ff2460c666154c3}{startup}} (void)
+\begin{DoxyCompactList}\small\item\em Performs the function calls in order such that and engine startup would occur. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_engine__funcs_8c_a54163ad9d4f9e7fa08b4aae836a1b316}{throttle}} (void)
+\begin{DoxyCompactList}\small\item\em Sets the fuel flow rate such that the engine would operate at a desired throttle value. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_engine__funcs_8c_a3bb63dcf5362454afa9c040947c372ae}{compressor}} (void)
+\begin{DoxyCompactList}\small\item\em Sets the duty cycle for the starter motor such that the compressor safely reaches a desired R\+PM. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_engine__funcs_8c_a973541bd9d7a03580e58b233eb35de06}{fuel\+\_\+puffs}} (void)
+\begin{DoxyCompactList}\small\item\em Operates the fuel pump and fuel/lubrication solenoids such that ignition begins in the combustion chamber. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_engine__funcs_8c_a7b71bd44c46c9be20f29250cacab8a6b}{heat\+Soaking}} (void)
+\begin{DoxyCompactList}\small\item\em Prevents interruptions from the operation of the engine so that the temperature of the combustion can will increase. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_engine__funcs_8c_a24cdf62b1d79063305146ff04981c16a}{cooling\+Mode}} (void)
+\begin{DoxyCompactList}\small\item\em Shuts off the engine with the exception of the starter motor to force cool air through the engine. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Function implementation functions which are more directly related to the operation of the jet engine. 
+
+\begin{DoxyAuthor}{Author}
+Nick Moore 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+March 22, 2018 
+\end{DoxyDate}
+\begin{DoxyRefDesc}{Bug}
+\item[\mbox{\hyperlink{bug__bug000002}{Bug}}]No known bugs, however, this code has not been tested on actual hardware \end{DoxyRefDesc}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{_engine__funcs_8c_a3bb63dcf5362454afa9c040947c372ae}\label{_engine__funcs_8c_a3bb63dcf5362454afa9c040947c372ae}} 
+\index{Engine\+\_\+funcs.\+c@{Engine\+\_\+funcs.\+c}!compressor@{compressor}}
+\index{compressor@{compressor}!Engine\+\_\+funcs.\+c@{Engine\+\_\+funcs.\+c}}
+\subsubsection{\texorpdfstring{compressor()}{compressor()}}
+{\footnotesize\ttfamily void compressor (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Sets the duty cycle for the starter motor such that the compressor safely reaches a desired R\+PM. 
+
+1) This function uses a proportional-\/derivative control law to quickly get to the desired R\+PM of 10,000 R\+PM The reason this R\+PM was chosen is because it was listed in one of the data sheets for the Jet\+Cat engine
+
+2) This control law uses gain which have been estimated based on the desired rise time and such. However, these gains have not been tested at all and should not be trusted.
+
+3) If would be recommend that instead of using a fixed value for the voltage that can be supplied to the motor (see pump\+\_\+tot\+\_\+V) ~\newline
+ 
+\begin{DoxyParams}{Parameters}
+{\em void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 163 of file Engine\+\_\+funcs.\+c.
+
+
+\begin{DoxyCode}
+164 \{
+165     \textcolor{comment}{// For this function, the PD control law needs to be implemented}
+166     \textcolor{comment}{//so that the engine gets to 10,000 RPM as quickly as possible}
+167     \textcolor{keywordtype}{char} slope = 0;     \textcolor{comment}{// this will be a linear slope for the current rate of change of RPM}
+168     
+169     \textcolor{comment}{// first turn on the glow plug}
+170     OCR2A = 255 - ((uint8\_t) (gVolts / pump\_tot\_V * 255.0));
+171     \textcolor{comment}{// now turn on the prescalar}
+172     TCCR2B |= (1 << CS22) | (1 << CS20);   \textcolor{comment}{// this is a prescalar of 1024}
+173     \mbox{\hyperlink{_e_s_b__funcs_8h_aa4fe19cf3f989d0dc2f1d829fa2ef74d}{glowPlug}} = 1;   \textcolor{comment}{// so that the PC can also record that the glow plug is on}
+174     
+175     \textcolor{comment}{// now turn on the starter motor}
+176     OCR0A = 255 - ((uint8\_t) (sMotor / pump\_tot\_V * 255.0));
+177     TCCR0B |= (1 << CS02) | (1 << CS00);    
+178     
+179     \textcolor{keywordflow}{while} (!(hallEffect < 10500 && hallEffect > 9500 && slope < 10 && slope > -10))
+180     \{
+181         \textcolor{comment}{// now need to find new voltage}
+182         \textcolor{keywordtype}{float} voltage = Kp*(\mbox{\hyperlink{_e_s_b__funcs_8h_aa477a3c8d0b96834b0291a9be67f1e77}{hallEffect}} - 10000) + Kd*slope;
+183         \textcolor{keywordflow}{if} (voltage > 6.0)               \textcolor{comment}{// Cap the voltage at the maximum the motor is rated for}
+184             voltage = 6.0;
+185         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (voltage < 0.0)
+186             voltage = 0.0;         \textcolor{comment}{// some error checking to make sure that things to not get unbounded}
+187         \textcolor{comment}{// now convert this into a duty cycle }
+188         \textcolor{keywordtype}{float} duty = voltage / pump\_tot\_V;
+189         
+190         \textcolor{comment}{// now change the duty cycle on the starter motor}
+191         OCR0A = 255 - ((uint8\_t) (duty * 255.5));
+192         \mbox{\hyperlink{_e_s_b__funcs_8h_ac3715e08cbd719300a7d01c9633cb3c2}{hallDone}} = 0;
+193         uint16\_t hallPrev = \mbox{\hyperlink{_e_s_b__funcs_8h_aa477a3c8d0b96834b0291a9be67f1e77}{hallEffect}};
+194         \textcolor{comment}{// now wait for the next hall effect sensor measurement}
+195         \textcolor{keywordflow}{while} (!\mbox{\hyperlink{_e_s_b__funcs_8h_ac3715e08cbd719300a7d01c9633cb3c2}{hallDone}});
+196         
+197         \textcolor{keywordflow}{if} (\mbox{\hyperlink{_e_s_b__funcs_8h_a07a924cfb101a7d1ce3489f00b9da976}{opMode}} == 1)\{  \textcolor{comment}{// This means that a shutdown has been invoked}
+198             \textcolor{keywordflow}{return};
+199         \}
+200         
+201         \textcolor{comment}{// now calculate the new slope}
+202         slope = (hallPrev - \mbox{\hyperlink{_e_s_b__funcs_8h_aa477a3c8d0b96834b0291a9be67f1e77}{hallEffect}}) / 0.25;
+203         
+204     \}
+205     
+206 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_engine__funcs_8c_a24cdf62b1d79063305146ff04981c16a}\label{_engine__funcs_8c_a24cdf62b1d79063305146ff04981c16a}} 
+\index{Engine\+\_\+funcs.\+c@{Engine\+\_\+funcs.\+c}!cooling\+Mode@{cooling\+Mode}}
+\index{cooling\+Mode@{cooling\+Mode}!Engine\+\_\+funcs.\+c@{Engine\+\_\+funcs.\+c}}
+\subsubsection{\texorpdfstring{cooling\+Mode()}{coolingMode()}}
+{\footnotesize\ttfamily void cooling\+Mode (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Shuts off the engine with the exception of the starter motor to force cool air through the engine. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 308 of file Engine\+\_\+funcs.\+c.
+
+
+
+References E\+GT.
+
+
+\begin{DoxyCode}
+309 \{
+310     \textcolor{comment}{// for this I will make sure that the starter motor receives 4V }
+311     \textcolor{comment}{// This will force cool air through the engine}
+312     
+313     \textcolor{keywordflow}{if} (\mbox{\hyperlink{_e_s_b__funcs_8h_a34c104e39ff60265f33e3325bf865ab5}{EGT}} > 100)\{
+314         \textcolor{comment}{// first need to make sure that the PWM is working }
+315         TCCR0A |= (1 << WGM01) | (1 << WGM00) | (1 << COM0A0) | (1 << COM0A1);
+316         TCCR0B |= (1 << WGM02);
+317         OCR0A = (uint8\_t) (255 - sMotor * 255.0 / pump\_tot\_V);             \textcolor{comment}{// When combine with a prescalar
+       of 1024, this will have a period of 0.016384 seconds    }
+318     
+319         \textcolor{comment}{// Now start with the proper duty cycle}
+320         TCCR0B |= (1 << CS00) | (1 << CS02);
+321     \}
+322     \textcolor{keywordflow}{else}\{    \textcolor{comment}{// this means that the engine has cooled sufficiently}
+323         TCCR0A = 0;
+324         TCCR0B = 0;
+325         \mbox{\hyperlink{_e_s_b__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}{assign\_bit}}(&PORTB, startPin, 0);   \textcolor{comment}{// make sure the starter motor is turned off}
+326         \mbox{\hyperlink{_e_s_b__funcs_8h_a07a924cfb101a7d1ce3489f00b9da976}{opMode}} = 6;   \textcolor{comment}{// this means that the engine is just kind of chilling    }
+327     \}
+328     
+329     
+330 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_engine__funcs_8c_a973541bd9d7a03580e58b233eb35de06}\label{_engine__funcs_8c_a973541bd9d7a03580e58b233eb35de06}} 
+\index{Engine\+\_\+funcs.\+c@{Engine\+\_\+funcs.\+c}!fuel\+\_\+puffs@{fuel\+\_\+puffs}}
+\index{fuel\+\_\+puffs@{fuel\+\_\+puffs}!Engine\+\_\+funcs.\+c@{Engine\+\_\+funcs.\+c}}
+\subsubsection{\texorpdfstring{fuel\+\_\+puffs()}{fuel\_puffs()}}
+{\footnotesize\ttfamily void fuel\+\_\+puffs (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Operates the fuel pump and fuel/lubrication solenoids such that ignition begins in the combustion chamber. 
+
+1) This function starts by first applying voltage so that there will be some fuel pressure on the back of the closed fuel and lubrication solenoids.
+
+2) Then the solenoid will begin opening with a duty cycle of 5\% and increase by 5\% every iteration in the loop. Each iteration of the loop will occupy 0.\+25 secs of time. ~\newline
+ 3) The Lubrication solenoid will then be toggled at an interval as specified by lube\+\_\+factor (see header file). This value corresponds to the factor by which the lubrication solenoid is slower than the fuel solenoid.
+
+4) Once the exhaust gas temperature gets above 200C, then the starter motor and glow plug will turn off as it can be assumed that the ignition has been seeded.
+
+
+\begin{DoxyParams}{Parameters}
+{\em void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 225 of file Engine\+\_\+funcs.\+c.
+
+
+\begin{DoxyCode}
+226 \{
+227     \textcolor{comment}{// If the code has made it this far then the compressor is up to speed }
+228     \textcolor{comment}{// first I need to apply 2 volts of pressure with the fuel pump}
+229     OCR3B = ICR3 - (\textcolor{keywordtype}{unsigned} int)(ICR3 * 2.0 / pump\_tot\_V);          \textcolor{comment}{// This will set the duty cycle so
+       that there is 2 volts received by the pump}
+230     
+231     \textcolor{comment}{// now change the prescalar so the pump will turn on, prescalar of 8}
+232     TCCR3B |= (1 << CS31);
+233     
+234     \textcolor{comment}{// Now begin with increasing the duty cycle}
+235     \textcolor{keywordtype}{float} duty = 0.0;
+236     OCR1B = ICR1 - (\textcolor{keywordtype}{unsigned} int)(ICR1 * duty);
+237     \textcolor{comment}{// now turn on the fuel solenoid with a prescalar of 256}
+238     TCCR4B |= (1 << CS42);
+239     
+240     \textcolor{comment}{// NOTE: It would be beneficial to have the output line for the fuel solenoid tied to a PCINT pin (such
+       as PB6) and then}
+241     \textcolor{comment}{// toggle the lubrication solenoid through the use of an interrupt.  Becuase of this the actuation of
+       the lubrication }
+242     \textcolor{comment}{// solenoid will be left unimplemented. }
+243     
+244     \textcolor{keywordflow}{while} (duty != 1)
+245     \{
+246         \textcolor{comment}{// now wait for the new value of Hall effect and EGT, wait for 2 cycles so that 0.5 seconds will
+       elapse}
+247         \mbox{\hyperlink{_e_s_b__funcs_8h_ac3715e08cbd719300a7d01c9633cb3c2}{hallDone}} = 0;
+248         \textcolor{keywordflow}{while} (!\mbox{\hyperlink{_e_s_b__funcs_8h_ac3715e08cbd719300a7d01c9633cb3c2}{hallDone}});
+249         \mbox{\hyperlink{_e_s_b__funcs_8h_ac3715e08cbd719300a7d01c9633cb3c2}{hallDone}} = 0;
+250         \textcolor{keywordflow}{while} (!\mbox{\hyperlink{_e_s_b__funcs_8h_ac3715e08cbd719300a7d01c9633cb3c2}{hallDone}});
+251         
+252         \textcolor{keywordflow}{if} (\mbox{\hyperlink{_e_s_b__funcs_8h_a07a924cfb101a7d1ce3489f00b9da976}{opMode}} == 1)    \textcolor{comment}{// This means that a shutdown has been invoked}
+253             \textcolor{keywordflow}{return};
+254             
+255         \textcolor{keywordflow}{if} (\mbox{\hyperlink{_e_s_b__funcs_8h_a34c104e39ff60265f33e3325bf865ab5}{EGT}} > 200) \{  \textcolor{comment}{// if true, turn off the starter motor and glow plug.  Do your own check to
+       make sure that 200C is a good temp to turn this off at}
+256             TCCR2A = 0;      \textcolor{comment}{// this will return the pin to its normal state}
+257             TCCR2B &= 0xF8;  \textcolor{comment}{// this will turn off the glow plug}
+258             \mbox{\hyperlink{_e_s_b__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}{assign\_bit}}(&PORTB, glowPin, 0);   \textcolor{comment}{// force the pin low}
+259             TCCR0A = 0;
+260             TCCR0B &= 0xF8;  \textcolor{comment}{// this will turn off the starter motor}
+261             \mbox{\hyperlink{_e_s_b__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}{assign\_bit}}(&PORTB, startPin, 0);    \textcolor{comment}{// for the pin low}
+262         \}
+263 
+264         duty += 0.05;
+265         OCR4B = ICR4 - (\textcolor{keywordtype}{unsigned} int)(ICR4 * duty);
+266     \}
+267     \textcolor{keywordflow}{if} (!\mbox{\hyperlink{_e_s_b__funcs_8h_ab29954c519f55503589a368e542e6637}{massFlow}}.f)
+268         \mbox{\hyperlink{_e_s_b__funcs_8h_a07a924cfb101a7d1ce3489f00b9da976}{opMode}} = 9;      \textcolor{comment}{// This is the opMode for if the fuel is not flowing}
+269     
+270 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_engine__funcs_8c_a7b71bd44c46c9be20f29250cacab8a6b}\label{_engine__funcs_8c_a7b71bd44c46c9be20f29250cacab8a6b}} 
+\index{Engine\+\_\+funcs.\+c@{Engine\+\_\+funcs.\+c}!heat\+Soaking@{heat\+Soaking}}
+\index{heat\+Soaking@{heat\+Soaking}!Engine\+\_\+funcs.\+c@{Engine\+\_\+funcs.\+c}}
+\subsubsection{\texorpdfstring{heat\+Soaking()}{heatSoaking()}}
+{\footnotesize\ttfamily void heat\+Soaking (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Prevents interruptions from the operation of the engine so that the temperature of the combustion can will increase. 
+
+1) This function is pretty simple, it sets a timer for 15 seconds and hogs execution until the timer has completed. During this time, the throttle is not allowed to be changed.
+
+2) If this step is completed then it can be said that the engine has reached idle$\ast$
+
+
+\begin{DoxyParams}{Parameters}
+{\em void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 282 of file Engine\+\_\+funcs.\+c.
+
+
+
+References assign\+\_\+bit(), bit\+\_\+is\+\_\+clear, and op\+Mode.
+
+
+\begin{DoxyCode}
+283 \{
+284 
+285     \textcolor{comment}{// during this time the starter motor will not be using its PWM, timer0 (8 bit)}
+286     TCCR0A = 0;    \textcolor{comment}{// make this work as a normal timer}
+287     TCCR0B = 0;    \textcolor{comment}{// reset everything to 0}
+288     
+289     \textcolor{comment}{// Now figure out the prescalars}
+290     TCNT0 = 100;
+291     \mbox{\hyperlink{_e_s_b__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}{assign\_bit}}(&TIMSK0, TOIE0, 0);  \textcolor{comment}{// make sure there are not any overflow interrupts}
+292     TCCR0B |= (1 << CS02) | (1 << CS00);   \textcolor{comment}{// have a prescalar of 1024 and starts the timer}
+293     
+294     \textcolor{keywordflow}{for} (uint16\_t i = 0; i < 1500; i++)\{
+295         \textcolor{keywordflow}{while} (\mbox{\hyperlink{_e_s_b__funcs_8h_ad188fb0fbfd923bdb01294072367d024}{bit\_is\_clear}}(TIFR0,TOV0));
+296         \mbox{\hyperlink{_e_s_b__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}{assign\_bit}}(&TIFR0, TOV0, 1);    \textcolor{comment}{// clear by writing a 1 to it}
+297         TCNT0 = 100;    \textcolor{comment}{// This will have the timer run for 0.1 seconds}
+298     \}
+299     \textcolor{comment}{// If it has made it to here then the engine has reached idle}
+300     \mbox{\hyperlink{_e_s_b__funcs_8h_a07a924cfb101a7d1ce3489f00b9da976}{opMode}} = 10;
+301 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_engine__funcs_8c_a1c9d5e29ad8899afe0c34571ddee18f9}\label{_engine__funcs_8c_a1c9d5e29ad8899afe0c34571ddee18f9}} 
+\index{Engine\+\_\+funcs.\+c@{Engine\+\_\+funcs.\+c}!shutdown@{shutdown}}
+\index{shutdown@{shutdown}!Engine\+\_\+funcs.\+c@{Engine\+\_\+funcs.\+c}}
+\subsubsection{\texorpdfstring{shutdown()}{shutdown()}}
+{\footnotesize\ttfamily void shutdown (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Forces an engine shutdown and closes all output ports which could actuate the engine. 
+
+This function performs the following functions\+: 1) Zeros out the prescalars for the operation of the following pieces of hardware\+: a) The starter motor b) The fuel solenoid b) The glow plug c) The fuel pump d) The lubrication solenoid
+
+2) Zeros out the control registers for the same components. This has the effect of restoring the pin to its normal operation (see page 155 in datasheet)
+
+
+\begin{DoxyParams}{Parameters}
+{\em void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 29 of file Engine\+\_\+funcs.\+c.
+
+
+
+References assign\+\_\+bit().
+
+
+\begin{DoxyCode}
+30 \{
+31     \textcolor{comment}{// For this just need to turn off the pump, glow plug, starter motor, and solenoids}
+32     \textcolor{comment}{// Start with the starter motor}
+33     TCCR0B = 0;    \textcolor{comment}{// this will force the prescalar values to be zero}
+34     TCCR0A = 0;    \textcolor{comment}{// This will force normal operation of the pin (so that it can always be pulled low)}
+35     \mbox{\hyperlink{_e_s_b__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}{assign\_bit}}(&PORTB, startPin, 0);
+36     
+37     \textcolor{comment}{// Now the glow plug}
+38     TCCR2B = 0;
+39     TCCR2A = 0;
+40     \mbox{\hyperlink{_e_s_b__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}{assign\_bit}}(&PORTB, glowPin, 0);
+41     
+42     \textcolor{comment}{// now the pump}
+43     TCCR3B = 0;
+44     TCCR3A = 0;  \textcolor{comment}{// make sure the PWM loses authority}
+45     \mbox{\hyperlink{_e_s_b__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}{assign\_bit}}(&PORTB, pumpPin, 0);
+46     
+47     \textcolor{comment}{// now the fuel solenoid}
+48     TCCR5B = 0;
+49     TCCR5A = 0;
+50     \mbox{\hyperlink{_e_s_b__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}{assign\_bit}}(&PORTB, solePin, 0);
+51     
+52     \textcolor{comment}{// now the lube solenoid}
+53     \mbox{\hyperlink{_e_s_b__funcs_8c_aba7fa75d6dd6ebcdc6225282a798fcd2}{assign\_bit}}(&PORTB, lubePin, 0);
+54     
+55     \mbox{\hyperlink{_e_s_b__funcs_8h_aaa80cb59482ff694d0bddd525d2c11d3}{startUpLockOut}} = 1;
+56     \mbox{\hyperlink{_e_s_b__funcs_8h_a07a924cfb101a7d1ce3489f00b9da976}{opMode}} = 4;    \textcolor{comment}{// An opMode of 4 means that the engine will enter the cooling mode}
+57 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_engine__funcs_8c_ab0c801cf89f8b3058ff2460c666154c3}\label{_engine__funcs_8c_ab0c801cf89f8b3058ff2460c666154c3}} 
+\index{Engine\+\_\+funcs.\+c@{Engine\+\_\+funcs.\+c}!startup@{startup}}
+\index{startup@{startup}!Engine\+\_\+funcs.\+c@{Engine\+\_\+funcs.\+c}}
+\subsubsection{\texorpdfstring{startup()}{startup()}}
+{\footnotesize\ttfamily void startup (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Performs the function calls in order such that and engine startup would occur. 
+
+1) This function checks to make sure that there is not a lockout which prevents the engine from starting. These engine lockouts are put in place such that the engine cannot be started until it has fully stopped. This is to prevent a startup in an unsafe situation.
+
+2) If a lockout is not present then the next set is set the various P\+WM lines such that the designates I/O pins can drive the hardware vital to the engine.
+
+3) The function invokes the compressor function which will begin spinning up the starter motor until it reaches the point at which the air is sufficiently compressed for combustion to occur. Meanwhile, the glow plug is turned on so that it can begin heating up.
+
+4) The function begins injecting small puffs of fuel into the combustion chamber so that combustion will begin taking place and become self-\/sufficient.
+
+5) Assuming there are no issues with the engine operation so far, a heat soaking procedure will then take place. This is essentially a process where the engine is just allowed to run without being interfered with so that the combustion chamber can reach a more optimal temperature.
+
+
+\begin{DoxyParams}{Parameters}
+{\em void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 82 of file Engine\+\_\+funcs.\+c.
+
+
+
+References compressor(), E\+GT, fuel\+\_\+puffs(), hall\+Effect, heat\+Soaking(), op\+Mode, set\+P\+W\+M(), shutdown(), startup(), and start\+Up\+Lock\+Out.
+
+
+\begin{DoxyCode}
+83 \{
+84     \textcolor{keywordflow}{if} (\mbox{\hyperlink{_e_s_b__funcs_8h_aaa80cb59482ff694d0bddd525d2c11d3}{startUpLockOut}})\{
+85         \textcolor{keywordflow}{if} (\mbox{\hyperlink{_e_s_b__funcs_8h_aa477a3c8d0b96834b0291a9be67f1e77}{hallEffect}} < 10 && \mbox{\hyperlink{_e_s_b__funcs_8h_a34c104e39ff60265f33e3325bf865ab5}{EGT}} < 50)\{
+86             \mbox{\hyperlink{_e_s_b__funcs_8h_aaa80cb59482ff694d0bddd525d2c11d3}{startUpLockOut}} = 0;
+87             \mbox{\hyperlink{_engine__funcs_8c_ab0c801cf89f8b3058ff2460c666154c3}{startup}}();              \textcolor{comment}{// restart the function so that it has the opportunity to
+       restart}
+88         \}
+89     \}
+90     \textcolor{keywordflow}{else}\{
+91         \mbox{\hyperlink{_e_s_b__funcs_8c_a154a9f374d6a56c8d416a756891cc60e}{setPWM}}();
+92         \mbox{\hyperlink{_engine__funcs_8c_a3bb63dcf5362454afa9c040947c372ae}{compressor}}();
+93         \textcolor{keywordflow}{if} (\mbox{\hyperlink{_e_s_b__funcs_8h_a07a924cfb101a7d1ce3489f00b9da976}{opMode}} == 1)
+94             \textcolor{keywordflow}{return};
+95             
+96         \mbox{\hyperlink{_engine__funcs_8c_a973541bd9d7a03580e58b233eb35de06}{fuel\_puffs}}();
+97         \textcolor{keywordflow}{if} (\mbox{\hyperlink{_e_s_b__funcs_8h_a07a924cfb101a7d1ce3489f00b9da976}{opMode}} == 1)
+98             \textcolor{keywordflow}{return};
+99             
+100         \textcolor{keywordflow}{if} (\mbox{\hyperlink{_e_s_b__funcs_8h_aa477a3c8d0b96834b0291a9be67f1e77}{hallEffect}} < 35000)\{  \textcolor{comment}{// This means that start up was not achieved}
+101             \mbox{\hyperlink{_engine__funcs_8c_a1c9d5e29ad8899afe0c34571ddee18f9}{shutdown}}();     \textcolor{comment}{// 35,000 RPM is the minimum required for startup}
+102         \}
+103         \textcolor{keywordflow}{else}\{
+104             \mbox{\hyperlink{_engine__funcs_8c_a7b71bd44c46c9be20f29250cacab8a6b}{heatSoaking}}();   
+105         \}
+106     \}
+107 \}
+\end{DoxyCode}
+\mbox{\Hypertarget{_engine__funcs_8c_a54163ad9d4f9e7fa08b4aae836a1b316}\label{_engine__funcs_8c_a54163ad9d4f9e7fa08b4aae836a1b316}} 
+\index{Engine\+\_\+funcs.\+c@{Engine\+\_\+funcs.\+c}!throttle@{throttle}}
+\index{throttle@{throttle}!Engine\+\_\+funcs.\+c@{Engine\+\_\+funcs.\+c}}
+\subsubsection{\texorpdfstring{throttle()}{throttle()}}
+{\footnotesize\ttfamily void throttle (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Sets the fuel flow rate such that the engine would operate at a desired throttle value. 
+
+1) This function converts the desired throttle value into a mass flow rate. T\+H\+IS M\+A\+SS F\+L\+OW R\+A\+TE IS D\+E\+T\+E\+R\+M\+I\+N\+ED O\+N\+LY F\+OR T\+HE P90-\/\+R\+X\+I!
+
+2) This mass flow rate is then converted into a number of flow rate pulses bases on the known linear relationship. See the published document for more explanation on this relationship.
+
+3) The error, in terms of pulses, is then determined between the actual and desired flow rate of fuel.
+
+4) The error is then converted into volts, which then can be used to directly translated into how many counts by which the input capture control register. This directly correlates to the duty cycle for the P\+WM signal which powers the fuel pump.
+
+
+\begin{DoxyParams}{Parameters}
+{\em void} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Void 
+\end{DoxyReturn}
+
+
+Definition at line 126 of file Engine\+\_\+funcs.\+c.
+
+
+
+References des\+M\+Flow, mass\+Flow, pulse\+\_\+flow, and throttle\+\_\+val.
+
+
+\begin{DoxyCode}
+127 \{
+128     \textcolor{comment}{// first I need to figure out what mass flow rate is desired for the requested throttle}
+129     \mbox{\hyperlink{_e_s_b__funcs_8h_af468793001ca08918b5208156c88de9d}{desMFlow}} = 4.8*((float) \mbox{\hyperlink{_e_s_b__funcs_8h_a715738e95d6e1917be2e5d209d416ff2}{throttle\_val}} / 255.0);
+130     uint8\_t desPulses = (uint8\_t) \mbox{\hyperlink{_e_s_b__funcs_8h_af468793001ca08918b5208156c88de9d}{desMFlow}}*\mbox{\hyperlink{_e_s_b__funcs_8h_a2e65b097da1a73a847fa30bbd88fd97c}{pulse\_flow}};
+131     
+132     \textcolor{comment}{// Now I need to increase the duty cycle depending in the difference from the expected flow rate}
+133     uint8\_t pulse\_error = desPulses - (uint8\_t) \mbox{\hyperlink{_e_s_b__funcs_8h_a2e65b097da1a73a847fa30bbd88fd97c}{pulse\_flow}} * \mbox{\hyperlink{_e_s_b__funcs_8h_ab29954c519f55503589a368e542e6637}{massFlow}}.f;
+134     
+135     \textcolor{keywordtype}{float} difference = \mbox{\hyperlink{_e_s_b__funcs_8h_ab29954c519f55503589a368e542e6637}{massFlow}}.f - \mbox{\hyperlink{_e_s_b__funcs_8h_af468793001ca08918b5208156c88de9d}{desMFlow}};
+136     if (difference < 0)
+137         difference = -difference;
+138     
+139     \textcolor{keywordflow}{if} (difference < errorAllow)\{
+140         \mbox{\hyperlink{_e_s_b__funcs_8h_a07a924cfb101a7d1ce3489f00b9da976}{opMode}} = 8;                                 \textcolor{comment}{// this means that the desired throttle has been
+       reached}
+141     \}
+142     
+143     \textcolor{keywordtype}{float} change = (float) pulse\_error * \mbox{\hyperlink{_e_s_b__funcs_8h_a4d33ec29c2398728e80d752eeced889e}{V\_per\_pulse}} * ((\textcolor{keywordtype}{float}) ICR3 / pump\_tot\_V);
+144     OCR3B -= (uint16\_t) change;
+145     \textcolor{keywordflow}{if} (\mbox{\hyperlink{_e_s_b__funcs_8h_a07a924cfb101a7d1ce3489f00b9da976}{opMode}} != 8)
+146         \mbox{\hyperlink{_e_s_b__funcs_8h_a07a924cfb101a7d1ce3489f00b9da976}{opMode}} = 4;                 \textcolor{comment}{// change the opMode so that it doesn't go through this again
+       until there is a new flow measurement}
+147 \}
+\end{DoxyCode}

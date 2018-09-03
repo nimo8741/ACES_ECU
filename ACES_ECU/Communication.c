@@ -329,8 +329,12 @@ void packageMessage(void)
 	ESBtransmit[2] = massFlow.c[1];
 	ESBtransmit[3] = massFlow.c[2];
 	ESBtransmit[4] = massFlow.c[3];
-	ESBtransmit[5] = 0;
-	ESBtransmit[6] = calculateParity(ESBtransmit, 0);
+	ESBtransmit[5] = voltage.c[0];
+	ESBtransmit[6] = voltage.c[1];
+	ESBtransmit[7] = voltage.c[2];
+	ESBtransmit[8] = voltage.c[3];
+	ESBtransmit[9] = calculateParity(ESBtransmit, 0);
+	ESBtransmit[10] = calculateParity(ESBtransmit, 3);
 }
 
 /** @brief Requests the Windows GUI to repeat the last sent command
@@ -348,9 +352,7 @@ void repeatCommand(void)
 	while ( !( UCSR0A & (1<<UDRE0)) );
 	
 	/* Put data into buffer, sends the data */
-	UDR0 = 'V';
-	repeatCount++;
-	
+	UDR0 = 'V';	
 	// Will have to see in unit testing how long this takes to get the response from the GUI
 }
 
